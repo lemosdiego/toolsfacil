@@ -1,6 +1,6 @@
 # 03 — Construir layout e home das ferramentas
 
-**Status:** 👍 Aprovado · **Branch:** `feat/03-construir-layout-e-home-das-ferramentas` · **Depende de:** 02
+**Status:** 🔍 Em revisão · **Branch:** `feat/03-construir-layout-e-home-das-ferramentas` · **Depende de:** 02
 
 ## Objetivo
 
@@ -128,20 +128,20 @@ A ideia não é copiar nenhum site, e sim pegar o que funciona e fazer do nosso 
 
 ## Tarefas
 
-- [ ] Aplicar o nome "Tools Fácil" em `site-config.ts`, `README.md` e `CLAUDE.md` (e ajustar os testes que leem o nome)
-- [ ] Criar `src/lib/tools.ts` (tipos, registro das 4 ferramentas do MVP com status `soon`, `getAvailableTools`, `getToolBySlug`, `getToolsByCategory`) e os testes
-- [ ] Criar `SkipLink`, `SiteHeader` (com o menu Popover) e `SiteFooter` em `src/components/layout/`
-- [ ] Aplicar header, footer e o link de pular no `layout.tsx` (com `<main id="conteudo">`)
-- [ ] Criar `AdSlot` em `src/components/ads/` (posições, alturas, rótulo, comportamento sem variável)
-- [ ] Criar `ToolCard` e `ToolGrid` (bento, com destaque) em `src/components/tools/`
-- [ ] Criar `ToolPageLayout` em `src/components/tools/`
-- [ ] Reescrever a home com as seções previstas e o texto original em pt-BR
-- [ ] Adicionar a textura de xadrez ao hero (utilitário em `globals.css`, com os tokens)
-- [ ] Adicionar `AdSlot`, `ToolCard` e `ToolPageLayout` ao `/styleguide`
-- [ ] Testes de unidade e de componente
-- [ ] Testes E2E da home e do layout (desktop e mobile)
-- [ ] Atualizar o `CLAUDE.md` (registro com status, layout, `AdSlot`)
-- [ ] Preencher as notas desta fase, atualizar o `index.md` e abrir o PR
+- [x] Aplicar o nome "Tools Fácil" em `site-config.ts`, `README.md` e `CLAUDE.md` (e ajustar os testes que leem o nome)
+- [x] Criar `src/lib/tools.ts` (tipos, registro das 4 ferramentas do MVP com status `soon`, `getAvailableTools`, `getToolBySlug`, `getToolsByCategory`) e os testes
+- [x] Criar `SkipLink`, `SiteHeader` (com o menu Popover) e `SiteFooter` em `src/components/layout/`
+- [x] Aplicar header, footer e o link de pular no `layout.tsx` (com `<main id="conteudo">`)
+- [x] Criar `AdSlot` em `src/components/ads/` (posições, alturas, rótulo, comportamento sem variável)
+- [x] Criar `ToolCard` e `ToolGrid` (bento, com destaque) em `src/components/tools/`
+- [x] Criar `ToolPageLayout` em `src/components/tools/`
+- [x] Reescrever a home com as seções previstas e o texto original em pt-BR
+- [x] Adicionar a textura de xadrez ao hero (utilitário em `globals.css`, com os tokens)
+- [x] Adicionar `AdSlot`, `ToolCard` e `ToolPageLayout` ao `/styleguide`
+- [x] Testes de unidade e de componente
+- [x] Testes E2E da home e do layout (desktop e mobile)
+- [x] Atualizar o `CLAUDE.md` (registro com status, layout, `AdSlot`)
+- [x] Preencher as notas desta fase, atualizar o `index.md` e abrir o PR
 
 ## Commits previstos
 
@@ -187,15 +187,15 @@ Os testes de unidade e de componente entram no mesmo commit do código.
 
 ## Critérios de aceite
 
-- [ ] O nome "Tools Fácil" aparece só em `site-config.ts` no código
-- [ ] Home, header e footer leem as ferramentas só do `tools.ts` (nenhuma lista solta)
-- [ ] Ferramentas `soon` não geram links (nenhum link quebrado na home)
-- [ ] Um único `h1` por página; link "Pular para o conteúdo" funcionando
-- [ ] Menu mobile abre e fecha pelo teclado e pelo toque, sem JavaScript próprio
-- [ ] `AdSlot` com altura reservada, nunca colado à área da ferramenta, sem script do AdSense
-- [ ] Sem rolagem horizontal em 360px; alvos de toque de 44px
-- [ ] axe sem violações na home, nos dois temas
-- [ ] `lint`, `format:check`, `typecheck`, `test`, `test:e2e` e `build` passando
+- [x] O nome "Tools Fácil" aparece só em `site-config.ts` no código
+- [x] Home, header e footer leem as ferramentas só do `tools.ts` (nenhuma lista solta)
+- [x] Ferramentas `soon` não geram links (nenhum link quebrado na home)
+- [x] Um único `h1` por página; link "Pular para o conteúdo" funcionando
+- [x] Menu mobile abre e fecha pelo teclado e pelo toque, sem JavaScript próprio
+- [x] `AdSlot` com altura reservada, nunca colado à área da ferramenta, sem script do AdSense
+- [x] Sem rolagem horizontal em 360px; alvos de toque de 44px
+- [x] axe sem violações na home, nos dois temas
+- [x] `lint`, `format:check`, `typecheck`, `test`, `test:e2e` e `build` passando (CI a conferir no PR)
 
 ## Decisões confirmadas
 
@@ -212,4 +212,23 @@ Os testes de unidade e de componente entram no mesmo commit do código.
 
 ## Notas da implementação
 
-_Preenchido ao final: desvios do plano, pendências e aprendizados._
+**Desvios do plano**
+
+- **HEIC para JPG com rota própria** (`/heic-para-jpg`). O `CLAUDE.md` colocava o HEIC dentro de `/converter-webp`, mas como o roteiro já tem uma fase só para ele (09), uma rota própria rende mais no SEO ("heic para jpg" é uma busca à parte). O `CLAUDE.md` foi atualizado.
+- **Footer sem o ano.** Com `cacheComponents`, `new Date()` em Server Component quebra a pré-renderização. Mostrar o ano exigiria `"use cache"` com `cacheLife` ou um Client Component, só para o "©". O footer mostra "© Tools Fácil." e o aviso foi registrado no `CLAUDE.md`.
+- **Menu com uma ilha cliente mínima** (`ClosePopoverOnNavigate`). O popover abre e fecha sem JavaScript próprio, mas o layout do Next persiste entre as navegações, então o menu ficaria aberto depois de clicar num link. A ilha só fecha o popover quando a rota muda (cerca de 15 linhas).
+- **Um único botão "Ferramentas" em todas as larguras**, em vez de links soltos no desktop. Com as 4 ferramentas "em breve", uma barra de links no desktop ficaria só com texto sem link.
+- **Categorias com nomes em inglês no código** (`convert`, `resize`, `compress`) e rótulos em português em `categoryLabels`, seguindo a convenção de nomes do `CLAUDE.md`.
+- **Transformação no registro** (`transformation.from` / `to`) no lugar de "formatos de entrada e saída", porque o corte e a compactação não trocam o formato. O card da compactação mostra "Menos KB", sem inventar porcentagens de redução.
+- **Exemplo do `ToolPageLayout` em página separada** (`/styleguide/ferramenta`, só em dev), porque ele tem o próprio `h1` e o styleguide já tem o dele.
+- **Ajuste visual depois das capturas de tela:** o badge "Em breve" do card de destaque ficava solto no meio. Agora fica no canto de todos os cards, e o destaque ganhou a textura de xadrez à direita (commit `style(ferramentas)`).
+- **Teste do styleguide corrigido:** o anunciador de rotas do Next também usa `role="alert"`, o que fazia o teste falhar às vezes. Ele passou a filtrar pelo texto (commit `test(e2e)` extra).
+- Os textos de "Pontos a confirmar" viraram "Decisões confirmadas" antes da implementação.
+
+**Testes:** 83 de unidade e componente; E2E com 42 testes em dev e 24 em produção (desktop e mobile), incluindo axe nos dois temas na home e no exemplo do `ToolPageLayout`.
+
+**Pendências**
+
+- Os links institucionais do footer entram na fase 10.
+- As alturas do `AdSlot` são estimativas: ajustar na fase 14 com os tamanhos reais servidos.
+- O `bg-checkerboard` usa o token `line`. Na identidade visual (fase 12), conferir se ele continua sutil com a paleta nova.

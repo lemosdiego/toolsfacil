@@ -20,7 +20,7 @@ Painel das fases do projeto. Cada fase é um plano em [`phases/`](phases/), cria
 | --- | ------------------------------------------------------------------------------------------------- | ------------- | ------------------------------------------------------- | --- |
 | 01  | [Configurar Next.js, Tailwind e testes](phases/01-configurar-nextjs-tailwind-e-testes.md)         | ✅ Concluído  | `feat/01-configurar-nextjs-tailwind-e-testes`           | #1  |
 | 02  | [Definir design tokens e componentes base](phases/02-definir-design-tokens-e-componentes-base.md) | ✅ Concluído  | `feat/02-definir-design-tokens-e-componentes-base`      | #2  |
-| 03  | [Construir layout e home das ferramentas](phases/03-construir-layout-e-home-das-ferramentas.md)   | 👍 Aprovado   | `feat/03-construir-layout-e-home-das-ferramentas`       | —   |
+| 03  | [Construir layout e home das ferramentas](phases/03-construir-layout-e-home-das-ferramentas.md)   | 🔍 Em revisão | `feat/03-construir-layout-e-home-das-ferramentas`       | #3  |
 | 04  | Configurar SEO, dados estruturados e CSP                                                          | ⬜ Não criado | `feat/04-configurar-seo-dados-estruturados-e-csp`       | —   |
 | 05  | Criar envio, validação e download de imagens                                                      | ⬜ Não criado | `feat/05-criar-envio-validacao-e-download-de-imagens`   | —   |
 | 06  | Converter PNG e JPG para WebP                                                                     | ⬜ Não criado | `feat/06-converter-png-e-jpg-para-webp`                 | —   |
