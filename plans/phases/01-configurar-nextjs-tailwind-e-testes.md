@@ -1,6 +1,6 @@
 # 01 — Configurar Next.js, Tailwind e testes
 
-**Status:** 👍 Aprovado · **Branch:** `feat/01-configurar-nextjs-tailwind-e-testes` · **Depende de:** —
+**Status:** 🔍 Em revisão · **Branch:** `feat/01-configurar-nextjs-tailwind-e-testes` · **Depende de:** —
 
 ## Objetivo
 
@@ -55,26 +55,26 @@ pnpm create next-app@16.4.5 <tmp> --ts --tailwind --eslint --app --src-dir \
 
 ## Tarefas
 
-- [ ] Inicializar git, fazer o commit inicial em `main` (`CLAUDE.md` + `plans/`) e criar o repositório no GitHub
-- [ ] Criar a branch `feat/01-configurar-nextjs-tailwind-e-testes`
-- [ ] Gerar o projeto Next.js no scratchpad e mover para a raiz
-- [ ] Mesclar o `.gitignore` (incluir `referencias/`)
-- [ ] Conferir `strict` e o alias `@/*` no `tsconfig.json`
-- [ ] Configurar Prettier + plugin do Tailwind (`.prettierrc`, `.prettierignore`) e integrar ao ESLint (`eslint-config-prettier`)
-- [ ] Adicionar os scripts `lint`, `format`, `format:check`, `typecheck`
-- [ ] Limpar o boilerplate: página inicial simples ("Tools — em breve", com o nome vindo de `site-config.ts`), remover SVGs de exemplo
-- [ ] Criar `src/lib/site-config.ts` e as pastas `src/components/ui`, `src/lib/image`, `src/workers`, `src/types`
-- [ ] Instalar e configurar o Vitest (`vitest.config.mts`, `vitest.setup.ts`, jest-dom)
-- [ ] Escrever o teste de componente da página inicial
-- [ ] Instalar e configurar o Playwright (`playwright.config.ts` com `webServer`, projetos desktop e mobile)
-- [ ] Escrever o teste E2E da página inicial
-- [ ] Criar `tests/fixtures/` com um `README.md` explicando o uso (as imagens entram na fase 05)
-- [ ] Adicionar `.env.example`, `.nvmrc` e `engines` no `package.json`
-- [ ] Configurar Husky + lint-staged (hook `pre-commit`)
-- [ ] Criar o workflow `.github/workflows/ci.yml`
-- [ ] Escrever o `README.md` em português (o que é, como rodar, comandos)
-- [ ] Rodar `lint`, `format:check`, `typecheck`, `test`, `test:e2e` e `build`. Todos devem passar
-- [ ] Preencher as notas desta fase, atualizar o `index.md` e abrir o PR
+- [x] Inicializar git, fazer o commit inicial em `main` (`CLAUDE.md` + `plans/`) e criar o repositório no GitHub
+- [x] Criar a branch `feat/01-configurar-nextjs-tailwind-e-testes`
+- [x] Gerar o projeto Next.js no scratchpad e mover para a raiz
+- [x] Mesclar o `.gitignore` (incluir `referencias/`)
+- [x] Conferir `strict` e o alias `@/*` no `tsconfig.json`
+- [x] Configurar Prettier + plugin do Tailwind (`.prettierrc`, `.prettierignore`) e integrar ao ESLint (`eslint-config-prettier`)
+- [x] Adicionar os scripts `lint`, `format`, `format:check`, `typecheck`
+- [x] Limpar o boilerplate: página inicial simples ("Tools — em breve", com o nome vindo de `site-config.ts`), remover SVGs de exemplo
+- [x] Criar `src/lib/site-config.ts` e as pastas `src/components/ui`, `src/lib/image`, `src/workers`, `src/types`
+- [x] Instalar e configurar o Vitest (`vitest.config.mts`, `vitest.setup.ts`, jest-dom)
+- [x] Escrever o teste de componente da página inicial
+- [x] Instalar e configurar o Playwright (`playwright.config.ts` com `webServer`, projetos desktop e mobile)
+- [x] Escrever o teste E2E da página inicial
+- [x] Criar `tests/fixtures/` com um `README.md` explicando o uso (as imagens entram na fase 05)
+- [x] Adicionar `.env.example`, `.nvmrc` e `engines` no `package.json`
+- [x] Configurar Husky + lint-staged (hook `pre-commit`)
+- [x] Criar o workflow `.github/workflows/ci.yml`
+- [x] Escrever o `README.md` em português (o que é, como rodar, comandos)
+- [x] Rodar `lint`, `format:check`, `typecheck`, `test`, `test:e2e` e `build`. Todos devem passar
+- [x] Preencher as notas desta fase, atualizar o `index.md` e abrir o PR
 
 ## Scripts previstos no `package.json`
 
@@ -135,14 +135,14 @@ pnpm create next-app@16.4.5 <tmp> --ts --tailwind --eslint --app --src-dir \
 
 ## Critérios de aceite
 
-- [ ] `pnpm dev` abre a página inicial em `http://localhost:3000`
-- [ ] `pnpm lint`, `pnpm format:check` e `pnpm typecheck` passam sem erros
-- [ ] `pnpm test` passa
-- [ ] `pnpm test:e2e` passa (desktop e mobile)
-- [ ] `pnpm build` passa
-- [ ] `referencias/` e `.env*` (exceto `.env.example`) estão fora do git
-- [ ] O nome "Tools" aparece só em `site-config.ts` (e nos documentos)
-- [ ] CI passando no PR
+- [x] `pnpm dev` abre a página inicial em `http://localhost:3000`
+- [x] `pnpm lint`, `pnpm format:check` e `pnpm typecheck` passam sem erros
+- [x] `pnpm test` passa
+- [x] `pnpm test:e2e` passa (desktop e mobile)
+- [x] `pnpm build` passa
+- [x] `referencias/` e `.env*` (exceto `.env.example`) estão fora do git
+- [x] O nome "Tools" aparece só em `site-config.ts` (e nos documentos)
+- [x] CI passando no PR
 
 ## Pontos a confirmar
 
@@ -153,4 +153,27 @@ pnpm create next-app@16.4.5 <tmp> --ts --tailwind --eslint --app --src-dir \
 
 ## Notas da implementação
 
-_Preenchido ao final: desvios do plano, pendências e aprendizados._
+**Respostas aos pontos a confirmar**
+
+- Repositório criado pelo usuário: `lemosdiego/toolsfacil`. O pacote no `package.json` se chama `toolsfacil`, mas o nome do site continua provisório ("Tools", só em `site-config.ts`).
+- Commit inicial direto em `main` (`CLAUDE.md` + `plans/` com o plano da fase 01). O plano da fase 02 continua só local, aguardando revisão.
+- Fase entregue por PR (padrão do `CLAUDE.md`).
+- O Playwright não pediu `sudo`: o Chromium baixou sem dependências extras (aviso de "OS não suportado oficialmente", com o build de fallback do Ubuntu 24.04, funcionando).
+
+**Desvios do plano**
+
+- O `create-next-app` 16.4.5 não tem mais a flag `--turbopack` (o Turbopack é o padrão). Usei também `--no-agent-feedback` e `--disable-git`.
+- O scaffold já vem com `cacheComponents: true`, `partialPrefetching: true` e o loader `@tailwindcss/turbopack` no `next.config.ts`. Mantive o padrão; a página inicial é pré-renderizada como estática.
+- O scaffold gera um `AGENTS.md` com o bloco gerenciado do Next. Foi commitado como veio e está no `.prettierignore`, para o `next dev` não sujar a árvore.
+- **Sem `vite-tsconfig-paths`:** o Vite 8 (usado pelo Vitest 5) resolve os paths do `tsconfig.json` nativamente (`resolve.tsconfigPaths: true`). A biblioteca foi removida, e com ela a subdependência obsoleta `tsconfck`.
+- Adicionado `@testing-library/jest-dom` (matchers como `toBeInTheDocument`), já previsto na tarefa do `vitest.setup.ts`.
+- **Playwright:** localmente o `webServer` sobe o `next dev`; com `CI` definido, sobe o `next start` (o build roda no passo anterior do workflow). Testado nos dois modos.
+- Commit extra: `test(e2e): documenta a pasta de fixtures de imagens`.
+- `public/` ficou só com um `.gitkeep` (o `ads.txt` entra na fase 13).
+
+**Versões instaladas:** Next 16.4.5, React 19.3.0, Tailwind 4.3.5, TypeScript 5.9.3, Vitest 5.1.0, jsdom 31, Playwright 1.65.0, Prettier 3.9.10, Husky 9.1.7, lint-staged 17.6.0.
+
+**Pendências**
+
+- O ESLint 9 aparece como obsoleto no `pnpm install`. O `eslint-config-next` 16.4.5 ainda depende dele; a atualização para o ESLint 10 fica para quando o Next suportar.
+- Conferir o CI no primeiro PR (versões das actions: `checkout@v5`, `setup-node@v5`, `pnpm/action-setup@v4`, `upload-artifact@v4`).
