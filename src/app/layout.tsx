@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
+import { SiteHeader } from "@/components/layout/site-header";
 import { MAIN_CONTENT_ID, SkipLink } from "@/components/layout/skip-link";
 import { siteConfig } from "@/lib/site-config";
 
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="pt-BR" className={`${inter.variable} h-full`}>
       <body className="flex min-h-full flex-col">
         <SkipLink />
+        <SiteHeader />
         <main
           id={MAIN_CONTENT_ID}
           tabIndex={-1}
