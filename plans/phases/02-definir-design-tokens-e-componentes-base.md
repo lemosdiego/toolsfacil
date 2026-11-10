@@ -1,6 +1,6 @@
 # 02 — Definir design tokens e componentes base
 
-**Status:** 👍 Aprovado · **Branch:** `feat/02-definir-design-tokens-e-componentes-base` · **Depende de:** 01
+**Status:** 🔍 Em revisão · **Branch:** `feat/02-definir-design-tokens-e-componentes-base` · **Depende de:** 01
 
 ## Objetivo
 
@@ -37,20 +37,20 @@ Criar a fundação visual do site: tokens semânticos de cor, tipografia, formas
 
 ## Tarefas
 
-- [ ] Instalar `clsx`, `tailwind-merge` e `lucide-react` (confirmar o peso antes)
-- [ ] Criar `src/lib/cn.ts` com teste
-- [ ] Definir os tokens em `globals.css` (cores claras e escuras, raios, sombras)
-- [ ] Configurar a fonte Inter no `layout.tsx` (`font-sans`)
-- [ ] Criar `Container` e `Heading` (níveis h1 a h3, com tamanho independente da tag)
-- [ ] Criar `Button` (variantes `primary`, `secondary`, `ghost`; tamanhos `md` e `lg`; estado `loading`; link com `href`)
-- [ ] Criar `IconButton` (`aria-label` obrigatório pelo tipo)
-- [ ] Criar `Card`, `Badge` e `Alert` (`info`, `success`, `error`, com `role` adequado)
-- [ ] Criar `Spinner`, `ProgressBar` (com `aria-valuenow`) e `VisuallyHidden`
-- [ ] Criar a página `/styleguide` (só em dev) com tokens, tipografia e todos os componentes
-- [ ] Testes de componente de cada um
-- [ ] Teste E2E: `/styleguide` abre em dev; checagem de contraste com `@axe-core/playwright` (ver "Pontos a confirmar")
-- [ ] Atualizar a seção de identidade visual do `CLAUDE.md` com os tokens e componentes criados
-- [ ] Preencher as notas desta fase, atualizar o `index.md` e abrir o PR
+- [x] Instalar `clsx`, `tailwind-merge` e `lucide-react` (confirmar o peso antes)
+- [x] Criar `src/lib/cn.ts` com teste
+- [x] Definir os tokens em `globals.css` (cores claras e escuras, raios, sombras)
+- [x] Configurar a fonte Inter no `layout.tsx` (`font-sans`)
+- [x] Criar `Container` e `Heading` (níveis h1 a h3, com tamanho independente da tag)
+- [x] Criar `Button` (variantes `primary`, `secondary`, `ghost`; tamanhos `md` e `lg`; estado `loading`; link com `href`)
+- [x] Criar `IconButton` (`aria-label` obrigatório pelo tipo)
+- [x] Criar `Card`, `Badge` e `Alert` (`info`, `success`, `error`, com `role` adequado)
+- [x] Criar `Spinner`, `ProgressBar` (com `aria-valuenow`) e `VisuallyHidden`
+- [x] Criar a página `/styleguide` (só em dev) com tokens, tipografia e todos os componentes
+- [x] Testes de componente de cada um
+- [x] Teste E2E: `/styleguide` abre em dev; checagem de contraste com `@axe-core/playwright` (ver "Pontos a confirmar")
+- [x] Atualizar a seção de identidade visual do `CLAUDE.md` com os tokens e componentes criados
+- [x] Preencher as notas desta fase, atualizar o `index.md` e abrir o PR
 
 ## Commits previstos
 
@@ -82,11 +82,11 @@ Os testes de cada componente entram no mesmo commit do componente.
 
 ## Critérios de aceite
 
-- [ ] Nenhum componente usa hex nem cores do Tailwind (`zinc`, `gray`...): só os tokens
-- [ ] Todos os componentes aparecem no `/styleguide`, que retorna 404 no build de produção
-- [ ] Botões e alvos de toque com no mínimo 44px; foco visível no teclado
-- [ ] Contraste AA nos dois temas (axe sem violações)
-- [ ] `lint`, `format:check`, `typecheck`, `test`, `test:e2e` e `build` passando
+- [x] Nenhum componente usa hex nem cores do Tailwind (`zinc`, `gray`...): só os tokens
+- [x] Todos os componentes aparecem no `/styleguide`, que retorna 404 no build de produção
+- [x] Botões e alvos de toque com no mínimo 44px; foco visível no teclado
+- [x] Contraste AA nos dois temas (axe sem violações)
+- [x] `lint`, `format:check`, `typecheck`, `test`, `test:e2e` e `build` passando (CI a conferir no PR)
 
 ## Pontos a confirmar
 
@@ -96,4 +96,25 @@ Os testes de cada componente entram no mesmo commit do componente.
 
 ## Notas da implementação
 
-_Preenchido ao final: desvios do plano, pendências e aprendizados._
+**Pontos a confirmar:** o usuário mandou implementar sem responder, então segui as recomendações do plano: tema **claro + escuro automático**, fonte **Inter** e **`@axe-core/playwright`** incluído. A pasta `referencias/` ainda não existe, então não havia referência visual a seguir.
+
+**Desvios do plano**
+
+- **Paleta padrão do Tailwind desligada** (`--color-*: initial` no `@theme`). Não estava no plano, mas garante o critério "só tokens": `bg-zinc-500` nem gera CSS.
+- **`cn()` com `extendTailwindMerge`:** o `tailwind-merge` não reconhece raios, sombras e larguras personalizados (`rounded-control` e `rounded-card` não se anulavam). Os nomes ficam registrados em `src/lib/cn.ts`, com um aviso no `globals.css`.
+- As variáveis brutas de sombra se chamam `--elevation-*`, porque `--shadow-card: var(--shadow-card)` no `@theme inline` seria uma referência circular.
+- O `@axe-core/playwright` entrou no commit de dependências (1), e não no 10.
+- **Sem `"use client"`:** nenhum componente base tem estado, então todos são Server Components.
+- `Card` aceita `div`, `article` e `section`. O `li` saiu porque os tipos de evento do `div` não servem para ele: para listas, coloque o `Card` dentro do `<li>`.
+- Classes compartilhadas de `Button` e `IconButton` ficam em `button-styles.ts` (arquivo comum).
+- O `/styleguide` fica em `src/app/(dev)/styleguide/`. No build, ele aparece como rota estática que renderiza o 404 (com `noindex`).
+- **E2E em dev e em produção:** no CI (build de produção), o styleguide só confere o 404. O axe do styleguide roda só em dev (localmente). Para o CI também checar contraste, a página inicial passa no axe nos dois temas, em dev e em produção. O `tests/e2e/server-mode.ts` centraliza qual servidor está sendo testado.
+- O axe roda todas as regras WCAG 2.1 A e AA, não só contraste.
+- Commit extra: `test(unit): ajusta ordem das classes no teste do cn`. Depois dos tokens, o plugin do Prettier passou a reordenar as classes dentro de `cn()`.
+
+**Contraste conferido** (além do axe): todos os pares de texto e fundo ficam entre 5,5:1 e 17,8:1 nos dois temas. `line-strong` sobre `surface` tem 3,1:1 (claro) e 3,7:1 (escuro), o mínimo para bordas de controles.
+
+**Pendências**
+
+- A paleta é provisória e muda quando a identidade visual for definida (fase própria ou ajuste dos valores em `globals.css`).
+- A conferência visual do `/styleguide` (aparência, não acessibilidade) fica para a revisão do PR.
