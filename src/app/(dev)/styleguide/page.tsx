@@ -305,7 +305,7 @@ export default function StyleguidePage() {
           no toque ou no teclado, pelo clique. Uma coluna no celular, duas no
           tablet e três no desktop.
         </p>
-        <div className="rounded-card border border-line bg-surface p-3 shadow-raised sm:p-5">
+        <div className="rounded-card border border-line bg-surface p-5 shadow-raised sm:p-8">
           <ToolsMenu />
         </div>
       </Section>

@@ -62,7 +62,7 @@ export function SiteHeader() {
         data-scroll-lock-mobile=""
         className={panelClasses}
       >
-        <div className="p-3 sm:p-5">
+        <div className="p-5 sm:p-8">
           <ToolsMenu />
         </div>
       </div>

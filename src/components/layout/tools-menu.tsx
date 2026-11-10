@@ -8,7 +8,8 @@ const headingClasses = "px-3 text-sm font-semibold text-foreground";
 
 /**
  * Conteúdo do menu de ferramentas: uma coluna por categoria do registro e a
- * coluna "Em breve". Uma coluna no celular, duas no tablet e três no desktop.
+ * coluna "Em breve". Uma coluna no celular; a partir de sm, colunas de
+ * largura fixa lado a lado, alinhadas à esquerda (quebram se não couberem).
  */
 export function ToolsMenu() {
   // Ids únicos: o menu aparece no header e no exemplo do styleguide.
@@ -17,13 +18,13 @@ export function ToolsMenu() {
   return (
     <nav
       aria-label="Ferramentas"
-      className="grid gap-x-6 gap-y-5 sm:grid-cols-2 lg:grid-cols-3"
+      className="flex flex-col gap-x-10 gap-y-6 sm:flex-row sm:flex-wrap"
     >
       {toolCategories.map((category) => {
         const headingId = `${idPrefix}-${category.id}`;
 
         return (
-          <div key={category.id} className="flex flex-col gap-1">
+          <div key={category.id} className="flex flex-col gap-1 sm:min-w-44">
             <p id={headingId} className={headingClasses}>
               {category.label}
             </p>
@@ -38,7 +39,7 @@ export function ToolsMenu() {
         );
       })}
 
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1 sm:min-w-44">
         <p className={headingClasses}>Em breve</p>
         <p className="flex min-h-11 items-center px-3 text-sm text-muted">
           Novas ferramentas chegando.
