@@ -2,6 +2,8 @@ import { expect, test } from "@playwright/test";
 
 import { siteConfig } from "@/lib/site-config";
 
+import { findAccessibilityViolations } from "./accessibility";
+
 test.describe("Página inicial", () => {
   test("responde 200 e exibe o nome do site", async ({ page }) => {
     const response = await page.goto("/");
@@ -18,4 +20,15 @@ test.describe("Página inicial", () => {
     await expect(page).toHaveTitle(siteConfig.name);
     await expect(page.locator("html")).toHaveAttribute("lang", "pt-BR");
   });
+
+  for (const colorScheme of ["light", "dark"] as const) {
+    test(`não tem violações de acessibilidade no tema ${colorScheme}`, async ({
+      page,
+    }) => {
+      await page.emulateMedia({ colorScheme });
+      await page.goto("/");
+
+      expect(await findAccessibilityViolations(page)).toEqual([]);
+    });
+  }
 });

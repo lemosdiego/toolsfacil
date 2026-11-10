@@ -1,5 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
+import { isProductionServer } from "./tests/e2e/server-mode";
+
 const PORT = Number(process.env.PORT ?? 3000);
 const baseURL = `http://localhost:${PORT}`;
 const isCI = Boolean(process.env.CI);
@@ -28,7 +30,7 @@ export default defineConfig({
   ],
   webServer: {
     // No CI o build já foi feito no passo anterior: roda a versão de produção.
-    command: isCI ? "pnpm start" : "pnpm dev",
+    command: isProductionServer ? "pnpm start" : "pnpm dev",
     url: baseURL,
     reuseExistingServer: !isCI,
     timeout: 120_000,
