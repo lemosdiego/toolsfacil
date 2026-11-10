@@ -1,6 +1,8 @@
 # 03 — Construir layout e home das ferramentas
 
-**Status:** 👍 Aprovado · **Branch:** `feat/03-construir-layout-e-home-das-ferramentas` · **Depende de:** 02
+**Status:** 🚫 Descartado · **Branch:** `feat/03-construir-layout-e-home-das-ferramentas` · **Depende de:** 02
+
+> **Descartada em 10/11/2026.** O usuário preferiu um layout mais enxuto, em que a pessoa chega e já usa a ferramenta, sem home cheia de seções. O PR #3 não será mergeado. A navegação passou para a [fase 04](04-construir-header-com-menu-de-ferramentas.md), e as outras telas entram por etapas, a partir dos prints do usuário. O código da branch fica como referência para reaproveitar.
 
 ## Objetivo
 
