@@ -1,8 +1,10 @@
-import { Download, Settings, Trash2, X } from "lucide-react";
+import { Download, FileImage, Settings, Trash2, X } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 
+import { AdSlot } from "@/components/ads/ad-slot";
+import { ToolCard } from "@/components/tools/tool-card";
 import { Alert } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -14,6 +16,7 @@ import { ProgressBar } from "@/components/ui/progress-bar";
 import { Spinner } from "@/components/ui/spinner";
 import { VisuallyHidden } from "@/components/ui/visually-hidden";
 import { cn } from "@/lib/cn";
+import type { Tool } from "@/lib/tools";
 
 /*
  * Referência visual dos tokens e componentes base.
@@ -123,6 +126,16 @@ const colorGroups: { title: string; swatches: Swatch[] }[] = [
     ],
   },
 ];
+
+const exampleTool: Tool = {
+  slug: "exemplo-disponivel",
+  name: "Ferramenta disponível",
+  shortDescription: "Exemplo de card com link, como fica depois de publicada.",
+  icon: FileImage,
+  category: "convert",
+  transformation: { from: ["PNG", "JPG"], to: ["WebP"] },
+  status: "available",
+};
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
@@ -294,6 +307,66 @@ export default function StyleguidePage() {
           <ProgressBar value={35} label="Progresso da conversão" showValue />
           <ProgressBar value={100} label="Conversão concluída" />
         </div>
+      </Section>
+
+      <Section title="ToolCard">
+        <ul className="grid gap-4 sm:grid-cols-2">
+          <li>
+            <ToolCard tool={exampleTool} />
+          </li>
+          <li>
+            <ToolCard
+              tool={{
+                ...exampleTool,
+                slug: "exemplo-em-breve",
+                name: "Ferramenta em breve",
+                shortDescription:
+                  "Sem link e com o badge até a fase dela terminar.",
+                status: "soon",
+              }}
+            />
+          </li>
+          <li className="sm:col-span-2">
+            <ToolCard
+              tool={{
+                ...exampleTool,
+                slug: "exemplo-destaque",
+                name: "Ferramenta em destaque",
+                shortDescription:
+                  "Card maior, com a textura de xadrez à direita.",
+                featured: true,
+              }}
+            />
+          </li>
+        </ul>
+      </Section>
+
+      <Section title="AdSlot">
+        <p className="text-muted">
+          Sem{" "}
+          <code className="font-mono text-sm">
+            NEXT_PUBLIC_ADSENSE_CLIENT_ID
+          </code>
+          , aparece só em desenvolvimento, com contorno. A lateral só aparece a
+          partir de <code className="font-mono text-sm">lg</code>.
+        </p>
+        <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_18.75rem]">
+          <div className="flex flex-col gap-4">
+            <AdSlot position="below-tool" />
+            <AdSlot position="in-content" />
+          </div>
+          <AdSlot position="sidebar" />
+        </div>
+      </Section>
+
+      <Section title="ToolPageLayout">
+        <p>
+          O esqueleto das páginas de ferramenta tem o próprio h1, por isso fica
+          numa página separada:{" "}
+          <Button href="/styleguide/ferramenta" variant="secondary">
+            Ver exemplo de página de ferramenta
+          </Button>
+        </p>
       </Section>
 
       <Section title="VisuallyHidden">
