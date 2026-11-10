@@ -1,4 +1,4 @@
-# CLAUDE.md — Tools (nome provisório)
+# CLAUDE.md — Tools Fácil
 
 > **Idioma:** responda sempre em **português (pt-BR)**: respostas, planos, commits, PRs e comentários no código.
 
@@ -12,14 +12,14 @@ Três princípios guiam todas as decisões:
 - **Privacidade:** os arquivos **nunca saem do navegador**. Todo processamento é _client-side_.
 - **Custo zero de infraestrutura:** site estático/serverless, sem servidor processando arquivos.
 
-> O nome do projeto ainda não foi decidido. Não espalhe "Tools" pelo código: o nome e a URL do site vêm só de `src/lib/site-config.ts` (ver "Pontos em aberto").
+> O nome do projeto é **Tools Fácil** (domínio sugerido: `toolsfacil.com.br`). Não espalhe o nome pelo código: o nome e a URL do site vêm só de `src/lib/site-config.ts`.
 
 ### Escopo do MVP
 
-1. **Conversor de imagens** (`/converter-webp`): PNG e JPG para WebP, HEIC para JPG.
+1. **Conversores de imagem**, cada um com rota própria para o SEO: PNG para WebP (`/png-para-webp`), JPG para WebP (`/jpg-para-webp`) e HEIC para JPG (`/heic-para-jpg`).
 2. **Cortador e redimensionador** (`/cortador-de-imagem`): corte livre, proporções prontas (redes sociais) e redimensionamento.
 3. **Compactador de imagens** (`/compactar-imagem`): redução de KB sem perda visual perceptível.
-4. **Home** com os cards de todas as ferramentas.
+4. **Layout enxuto:** o usuário chega e já usa a ferramenta, sem home cheia de seções. A navegação é o header com o menu "Ferramentas". Cada tela nasce de um print do usuário (ver "Referências visuais").
 5. **Páginas institucionais** exigidas pelo AdSense: Sobre, Contato, Política de Privacidade e Termos de Uso.
 
 ### Fora do escopo (não implementar sem pedido explícito)
@@ -75,7 +75,9 @@ pnpm exec playwright install chromium   # baixar o navegador (só na primeira ve
 src/
   app/
     (tools)/
-      converter-webp/       # uma pasta por ferramenta (rota = slug de SEO)
+      png-para-webp/        # uma pasta por ferramenta (rota = slug de SEO)
+      jpg-para-webp/
+      heic-para-jpg/
       cortador-de-imagem/
       compactar-imagem/
     (institutional)/
@@ -84,15 +86,15 @@ src/
       politica-de-privacidade/
       termos-de-uso/
     api/                    # route handlers (futuro: webhooks do Pix)
-    layout.tsx              # header, footer e script do AdSense
-    page.tsx                # home com os cards das ferramentas
+    layout.tsx              # SkipLink, header, <main> e script do AdSense
+    page.tsx                # home (layout definido por print do usuário)
     sitemap.ts
     robots.ts
   components/
     ui/                     # componentes genéricos (Button, Card...)
-    layout/                 # Navbar, Footer
-    ads/                    # AdBanner
-    tools/                  # FileDropzone, DownloadButton, ToolLayout...
+    layout/                 # SkipLink, SiteHeader, ToolsMenu (Footer depois)
+    ads/                    # AdSlot
+    tools/                  # ToolPageLayout, FileDropzone, DownloadButton...
   lib/
     tools.ts                # registro único das ferramentas (fonte da verdade)
     site-config.ts          # nome, URL e contatos do site
@@ -156,8 +158,21 @@ Referência visual de tudo em **`/styleguide`** (só em `pnpm dev`; responde 404
 
 ### Registro das ferramentas (`src/lib/tools.ts`)
 
-- **Fonte única da verdade** para slug, nome, descrição curta, ícone e categoria de cada ferramenta.
-- Home, menu, footer e `sitemap.ts` leem desse registro. **Uma ferramenta nova entra nele**, e nunca em listas soltas pelos componentes.
+- **Fonte única da verdade** para slug, nome (curto, mostrado no menu), descrição curta, categoria e status de cada ferramenta.
+- O menu (e depois o `sitemap.ts`) lê desse registro. **Uma ferramenta nova entra nele**, e nunca em listas soltas pelos componentes.
+- **Categorias** (`toolCategories`, na ordem das colunas do menu): `convert` ("Converter") e `edit` ("Editar"). Categoria nova entra nessa lista, com o rótulo em português.
+- **Status:** `soon` aparece no menu com o selo "Em breve", **sem link** (nada de link quebrado). Ao terminar a fase da ferramenta, troque para `available`: só então ela vira link (e entra no sitemap).
+- Consultas prontas: `getToolsByCategory()`, `getAvailableTools()`, `getToolBySlug()` e `getToolHref()`.
+
+### Layout e header
+
+- O layout raiz já tem `SkipLink`, `SiteHeader` e `<main id="conteudo">`. **As páginas não criam outro `<main>`.**
+- **Header** na largura toda da tela: nome do site à esquerda (logo provisório em texto) e o botão "Ferramentas ▾" à direita. Não é fixo no celular; sticky a partir de `lg`.
+- **Menu de ferramentas** (`ToolsMenu`): painel na largura toda, com uma coluna por categoria e a coluna "Em breve". Uma coluna no celular; a partir de `sm`, colunas lado a lado com a largura do conteúdo.
+  - Usa a **Popover API** nativa (`popover` + `popoverTarget`): toque e teclado abrem pelo botão; Esc e clique fora fecham.
+  - Com o **mouse, abre ao passar por cima** (ilha `OpenPopoverOnHover`) e fecha ao sair do botão e do painel. O clique depois do hover não fecha.
+  - A ilha `ClosePopoverOnNavigate` fecha o menu quando a rota muda (não no carregamento).
+  - No celular, a página atrás não rola com o menu aberto (`data-scroll-lock-mobile`).
 
 ### Processamento de imagem (client-side)
 
@@ -180,7 +195,7 @@ Referência visual de tudo em **`/styleguide`** (só em `pnpm dev`; responde 404
 
 ### Anúncios (AdSense)
 
-- Banners só pelo componente `AdBanner` (`src/components/ads/`), que lê o ID de `NEXT_PUBLIC_ADSENSE_CLIENT_ID`. **Sem a variável, nenhum anúncio aparece** (padrão em dev e nos testes).
+- Banners só pelo componente `AdSlot` (`src/components/ads/`), que lê o ID de `NEXT_PUBLIC_ADSENSE_CLIENT_ID`. **Sem a variável, nenhum anúncio aparece** (padrão em dev e nos testes).
 - **Reserve a altura** do espaço do anúncio (`min-height`) para não causar CLS.
 - **Políticas do AdSense:** nunca coloque um anúncio colado ao botão de download ou à área de soltar arquivo, nem de um jeito que pareça parte da ferramenta. Clique acidental pode suspender a conta.
 - Posições previstas: abaixo da ferramenta (entre a ferramenta e o texto explicativo), na lateral no desktop e no meio do texto longo. A ferramenta em si nunca fica abaixo da dobra por causa de anúncio.
@@ -297,7 +312,8 @@ Formato: **`NN-verbo-entrega.md`**, por exemplo `03-converter-png-jpg-para-webp.
 
 ## Pontos em aberto
 
-- [ ] **Nome e domínio do projeto:** "Tools" é provisório. Ao decidir, trocar só em `src/lib/site-config.ts` e nos metadados.
+- [x] **Nome do projeto:** Tools Fácil (só em `src/lib/site-config.ts` no código).
+- [ ] **Domínio:** sugerido `toolsfacil.com.br`, ainda não registrado. Entra no plano da publicação.
 - [ ] **Hospedagem:** o plano gratuito (Hobby) da Vercel **não permite uso comercial**, e um site com AdSense é comercial. Decidir entre o Vercel Pro ou uma alternativa com plano gratuito comercial (ex.: Netlify ou Cloudflare Pages, como no Babeloop).
 - [ ] **Identidade visual:** paleta, fontes, logo e ícone. Até lá, tokens neutros em `globals.css` (paleta provisória e Inter, ver "Tokens e componentes base").
 - [ ] **Decodificador de HEIC:** escolher a biblioteca (peso x compatibilidade) no plano do conversor.
