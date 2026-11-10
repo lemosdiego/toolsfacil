@@ -86,7 +86,7 @@ Os testes de cada componente entram no mesmo commit do componente.
 - [x] Todos os componentes aparecem no `/styleguide`, que retorna 404 no build de produção
 - [x] Botões e alvos de toque com no mínimo 44px; foco visível no teclado
 - [x] Contraste AA nos dois temas (axe sem violações)
-- [x] `lint`, `format:check`, `typecheck`, `test`, `test:e2e` e `build` passando (CI a conferir no PR)
+- [x] `lint`, `format:check`, `typecheck`, `test`, `test:e2e` e `build` passando (CI verde no PR #2)
 
 ## Pontos a confirmar
 
