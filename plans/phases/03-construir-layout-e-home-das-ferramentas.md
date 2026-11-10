@@ -195,7 +195,7 @@ Os testes de unidade e de componente entram no mesmo commit do código.
 - [x] `AdSlot` com altura reservada, nunca colado à área da ferramenta, sem script do AdSense
 - [x] Sem rolagem horizontal em 360px; alvos de toque de 44px
 - [x] axe sem violações na home, nos dois temas
-- [x] `lint`, `format:check`, `typecheck`, `test`, `test:e2e` e `build` passando (CI a conferir no PR)
+- [x] `lint`, `format:check`, `typecheck`, `test`, `test:e2e` e `build` passando (CI verde no PR #3)
 
 ## Decisões confirmadas
 
