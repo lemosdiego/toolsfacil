@@ -16,7 +16,7 @@ Três princípios guiam todas as decisões:
 
 ### Escopo do MVP
 
-1. **Conversor de imagens** (`/converter-webp`): PNG e JPG para WebP, HEIC para JPG.
+1. **Conversor de imagens:** PNG e JPG para WebP (`/converter-webp`) e HEIC para JPG (`/heic-para-jpg`, rota própria para o SEO).
 2. **Cortador e redimensionador** (`/cortador-de-imagem`): corte livre, proporções prontas (redes sociais) e redimensionamento.
 3. **Compactador de imagens** (`/compactar-imagem`): redução de KB sem perda visual perceptível.
 4. **Home** com os cards de todas as ferramentas.
@@ -90,9 +90,9 @@ src/
     robots.ts
   components/
     ui/                     # componentes genéricos (Button, Card...)
-    layout/                 # Navbar, Footer
-    ads/                    # AdBanner
-    tools/                  # FileDropzone, DownloadButton, ToolLayout...
+    layout/                 # SiteHeader, SiteFooter, SkipLink
+    ads/                    # AdSlot
+    tools/                  # ToolCard, ToolGrid, ToolPageLayout (FileDropzone, DownloadButton... na fase 05)
   lib/
     tools.ts                # registro único das ferramentas (fonte da verdade)
     site-config.ts          # nome, URL e contatos do site
@@ -146,6 +146,7 @@ Referência visual de tudo em **`/styleguide`** (só em `pnpm dev`; responde 404
 - **Raios:** `rounded-control` (botões, campos, alertas) e `rounded-card`. **Sombras:** `shadow-card` e `shadow-raised`. **Larguras:** `max-w-content` (layout) e `max-w-prose` (texto longo).
 - Raio, sombra ou largura nova no `@theme` também entra em `src/lib/cn.ts`, para o `tailwind-merge` resolver os conflitos.
 - **Fonte:** Inter (`font-sans`), auto-hospedada pelo `next/font`. Use `tabular-nums` em tamanhos e dimensões.
+- **Assinatura visual:** `bg-checkerboard` (xadrez de transparência, como nos editores de imagem), sempre decorativo (`aria-hidden`) e com máscara para ficar sutil.
 - **Ícones:** `lucide-react`, importados um a um (já saem com `aria-hidden`).
 - **Componentes** (`src/components/ui/`, todos Server Components):
   - `Container` (larguras `content`/`prose`) e `Heading` (`level` 1–3, `size` visual independente)
@@ -156,8 +157,19 @@ Referência visual de tudo em **`/styleguide`** (só em `pnpm dev`; responde 404
 
 ### Registro das ferramentas (`src/lib/tools.ts`)
 
-- **Fonte única da verdade** para slug, nome, descrição curta, ícone e categoria de cada ferramenta.
+- **Fonte única da verdade** para slug, nome, descrição curta, ícone, categoria, transformação (o que entra e o que sai, mostrado nos cards), status e destaque de cada ferramenta.
 - Home, menu, footer e `sitemap.ts` leem desse registro. **Uma ferramenta nova entra nele**, e nunca em listas soltas pelos componentes.
+- **Status:** `soon` aparece nos cards e no menu com "Em breve", **sem link** (nada de link quebrado). Ao terminar a fase da ferramenta, troque para `available`: só então ela vira link (e entra no sitemap).
+- `featured: true` em no máximo uma ferramenta (card maior na home).
+- Consultas prontas: `getToolsForDisplay()` (destaque primeiro), `getAvailableTools()`, `getToolBySlug()`, `getToolsByCategory()` e `getToolHref()`.
+
+### Layout e páginas de ferramenta
+
+- O layout raiz já tem `SkipLink`, `SiteHeader`, `<main id="conteudo">` e `SiteFooter`. **As páginas não criam outro `<main>`.**
+- O menu de ferramentas usa a **Popover API** nativa (`popover` + `popoverTarget`); a ilha `ClosePopoverOnNavigate` só fecha o menu quando a rota muda.
+- Toda página de ferramenta usa o **`ToolPageLayout`** (`src/components/tools/`): `title` (o `h1`), `description`, `tool` (a ilha `"use client"`) e o texto em `ToolPageSection` (`h2`). Ele garante a ferramenta acima da dobra, a distância até o anúncio e a lateral sticky só no desktop.
+- Exemplo vivo em `/styleguide/ferramenta` (só em dev).
+- **`new Date()` em Server Components quebra o build** com `cacheComponents` (pré-renderização). Use `"use cache"` com `cacheLife`, `connection()` dentro de `<Suspense>` ou um Client Component.
 
 ### Processamento de imagem (client-side)
 
@@ -180,10 +192,11 @@ Referência visual de tudo em **`/styleguide`** (só em `pnpm dev`; responde 404
 
 ### Anúncios (AdSense)
 
-- Banners só pelo componente `AdBanner` (`src/components/ads/`), que lê o ID de `NEXT_PUBLIC_ADSENSE_CLIENT_ID`. **Sem a variável, nenhum anúncio aparece** (padrão em dev e nos testes).
+- Banners só pelo componente `AdSlot` (`src/components/ads/`), que lê o ID de `NEXT_PUBLIC_ADSENSE_CLIENT_ID`. **Sem a variável, nenhum anúncio aparece em produção** (padrão nos testes). Em dev, sem a variável, o `AdSlot` mostra um contorno tracejado para visualizar a posição.
+- Posições do `AdSlot`: `below-tool` e `in-content` (280px no celular, 250px no desktop) e `sidebar` (600px, só a partir de `lg`). O script do AdSense entra na fase 14.
 - **Reserve a altura** do espaço do anúncio (`min-height`) para não causar CLS.
 - **Políticas do AdSense:** nunca coloque um anúncio colado ao botão de download ou à área de soltar arquivo, nem de um jeito que pareça parte da ferramenta. Clique acidental pode suspender a conta.
-- Posições previstas: abaixo da ferramenta (entre a ferramenta e o texto explicativo), na lateral no desktop e no meio do texto longo. A ferramenta em si nunca fica abaixo da dobra por causa de anúncio.
+- Posições previstas: abaixo da ferramenta (entre a ferramenta e o texto explicativo), na lateral no desktop e no meio do texto longo. A ferramenta em si nunca fica abaixo da dobra por causa de anúncio. Nas páginas de ferramenta, use as posições do `ToolPageLayout` em vez de espalhar `AdSlot`.
 - `public/ads.txt` com a linha do publisher, preenchida pelo usuário.
 
 ### SEO (`src/lib/seo.ts`)
