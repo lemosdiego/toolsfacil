@@ -111,6 +111,11 @@
   --color-danger: var(--danger);
   --color-danger-soft: var(--danger-soft);
 
+  /* Tipografia (Inter carregada pelo next/font no layout) */
+  --font-sans:
+    var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, sans-serif;
+
   /* Raios (rounded-control, rounded-card) */
   --radius-control: 0.625rem;
   --radius-card: 1rem;
@@ -131,7 +136,7 @@
 
 @layer base {
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-background font-sans text-foreground antialiased;
   }
 
   /* Foco visível só no teclado, em qualquer elemento focável. */
