@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Tools (nome provisório)
 
-## Getting Started
+Hub de micro-ferramentas para imagens: converter, cortar e compactar em segundos, direto no navegador.
 
-First, run the development server:
+- **Rápido:** entra, resolve e baixa. Sem cadastro.
+- **Privado:** os arquivos **nunca saem do seu dispositivo**. Todo o processamento acontece no navegador.
+- **Custo zero de infraestrutura:** site estático/serverless, sem servidor processando arquivos.
+
+## Stack
+
+Next.js 16 (App Router) · React 19 · TypeScript (`strict`) · Tailwind CSS v4 · Vitest + Testing Library · Playwright · ESLint + Prettier · pnpm
+
+## Requisitos
+
+- Node.js 22 LTS (mínimo 22.22, veja o `.nvmrc`)
+- pnpm 10 ou superior (nunca use npm ou yarn)
+
+## Como rodar
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install                            # instala as dependências e os hooks do Git
+pnpm exec playwright install chromium   # baixa o navegador dos testes E2E (só na primeira vez)
+pnpm dev                                # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+As variáveis de ambiente estão documentadas no `.env.example`. Copie para `.env.local` e preencha quando precisar.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Comandos
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Comando             | O que faz                                                      |
+| ------------------- | -------------------------------------------------------------- |
+| `pnpm dev`          | Servidor de desenvolvimento                                    |
+| `pnpm build`        | Build de produção                                              |
+| `pnpm start`        | Roda o build de produção                                       |
+| `pnpm lint`         | ESLint                                                         |
+| `pnpm format`       | Formata o código com o Prettier                                |
+| `pnpm format:check` | Só verifica a formatação (usado no CI)                         |
+| `pnpm typecheck`    | Gera os tipos do Next e roda o `tsc --noEmit`                  |
+| `pnpm test`         | Testes unitários e de componentes (Vitest)                     |
+| `pnpm test:watch`   | Vitest em modo watch                                           |
+| `pnpm test:e2e`     | Testes E2E (Playwright, desktop e mobile; sobe o Next sozinho) |
 
-## Learn More
+Antes de abrir um PR, todos devem passar: `lint`, `format:check`, `typecheck`, `test`, `test:e2e` e `build`. O CI roda os mesmos comandos em todo PR para `main`, e o hook de `pre-commit` aplica ESLint e Prettier nos arquivos alterados.
 
-To learn more about Next.js, take a look at the following resources:
+## Estrutura
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+src/
+  app/            # rotas (App Router)
+  components/     # componentes React
+  lib/            # funções puras e configuração (site-config.ts)
+  workers/        # Web Workers de processamento de imagem
+  types/
+tests/
+  e2e/            # Playwright
+  fixtures/       # imagens de teste
+plans/            # planos de cada fase do projeto
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+O roteiro e o status de cada fase estão em [`plans/index.md`](plans/index.md).
