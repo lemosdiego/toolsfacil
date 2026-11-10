@@ -142,7 +142,7 @@ pnpm create next-app@16.4.5 <tmp> --ts --tailwind --eslint --app --src-dir \
 - [x] `pnpm build` passa
 - [x] `referencias/` e `.env*` (exceto `.env.example`) estão fora do git
 - [x] O nome "Tools" aparece só em `site-config.ts` (e nos documentos)
-- [ ] CI passando no PR
+- [x] CI passando no PR
 
 ## Pontos a confirmar
 
