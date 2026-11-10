@@ -25,9 +25,10 @@ for (const colorScheme of ["light", "dark"] as const) {
       await expect(
         page.getByRole("heading", { level: 1, name: "Styleguide" }),
       ).toBeVisible();
-      await expect(page.getByRole("alert")).toContainText(
-        "Arquivo muito grande",
-      );
+      // Filtra pelo texto: o anunciador de rotas do Next também é role="alert".
+      await expect(
+        page.getByRole("alert").filter({ hasText: "Arquivo muito grande" }),
+      ).toBeVisible();
       await expect(
         page.getByRole("progressbar", { name: "Progresso da conversão" }),
       ).toHaveAttribute("aria-valuenow", "35");
