@@ -17,24 +17,24 @@ Painel das fases do projeto. Cada fase é um plano em [`phases/`](phases/), cria
 
 ## Roteiro do MVP
 
-| #   | Fase                                                                                              | Status        | Branch                                                  | PR  |
-| --- | ------------------------------------------------------------------------------------------------- | ------------- | ------------------------------------------------------- | --- |
-| 01  | [Configurar Next.js, Tailwind e testes](phases/01-configurar-nextjs-tailwind-e-testes.md)         | ✅ Concluído  | `feat/01-configurar-nextjs-tailwind-e-testes`           | #1  |
-| 02  | [Definir design tokens e componentes base](phases/02-definir-design-tokens-e-componentes-base.md) | ✅ Concluído  | `feat/02-definir-design-tokens-e-componentes-base`      | #2  |
-| 03  | [Construir layout e home das ferramentas](phases/03-construir-layout-e-home-das-ferramentas.md)   | 🚫 Descartado | `feat/03-construir-layout-e-home-das-ferramentas`       | #3  |
-| 04  | [Construir header com menu de ferramentas](phases/04-construir-header-com-menu-de-ferramentas.md) | 📝 Rascunho   | `feat/04-construir-header-com-menu-de-ferramentas`      | —   |
-| 05  | [Construir layout da página de ferramenta](phases/05-construir-layout-da-pagina-de-ferramenta.md) | 📝 Rascunho   | `feat/05-construir-layout-da-pagina-de-ferramenta`      | —   |
-| 06  | Configurar SEO, dados estruturados e CSP                                                          | ⬜ Não criado | `feat/06-configurar-seo-dados-estruturados-e-csp`       | —   |
-| 07  | Criar envio, validação e download de imagens                                                      | ⬜ Não criado | `feat/07-criar-envio-validacao-e-download-de-imagens`   | —   |
-| 08  | Converter PNG e JPG para WebP                                                                     | ⬜ Não criado | `feat/08-converter-png-e-jpg-para-webp`                 | —   |
-| 09  | Compactar imagens no navegador                                                                    | ⬜ Não criado | `feat/09-compactar-imagens-no-navegador`                | —   |
-| 10  | Cortar e redimensionar com Cropper.js                                                             | ⬜ Não criado | `feat/10-cortar-e-redimensionar-com-cropperjs`          | —   |
-| 11  | Converter HEIC para JPG                                                                           | ⬜ Não criado | `feat/11-converter-heic-para-jpg`                       | —   |
-| 12  | Criar páginas institucionais e de privacidade                                                     | ⬜ Não criado | `feat/12-criar-paginas-institucionais-e-privacidade`    | —   |
-| 13  | Auditar segurança, desempenho e acessibilidade                                                    | ⬜ Não criado | `fix/13-auditar-seguranca-desempenho-e-acessibilidade`  | —   |
-| 14  | Aplicar identidade visual e logo                                                                  | ⬜ Não criado | `feat/14-aplicar-identidade-visual-e-logo`              | —   |
-| 15  | Publicar o site e configurar o domínio                                                            | ⬜ Não criado | `feat/15-publicar-site-e-configurar-dominio`            | —   |
-| 16  | Integrar AdSense com consentimento de cookies                                                     | ⬜ Não criado | `feat/16-integrar-adsense-com-consentimento-de-cookies` | —   |
+| #   | Fase                                                                                              | Status          | Branch                                                  | PR  |
+| --- | ------------------------------------------------------------------------------------------------- | --------------- | ------------------------------------------------------- | --- |
+| 01  | [Configurar Next.js, Tailwind e testes](phases/01-configurar-nextjs-tailwind-e-testes.md)         | ✅ Concluído    | `feat/01-configurar-nextjs-tailwind-e-testes`           | #1  |
+| 02  | [Definir design tokens e componentes base](phases/02-definir-design-tokens-e-componentes-base.md) | ✅ Concluído    | `feat/02-definir-design-tokens-e-componentes-base`      | #2  |
+| 03  | [Construir layout e home das ferramentas](phases/03-construir-layout-e-home-das-ferramentas.md)   | 🚫 Descartado   | `feat/03-construir-layout-e-home-das-ferramentas`       | #3  |
+| 04  | [Construir header com menu de ferramentas](phases/04-construir-header-com-menu-de-ferramentas.md) | 🚧 Em andamento | `feat/04-construir-header-com-menu-de-ferramentas`      | —   |
+| 05  | [Construir layout da página de ferramenta](phases/05-construir-layout-da-pagina-de-ferramenta.md) | 📝 Rascunho     | `feat/05-construir-layout-da-pagina-de-ferramenta`      | —   |
+| 06  | Configurar SEO, dados estruturados e CSP                                                          | ⬜ Não criado   | `feat/06-configurar-seo-dados-estruturados-e-csp`       | —   |
+| 07  | Criar envio, validação e download de imagens                                                      | ⬜ Não criado   | `feat/07-criar-envio-validacao-e-download-de-imagens`   | —   |
+| 08  | Converter PNG e JPG para WebP                                                                     | ⬜ Não criado   | `feat/08-converter-png-e-jpg-para-webp`                 | —   |
+| 09  | Compactar imagens no navegador                                                                    | ⬜ Não criado   | `feat/09-compactar-imagens-no-navegador`                | —   |
+| 10  | Cortar e redimensionar com Cropper.js                                                             | ⬜ Não criado   | `feat/10-cortar-e-redimensionar-com-cropperjs`          | —   |
+| 11  | Converter HEIC para JPG                                                                           | ⬜ Não criado   | `feat/11-converter-heic-para-jpg`                       | —   |
+| 12  | Criar páginas institucionais e de privacidade                                                     | ⬜ Não criado   | `feat/12-criar-paginas-institucionais-e-privacidade`    | —   |
+| 13  | Auditar segurança, desempenho e acessibilidade                                                    | ⬜ Não criado   | `fix/13-auditar-seguranca-desempenho-e-acessibilidade`  | —   |
+| 14  | Aplicar identidade visual e logo                                                                  | ⬜ Não criado   | `feat/14-aplicar-identidade-visual-e-logo`              | —   |
+| 15  | Publicar o site e configurar o domínio                                                            | ⬜ Não criado   | `feat/15-publicar-site-e-configurar-dominio`            | —   |
+| 16  | Integrar AdSense com consentimento de cookies                                                     | ⬜ Não criado   | `feat/16-integrar-adsense-com-consentimento-de-cookies` | —   |
 
 > Ao criar o plano de uma fase, transforme o nome dela em link para o arquivo correspondente em `phases/`.
 >
