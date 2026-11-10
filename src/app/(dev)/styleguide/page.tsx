@@ -143,7 +143,7 @@ export default function StyleguidePage() {
   }
 
   return (
-    <Container as="main" className="flex flex-col gap-12 py-10 sm:py-14">
+    <Container className="flex flex-col gap-12 py-10 sm:py-14">
       <header className="flex flex-col gap-2">
         <Badge variant="info" className="self-start">
           Só em desenvolvimento
