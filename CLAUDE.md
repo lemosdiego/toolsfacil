@@ -132,6 +132,28 @@ referencias/
 - Classes condicionais via `cn()` (`src/lib/cn.ts`). Reaproveite os componentes de `src/components/ui/` antes de criar estilos novos.
 - Use os tokens semânticos do Tailwind definidos em `globals.css` (ex.: `bg-surface`, `text-muted`), e nunca hex soltos nos componentes. A identidade visual ainda não foi definida (ver "Pontos em aberto").
 
+### Tokens e componentes base
+
+Referência visual de tudo em **`/styleguide`** (só em `pnpm dev`; responde 404 em produção). Ao criar um componente genérico novo, inclua-o lá.
+
+- **Cores** (`bg-*`, `text-*`, `border-*`), com valores para o tema claro e o escuro (segue o `prefers-color-scheme`, sem botão de troca):
+  - Superfícies: `background` (página), `surface` (cards), `surface-muted` (áreas secundárias, hover)
+  - Texto: `foreground` (principal), `muted` (secundário)
+  - Bordas: `line` (decorativa), `line-strong` (controles, contraste 3:1)
+  - Ação: `primary`, `primary-hover`, `on-primary` (texto sobre o primary), `ring` (foco)
+  - Estados: `info`, `success`, `danger` e as versões `*-soft` para fundos
+- A paleta padrão do Tailwind (`zinc`, `gray`, `blue`...) está **desligada**: só os tokens geram classes.
+- **Raios:** `rounded-control` (botões, campos, alertas) e `rounded-card`. **Sombras:** `shadow-card` e `shadow-raised`. **Larguras:** `max-w-content` (layout) e `max-w-prose` (texto longo).
+- Raio, sombra ou largura nova no `@theme` também entra em `src/lib/cn.ts`, para o `tailwind-merge` resolver os conflitos.
+- **Fonte:** Inter (`font-sans`), auto-hospedada pelo `next/font`. Use `tabular-nums` em tamanhos e dimensões.
+- **Ícones:** `lucide-react`, importados um a um (já saem com `aria-hidden`).
+- **Componentes** (`src/components/ui/`, todos Server Components):
+  - `Container` (larguras `content`/`prose`) e `Heading` (`level` 1–3, `size` visual independente)
+  - `Button` (`primary`/`secondary`/`ghost`, `md`/`lg`, `loading`; com `href` vira link) e `IconButton` (`aria-label` obrigatório, 44px)
+  - `Card`, `Badge` (`neutral`/`info`/`success`/`danger`) e `Alert` (`info`/`success` com `role="status"`, `error` com `role="alert"`)
+  - `Spinner` (com `label`, é anunciado), `ProgressBar` (`role="progressbar"`, 0–100) e `VisuallyHidden`
+- **Acessibilidade nos testes:** o helper `tests/e2e/accessibility.ts` roda o axe (WCAG 2.1 AA, inclui contraste). Toda página nova passa por ele nos temas claro e escuro.
+
 ### Registro das ferramentas (`src/lib/tools.ts`)
 
 - **Fonte única da verdade** para slug, nome, descrição curta, ícone e categoria de cada ferramenta.
@@ -277,7 +299,7 @@ Formato: **`NN-verbo-entrega.md`**, por exemplo `03-converter-png-jpg-para-webp.
 
 - [ ] **Nome e domínio do projeto:** "Tools" é provisório. Ao decidir, trocar só em `src/lib/site-config.ts` e nos metadados.
 - [ ] **Hospedagem:** o plano gratuito (Hobby) da Vercel **não permite uso comercial**, e um site com AdSense é comercial. Decidir entre o Vercel Pro ou uma alternativa com plano gratuito comercial (ex.: Netlify ou Cloudflare Pages, como no Babeloop).
-- [ ] **Identidade visual:** paleta, fontes, logo e ícone. Até lá, tokens neutros em `globals.css`.
+- [ ] **Identidade visual:** paleta, fontes, logo e ícone. Até lá, tokens neutros em `globals.css` (paleta provisória e Inter, ver "Tokens e componentes base").
 - [ ] **Decodificador de HEIC:** escolher a biblioteca (peso x compatibilidade) no plano do conversor.
 - [ ] **Compactação de PNG:** o canvas não compacta PNG sem perdas de forma eficiente. Avaliar uma biblioteca WASM leve ou oferecer a conversão para WebP.
 - [ ] **CMP de cookies:** escolher a solução de consentimento antes de ativar o AdSense.
