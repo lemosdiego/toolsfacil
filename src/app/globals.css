@@ -1,26 +1,141 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/*
+ * Tokens semânticos do site.
+ *
+ * A identidade visual ainda não foi definida: a paleta abaixo é neutra e
+ * provisória. Quando a marca chegar, troque só os valores das variáveis em
+ * :root (tema claro) e no bloco do tema escuro. Os componentes usam apenas os
+ * nomes semânticos (bg-surface, text-muted, border-line...), nunca hex nem as
+ * cores padrão do Tailwind (que estão desligadas abaixo).
+ *
+ * Pares de texto e fundo conferidos para contraste AA nos dois temas
+ * (teste E2E com axe no /styleguide).
+ */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+:root {
+  color-scheme: light;
+
+  /* Superfícies */
+  --background: #f8f9fb; /* fundo da página */
+  --surface: #ffffff; /* cards, painéis e campos */
+  --surface-muted: #eef0f4; /* áreas secundárias, hover de botões neutros */
+
+  /* Texto */
+  --foreground: #16181d; /* texto principal */
+  --muted: #545b69; /* texto secundário */
+
+  /* Bordas */
+  --line: #d9dde4; /* divisórias e bordas decorativas */
+  --line-strong: #8a92a0; /* bordas de controles (contraste 3:1) */
+
+  /* Ação principal */
+  --primary: #1d4ed8;
+  --primary-hover: #1e40af;
+  --on-primary: #ffffff; /* texto sobre bg-primary */
+  --ring: #2563eb; /* contorno de foco */
+
+  /* Estados */
+  --info: #1d4ed8;
+  --info-soft: #eaf1fe;
+  --success: #15703a;
+  --success-soft: #e8f6ee;
+  --danger: #b42318;
+  --danger-soft: #fdecea;
+
+  /* Sombras */
+  --shadow-color: 220 20% 20%;
+  --elevation-card:
+    0 1px 2px hsl(var(--shadow-color) / 0.06),
+    0 1px 3px hsl(var(--shadow-color) / 0.08);
+  --elevation-raised:
+    0 4px 6px -1px hsl(var(--shadow-color) / 0.08),
+    0 10px 24px -4px hsl(var(--shadow-color) / 0.12);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    color-scheme: dark;
+
+    --background: #0d0f13;
+    --surface: #171a20;
+    --surface-muted: #232730;
+
+    --foreground: #eef0f4;
+    --muted: #a3aab8;
+
+    --line: #2c313b;
+    --line-strong: #6b7383;
+
+    --primary: #6ea2ff;
+    --primary-hover: #94bbff;
+    --on-primary: #0b1220;
+    --ring: #94bbff;
+
+    --info: #8fb6ff;
+    --info-soft: #14213a;
+    --success: #5fd08e;
+    --success-soft: #10261a;
+    --danger: #ff8a80;
+    --danger-soft: #2e1513;
+
+    --shadow-color: 220 40% 2%;
+    --elevation-card:
+      0 1px 2px hsl(var(--shadow-color) / 0.5),
+      0 1px 3px hsl(var(--shadow-color) / 0.4);
+    --elevation-raised:
+      0 4px 6px -1px hsl(var(--shadow-color) / 0.5),
+      0 10px 24px -4px hsl(var(--shadow-color) / 0.6);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@theme inline {
+  /* Desliga a paleta padrão do Tailwind (zinc, gray, blue...): só tokens. */
+  --color-*: initial;
+
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-on-primary: var(--on-primary);
+  --color-ring: var(--ring);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+
+  /* Raios (rounded-control, rounded-card) */
+  --radius-control: 0.625rem;
+  --radius-card: 1rem;
+
+  /* Sombras (shadow-card, shadow-raised) */
+  --shadow-card: var(--elevation-card);
+  --shadow-raised: var(--elevation-raised);
+
+  /* Larguras do conteúdo (max-w-content, max-w-prose) */
+  --container-content: 72rem;
+  --container-prose: 42rem;
+
+  /*
+   * Se criar um raio, sombra ou largura nova, registre o nome também em
+   * src/lib/cn.ts, para o tailwind-merge resolver os conflitos.
+   */
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+
+  /* Foco visível só no teclado, em qualquer elemento focável. */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-ring;
+  }
 }
