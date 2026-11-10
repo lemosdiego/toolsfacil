@@ -1,4 +1,4 @@
-# Tools (nome provisório)
+# Tools Fácil
 
 Hub de micro-ferramentas para imagens: converter, cortar e compactar em segundos, direto no navegador.
 

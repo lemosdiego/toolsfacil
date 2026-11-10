@@ -1,4 +1,4 @@
-# CLAUDE.md — Tools (nome provisório)
+# CLAUDE.md — Tools Fácil
 
 > **Idioma:** responda sempre em **português (pt-BR)**: respostas, planos, commits, PRs e comentários no código.
 
@@ -12,7 +12,7 @@ Três princípios guiam todas as decisões:
 - **Privacidade:** os arquivos **nunca saem do navegador**. Todo processamento é _client-side_.
 - **Custo zero de infraestrutura:** site estático/serverless, sem servidor processando arquivos.
 
-> O nome do projeto ainda não foi decidido. Não espalhe "Tools" pelo código: o nome e a URL do site vêm só de `src/lib/site-config.ts` (ver "Pontos em aberto").
+> O nome do projeto é **Tools Fácil** (domínio sugerido: `toolsfacil.com.br`). Não espalhe o nome pelo código: o nome e a URL do site vêm só de `src/lib/site-config.ts`.
 
 ### Escopo do MVP
 
@@ -297,7 +297,8 @@ Formato: **`NN-verbo-entrega.md`**, por exemplo `03-converter-png-jpg-para-webp.
 
 ## Pontos em aberto
 
-- [ ] **Nome e domínio do projeto:** "Tools" é provisório. Ao decidir, trocar só em `src/lib/site-config.ts` e nos metadados.
+- [x] **Nome do projeto:** Tools Fácil (só em `src/lib/site-config.ts` no código).
+- [ ] **Domínio:** sugerido `toolsfacil.com.br`, ainda não registrado. Entra no plano da fase 13 (publicação).
 - [ ] **Hospedagem:** o plano gratuito (Hobby) da Vercel **não permite uso comercial**, e um site com AdSense é comercial. Decidir entre o Vercel Pro ou uma alternativa com plano gratuito comercial (ex.: Netlify ou Cloudflare Pages, como no Babeloop).
 - [ ] **Identidade visual:** paleta, fontes, logo e ícone. Até lá, tokens neutros em `globals.css` (paleta provisória e Inter, ver "Tokens e componentes base").
 - [ ] **Decodificador de HEIC:** escolher a biblioteca (peso x compatibilidade) no plano do conversor.
