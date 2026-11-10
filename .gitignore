@@ -12,6 +12,10 @@
 
 # testing
 /coverage
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
 
 # next.js
 /.next/
@@ -30,8 +34,9 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# env files (só o .env.example vai para o git)
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -39,3 +44,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# referências visuais locais (nunca versionar)
+referencias/
+
+# claude code (configurações locais)
+.claude/settings.local.json
