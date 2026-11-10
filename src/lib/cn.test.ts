@@ -20,7 +20,7 @@ describe("cn", () => {
   });
 
   it("não confunde cor de texto com tamanho de texto", () => {
-    expect(cn("text-muted text-sm", "text-foreground")).toBe(
+    expect(cn("text-sm text-muted", "text-foreground")).toBe(
       "text-sm text-foreground",
     );
   });
@@ -30,8 +30,8 @@ describe("cn", () => {
   });
 
   it("resolve conflitos entre sombras e larguras personalizadas", () => {
-    expect(cn("shadow-card max-w-content", "shadow-raised max-w-prose")).toBe(
-      "shadow-raised max-w-prose",
+    expect(cn("max-w-content shadow-card", "max-w-prose shadow-raised")).toBe(
+      "max-w-prose shadow-raised",
     );
   });
 });
