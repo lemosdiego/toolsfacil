@@ -1,6 +1,6 @@
 # 01 — Configurar Next.js, Tailwind e testes
 
-**Status:** 🔍 Em revisão · **Branch:** `feat/01-configurar-nextjs-tailwind-e-testes` · **Depende de:** —
+**Status:** ✅ Concluído · **Branch:** `feat/01-configurar-nextjs-tailwind-e-testes` · **Depende de:** —
 
 ## Objetivo
 
