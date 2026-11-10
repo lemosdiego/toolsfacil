@@ -1,3 +1,5 @@
+import { useId } from "react";
+
 import { getToolsByCategory, toolCategories } from "@/lib/tools";
 
 import { ToolMenuItem } from "./tool-menu-item";
@@ -9,13 +11,16 @@ const headingClasses = "px-3 text-sm font-semibold text-foreground";
  * coluna "Em breve". Uma coluna no celular, duas no tablet e três no desktop.
  */
 export function ToolsMenu() {
+  // Ids únicos: o menu aparece no header e no exemplo do styleguide.
+  const idPrefix = useId();
+
   return (
     <nav
       aria-label="Ferramentas"
       className="grid gap-x-6 gap-y-5 sm:grid-cols-2 lg:grid-cols-3"
     >
       {toolCategories.map((category) => {
-        const headingId = `menu-categoria-${category.id}`;
+        const headingId = `${idPrefix}-${category.id}`;
 
         return (
           <div key={category.id} className="flex flex-col gap-1">
