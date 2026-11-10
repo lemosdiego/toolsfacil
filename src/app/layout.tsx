@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
+import { MAIN_CONTENT_ID, SkipLink } from "@/components/layout/skip-link";
 import { siteConfig } from "@/lib/site-config";
 
 import "./globals.css";
@@ -20,7 +21,16 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="pt-BR" className={`${inter.variable} h-full`}>
-      <body className="flex min-h-full flex-col">{children}</body>
+      <body className="flex min-h-full flex-col">
+        <SkipLink />
+        <main
+          id={MAIN_CONTENT_ID}
+          tabIndex={-1}
+          className="flex flex-1 flex-col focus:outline-none"
+        >
+          {children}
+        </main>
+      </body>
     </html>
   );
 }
