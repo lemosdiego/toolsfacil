@@ -1,6 +1,6 @@
 # 02 — Definir design tokens e componentes base
 
-**Status:** 🔍 Em revisão · **Branch:** `feat/02-definir-design-tokens-e-componentes-base` · **Depende de:** 01
+**Status:** ✅ Concluído · **Branch:** `feat/02-definir-design-tokens-e-componentes-base` · **Depende de:** 01
 
 ## Objetivo
 

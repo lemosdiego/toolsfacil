@@ -19,7 +19,7 @@ Painel das fases do projeto. Cada fase é um plano em [`phases/`](phases/), cria
 | #   | Fase                                                                                              | Status        | Branch                                                  | PR  |
 | --- | ------------------------------------------------------------------------------------------------- | ------------- | ------------------------------------------------------- | --- |
 | 01  | [Configurar Next.js, Tailwind e testes](phases/01-configurar-nextjs-tailwind-e-testes.md)         | ✅ Concluído  | `feat/01-configurar-nextjs-tailwind-e-testes`           | #1  |
-| 02  | [Definir design tokens e componentes base](phases/02-definir-design-tokens-e-componentes-base.md) | 🔍 Em revisão | `feat/02-definir-design-tokens-e-componentes-base`      | #2  |
+| 02  | [Definir design tokens e componentes base](phases/02-definir-design-tokens-e-componentes-base.md) | ✅ Concluído  | `feat/02-definir-design-tokens-e-componentes-base`      | #2  |
 | 03  | Construir layout e home das ferramentas                                                           | ⬜ Não criado | `feat/03-construir-layout-e-home-das-ferramentas`       | —   |
 | 04  | Configurar SEO, sitemap e dados estruturados                                                      | ⬜ Não criado | `feat/04-configurar-seo-sitemap-e-dados-estruturados`   | —   |
 | 05  | Criar envio, validação e download de imagens                                                      | ⬜ Não criado | `feat/05-criar-envio-validacao-e-download-de-imagens`   | —   |
