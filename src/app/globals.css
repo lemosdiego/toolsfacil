@@ -134,6 +134,20 @@
    */
 }
 
+/*
+ * Xadrez de transparência (o fundo dos editores de imagem): assinatura visual
+ * do site. Só decorativo, sempre com aria-hidden. Segue os tokens nos dois temas.
+ */
+@utility bg-checkerboard {
+  background-image: conic-gradient(
+    var(--color-line) 25%,
+    transparent 0 50%,
+    var(--color-line) 0 75%,
+    transparent 0
+  );
+  background-size: 1.5rem 1.5rem;
+}
+
 @layer base {
   body {
     @apply bg-background font-sans text-foreground antialiased;
