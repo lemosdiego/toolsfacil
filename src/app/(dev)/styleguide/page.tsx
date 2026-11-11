@@ -310,6 +310,20 @@ export default function StyleguidePage() {
         </div>
       </Section>
 
+      <Section title="Página de ferramenta">
+        <p className="max-w-prose text-muted">
+          Molde das páginas de ferramenta (
+          <code className="font-mono text-sm">ToolPageLayout</code> e{" "}
+          <code className="font-mono text-sm">PreviewCard</code>), com as
+          posições de anúncio.
+        </p>
+        <Row>
+          <Button href="/styleguide/ferramenta" variant="secondary">
+            Ver o exemplo
+          </Button>
+        </Row>
+      </Section>
+
       <Section title="VisuallyHidden">
         <p>
           Este parágrafo tem um texto oculto só para leitores de tela.
