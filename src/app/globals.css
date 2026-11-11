@@ -134,6 +134,22 @@
    */
 }
 
+/*
+ * Xadrez de transparência (o fundo dos editores de imagem): assinatura visual
+ * do site e fundo da prévia, onde mostra as áreas transparentes da imagem.
+ * Segue os tokens nos dois temas.
+ */
+@utility bg-checkerboard {
+  background-color: var(--color-surface);
+  background-image: conic-gradient(
+    var(--color-surface-muted) 25%,
+    transparent 0 50%,
+    var(--color-surface-muted) 0 75%,
+    transparent 0
+  );
+  background-size: 1.25rem 1.25rem;
+}
+
 @layer base {
   body {
     @apply bg-background font-sans text-foreground antialiased;
