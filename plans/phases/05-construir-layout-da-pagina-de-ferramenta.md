@@ -1,6 +1,6 @@
 # 05 — Construir layout da página de ferramenta
 
-**Status:** 📝 Rascunho · **Branch:** `feat/05-construir-layout-da-pagina-de-ferramenta` · **Depende de:** 04
+**Status:** 🚧 Em andamento · **Branch:** `feat/05-construir-layout-da-pagina-de-ferramenta` · **Depende de:** 04
 
 ## Objetivo
 
@@ -22,7 +22,7 @@ Print do usuário (desktop), com os anúncios e o texto que o plano acrescenta:
    Texto curto: o que a ferramenta  │                      │
    faz, em 2 ou 3 linhas            │        Imagem        │  prévia
                                     │                      │
-   [ Enviar imagem ]                │  1,2 MB → 340 KB     │  tamanho antes/depois
+   [ Escolher imagem ]                │  1,2 MB → 340 KB     │  tamanho antes/depois
                                     └──────────────────────┘
 
    ─────────────────── espaço de segurança ────────────────────
@@ -86,7 +86,7 @@ Print do usuário (desktop), com os anúncios e o texto que o plano acrescenta:
 │ PNG para WebP     (h1)   │
 │ Texto curto em 2 ou 3    │
 │ linhas                   │
-│ [   Enviar imagem    ]   │  botão com a largura toda, 48px de altura
+│ [   Escolher imagem    ]   │  botão com a largura toda, 48px de altura
 │                          │  ← tudo isso acima da dobra
 │ ─── espaço de segurança ─│
 │ Publicidade              │
@@ -155,10 +155,10 @@ Os testes de componente entram no mesmo commit do código.
 - [ ] axe sem violações nos dois temas
 - [ ] `lint`, `format:check`, `typecheck`, `test`, `test:e2e` e `build` passando
 
-## Pontos a confirmar
+## Decisões confirmadas
 
-- **Ícone de download sozinho ou com texto:** o plano segue o print (só o ícone, no canto do card). Um botão "Baixar" com o ícone e a palavra é mais fácil de achar, principalmente no celular. Se preferir, troco.
-- **Texto do botão:** "Enviar imagem" ou "Escolher imagem"? Recomendo **"Escolher imagem"**, porque "enviar" dá a impressão de que o arquivo vai para um servidor, e o diferencial do site é que nada sai do navegador.
+- **Download:** só o ícone tradicional de download (seta para baixo com a bandeja), no canto do card, como no print. Tem `aria-label` e 44px de área de toque.
+- **Texto do botão:** "Escolher imagem", o texto padrão proposto no plano.
 
 ## Notas da implementação
 
