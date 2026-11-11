@@ -143,4 +143,14 @@
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-ring;
   }
+
+  /*
+   * Menu de ferramentas aberto no celular e no tablet: a página atrás não rola,
+   * só a lista dentro do menu. No desktop o menu é fixo e a página rola normal.
+   */
+  @media (width < 64rem) {
+    html:has([data-scroll-lock-mobile]:popover-open) {
+      overflow: hidden;
+    }
+  }
 }

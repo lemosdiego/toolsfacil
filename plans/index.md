@@ -22,7 +22,7 @@ Painel das fases do projeto. Cada fase é um plano em [`phases/`](phases/), cria
 | 01  | [Configurar Next.js, Tailwind e testes](phases/01-configurar-nextjs-tailwind-e-testes.md)         | ✅ Concluído  | `feat/01-configurar-nextjs-tailwind-e-testes`           | #1  |
 | 02  | [Definir design tokens e componentes base](phases/02-definir-design-tokens-e-componentes-base.md) | ✅ Concluído  | `feat/02-definir-design-tokens-e-componentes-base`      | #2  |
 | 03  | [Construir layout e home das ferramentas](phases/03-construir-layout-e-home-das-ferramentas.md)   | 🚫 Descartado | `feat/03-construir-layout-e-home-das-ferramentas`       | #3  |
-| 04  | [Construir header com menu de ferramentas](phases/04-construir-header-com-menu-de-ferramentas.md) | 📝 Rascunho   | `feat/04-construir-header-com-menu-de-ferramentas`      | —   |
+| 04  | [Construir header com menu de ferramentas](phases/04-construir-header-com-menu-de-ferramentas.md) | 🔍 Em revisão | `feat/04-construir-header-com-menu-de-ferramentas`      | #4  |
 | 05  | [Construir layout da página de ferramenta](phases/05-construir-layout-da-pagina-de-ferramenta.md) | 📝 Rascunho   | `feat/05-construir-layout-da-pagina-de-ferramenta`      | —   |
 | 06  | Configurar SEO, dados estruturados e CSP                                                          | ⬜ Não criado | `feat/06-configurar-seo-dados-estruturados-e-csp`       | —   |
 | 07  | Criar envio, validação e download de imagens                                                      | ⬜ Não criado | `feat/07-criar-envio-validacao-e-download-de-imagens`   | —   |

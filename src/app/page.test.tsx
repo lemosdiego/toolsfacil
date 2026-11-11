@@ -19,4 +19,10 @@ describe("Página inicial", () => {
 
     expect(screen.getByText(siteConfig.description)).toBeInTheDocument();
   });
+
+  it("não cria outro main (o layout raiz já tem um)", () => {
+    render(<Home />);
+
+    expect(screen.queryByRole("main")).not.toBeInTheDocument();
+  });
 });

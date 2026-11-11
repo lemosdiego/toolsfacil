@@ -1,6 +1,6 @@
 # 04 — Construir header com menu de ferramentas
 
-**Status:** 📝 Rascunho · **Branch:** `feat/04-construir-header-com-menu-de-ferramentas` · **Depende de:** 02
+**Status:** 🔍 Em revisão · **Branch:** `feat/04-construir-header-com-menu-de-ferramentas` · **Depende de:** 02
 
 ## Objetivo
 
@@ -90,15 +90,15 @@ O mesmo botão "Ferramentas ▾" em todas as larguras (sem menu "hambúrguer"), 
 
 ## Tarefas
 
-- [ ] Trazer da branch da fase 03 o registro, o `SkipLink`, o `ToolMenuItem` e a ilha `ClosePopoverOnNavigate`
-- [ ] Aplicar o nome "Tools Fácil" em `site-config.ts` (e nos testes que leem o nome)
-- [ ] Ajustar o registro: categorias `convert`/`edit`, separar PNG e JPG para WebP, remover o `featured`, e escrever os testes
-- [ ] Criar `SiteHeader` e `ToolsMenu` com as colunas por categoria e o responsivo
-- [ ] Aplicar `SkipLink`, `SiteHeader` e `<main id="conteudo">` no `layout.tsx`, e tirar o `<main>` da home
-- [ ] Adicionar o header e o menu ao `/styleguide`
-- [ ] Testes de unidade, de componente e E2E (desktop e mobile)
-- [ ] Atualizar o `CLAUDE.md`
-- [ ] Preencher as notas desta fase, atualizar o `index.md` e abrir o PR
+- [x] Trazer da branch da fase 03 o registro, o `SkipLink`, o `ToolMenuItem` e a ilha `ClosePopoverOnNavigate`
+- [x] Aplicar o nome "Tools Fácil" em `site-config.ts` (e nos testes que leem o nome)
+- [x] Ajustar o registro: categorias `convert`/`edit`, separar PNG e JPG para WebP, remover o `featured`, e escrever os testes
+- [x] Criar `SiteHeader` e `ToolsMenu` com as colunas por categoria e o responsivo
+- [x] Aplicar `SkipLink`, `SiteHeader` e `<main id="conteudo">` no `layout.tsx`, e tirar o `<main>` da home
+- [x] Adicionar o header e o menu ao `/styleguide`
+- [x] Testes de unidade, de componente e E2E (desktop e mobile)
+- [x] Atualizar o `CLAUDE.md`
+- [x] Preencher as notas desta fase, atualizar o `index.md` e abrir o PR
 
 ## Commits previstos
 
@@ -137,13 +137,13 @@ Os testes de unidade e de componente entram no mesmo commit do código.
 
 ## Critérios de aceite
 
-- [ ] O header e o menu seguem o print: logo à esquerda, "Ferramentas ▾" à direita, colunas Converter, Editar e Em breve
-- [ ] O menu lê as ferramentas só do `tools.ts` (nenhuma lista solta)
-- [ ] Ferramentas `soon` não geram links
-- [ ] Menu acessível pelo teclado e pelo toque (abre, fecha com Esc e clique fora, foco volta ao botão) e fecha ao navegar
-- [ ] Sem rolagem horizontal em 360px; alvos de toque de 44px
-- [ ] axe sem violações nos dois temas
-- [ ] `lint`, `format:check`, `typecheck`, `test`, `test:e2e` e `build` passando
+- [x] O header e o menu seguem o print: logo à esquerda, "Ferramentas ▾" à direita, colunas Converter, Editar e Em breve
+- [x] O menu lê as ferramentas só do `tools.ts` (nenhuma lista solta)
+- [x] Ferramentas `soon` não geram links
+- [x] Menu acessível pelo teclado e pelo toque (abre, fecha com Esc e clique fora, foco volta ao botão) e fecha ao navegar
+- [x] Sem rolagem horizontal em 360px; alvos de toque de 44px
+- [x] axe sem violações nos dois temas
+- [x] `lint`, `format:check`, `typecheck`, `test`, `test:e2e` e `build` passando
 
 ## Pontos a confirmar
 
@@ -152,4 +152,25 @@ Os testes de unidade e de componente entram no mesmo commit do código.
 
 ## Notas da implementação
 
-_Preenchido ao final: desvios do plano, pendências e aprendizados._
+**Mudanças pedidas pelo usuário durante a implementação**
+
+- **Menu abre ao passar o mouse**, e não no clique. No toque (celular) e no teclado, continua abrindo pelo botão. A ilha `OpenPopoverOnHover` abre no hover e fecha 150 ms depois que o mouse sai do botão e do painel (tempo para atravessar o espaço entre os dois). O clique depois do hover não fecha o menu.
+- **Header e painel na largura toda da tela**, só com a margem lateral do site (1rem no celular, 1.5rem a partir de `sm`), em vez de limitados ao `max-w-content`.
+- **Colunas juntas e mais padding:** as colunas têm a largura do conteúdo (mínimo de 11rem), ficam lado a lado e alinhadas à esquerda, e o painel ganhou mais espaçamento interno. No tablet, "Em breve" desce para a linha de baixo quando não cabe.
+
+**Desvios do plano**
+
+- **Registro mais enxuto:** sem ícone, `transformation` e `featured`, que só serviam aos cards da fase 03. O menu segue o print, só com texto.
+- **Header em formato de card** (borda arredondada e sombra), como no print.
+- **Ids das colunas com `useId`**, porque o menu aparece também no `/styleguide` e os ids não podem se repetir.
+- **O `/styleguide` deixou de criar o próprio `<main>`**, já que o layout raiz agora tem um. O teste dele passou a filtrar o alerta pelo texto (o anunciador de rotas do Next também usa `role="alert"`), como já tinha sido feito na fase 03.
+- **Bug corrigido:** a ilha `ClosePopoverOnNavigate` também rodava quando a página terminava de carregar e fechava o menu se a pessoa o tivesse aberto nesse instante (o teste de teclado no mobile falhava às vezes). Agora só fecha quando a rota muda de verdade, com teste de unidade.
+- **`aria-expanded` não é testado como atributo:** o navegador calcula esse estado a partir do `popovertarget`, na árvore de acessibilidade, sem gravar no HTML.
+- **Pontos a confirmar:** sem resposta até a implementação, seguiram o que o plano propôs (frase curta na coluna "Em breve" e rotas separadas para PNG e JPG para WebP).
+
+**Testes:** 71 de unidade e componente; E2E com 38 testes em dev e 28 no build de produção (desktop e mobile), incluindo hover, toque, teclado, 360px e axe com o menu aberto nos dois temas.
+
+**Pendências**
+
+- Fechar o PR #3 (fase 03 descartada).
+- Footer e links institucionais: fase 12. Logo de verdade: fase 14.

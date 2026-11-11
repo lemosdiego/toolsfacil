@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 
+import { ToolsMenu } from "@/components/layout/tools-menu";
 import { Alert } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -143,7 +144,7 @@ export default function StyleguidePage() {
   }
 
   return (
-    <Container as="main" className="flex flex-col gap-12 py-10 sm:py-14">
+    <Container className="flex flex-col gap-12 py-10 sm:py-14">
       <header className="flex flex-col gap-2">
         <Badge variant="info" className="self-start">
           Só em desenvolvimento
@@ -293,6 +294,19 @@ export default function StyleguidePage() {
         <div className="flex max-w-md flex-col gap-4">
           <ProgressBar value={35} label="Progresso da conversão" showValue />
           <ProgressBar value={100} label="Conversão concluída" />
+        </div>
+      </Section>
+
+      <Section title="Menu de ferramentas">
+        <p className="max-w-prose text-muted">
+          Conteúdo do menu do header (
+          <code className="font-mono text-sm">ToolsMenu</code>), lido do
+          registro. Abre ao passar o mouse no botão &quot;Ferramentas&quot; e,
+          no toque ou no teclado, pelo clique. Uma coluna no celular, duas no
+          tablet e três no desktop.
+        </p>
+        <div className="rounded-card border border-line bg-surface p-5 shadow-raised sm:p-8">
+          <ToolsMenu />
         </div>
       </Section>
 
