@@ -174,6 +174,15 @@ Referência visual de tudo em **`/styleguide`** (só em `pnpm dev`; responde 404
   - A ilha `ClosePopoverOnNavigate` fecha o menu quando a rota muda (não no carregamento).
   - No celular, a página atrás não rola com o menu aberto (`data-scroll-lock-mobile`).
 
+### Página de ferramenta
+
+- Toda página de ferramenta usa o **`ToolPageLayout`** (`src/components/tools/`): `title` (o `h1`), `description` (2 ou 3 linhas), `tool` (a ilha `"use client"`) e o texto em `ToolPageSection` (`h2`). Exemplo vivo em `/styleguide/ferramenta` (só em dev).
+- **Desktop:** título, texto e botão à esquerda, prévia à direita. **Celular:** uma coluna, com título e botão acima da dobra.
+- A ilha renderiza o botão dentro de `ToolActionArea` e a prévia dentro de `ToolPreviewArea`, que se encaixam na grade. Use `hiddenOnMobile` na prévia enquanto não há imagem.
+- **`PreviewCard`:** imagem sobre o xadrez de transparência, ícone de download tradicional no canto (desativado até haver resultado, com `aria-label` como "Baixar imagem em WebP") e tamanho antes e depois.
+- O botão de envio diz **"Escolher imagem"** (nunca "enviar" ou "upload": o arquivo não sai do aparelho).
+- Tamanhos de arquivo só por `formatFileSize()` e `formatSizeChange()` (`src/lib/image/format-file-size.ts`).
+
 ### Processamento de imagem (client-side)
 
 - **Regra de ouro:** nenhum byte do arquivo do usuário sai do navegador. Nunca envie arquivo, `Blob`, base64 ou nome do arquivo para `fetch`, API, analytics ou log.
@@ -198,7 +207,12 @@ Referência visual de tudo em **`/styleguide`** (só em `pnpm dev`; responde 404
 - Banners só pelo componente `AdSlot` (`src/components/ads/`), que lê o ID de `NEXT_PUBLIC_ADSENSE_CLIENT_ID`. **Sem a variável, nenhum anúncio aparece** (padrão em dev e nos testes).
 - **Reserve a altura** do espaço do anúncio (`min-height`) para não causar CLS.
 - **Políticas do AdSense:** nunca coloque um anúncio colado ao botão de download ou à área de soltar arquivo, nem de um jeito que pareça parte da ferramenta. Clique acidental pode suspender a conta.
-- Posições previstas: abaixo da ferramenta (entre a ferramenta e o texto explicativo), na lateral no desktop e no meio do texto longo. A ferramenta em si nunca fica abaixo da dobra por causa de anúncio.
+- Posições do `AdSlot`, já colocadas pelo `ToolPageLayout` (não espalhe `AdSlot` nas páginas de ferramenta):
+  - `below-tool`: abaixo da ferramenta, depois de um espaço de segurança com divisória (pelo menos 48px). 280px no celular, 250px no desktop.
+  - `in-content`: no meio do texto, depois da primeira `ToolPageSection`. Mesmas alturas.
+  - `sidebar`: ao lado do texto (nunca da ferramenta), sticky, 600px, só a partir de `lg`.
+- Sem anúncio fixo no rodapé do celular (anúncio âncora). A ferramenta nunca fica abaixo da dobra por causa de anúncio.
+- Em dev, sem a variável, o `AdSlot` mostra um contorno tracejado para visualizar a posição.
 - `public/ads.txt` com a linha do publisher, preenchida pelo usuário.
 
 ### SEO (`src/lib/seo.ts`)
