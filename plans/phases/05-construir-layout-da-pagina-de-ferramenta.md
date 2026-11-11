@@ -1,6 +1,6 @@
 # 05 — Construir layout da página de ferramenta
 
-**Status:** 🚧 Em andamento · **Branch:** `feat/05-construir-layout-da-pagina-de-ferramenta` · **Depende de:** 04
+**Status:** 🔍 Em revisão · **Branch:** `feat/05-construir-layout-da-pagina-de-ferramenta` · **Depende de:** 04
 
 ## Objetivo
 
