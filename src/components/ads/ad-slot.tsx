@@ -1,12 +1,14 @@
 import { cn } from "@/lib/cn";
 
-export type AdPosition = "below-tool" | "sidebar" | "in-content";
+export type AdPosition = "top" | "below-tool" | "sidebar" | "in-content";
 
 /**
  * Altura reservada por posição, para o anúncio não empurrar a página (CLS).
  * Ajustar na fase 16 com os tamanhos realmente servidos.
  */
 const positionClasses: Record<AdPosition, string> = {
+  // Faixa horizontal baixa (banner de 90px), só no desktop.
+  top: "min-h-[90px]",
   "below-tool": "min-h-[280px] sm:min-h-[250px]",
   "in-content": "min-h-[280px] sm:min-h-[250px]",
   // Lateral só existe em telas largas; nunca no celular.
@@ -40,7 +42,7 @@ export function AdSlot({ position, className }: AdSlotProps) {
       data-ad-position={position}
       className={cn(
         "flex w-full flex-col gap-1",
-        position === "sidebar" && "hidden lg:flex",
+        (position === "sidebar" || position === "top") && "hidden lg:flex",
         className,
       )}
     >

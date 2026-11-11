@@ -29,6 +29,7 @@ type ToolPageLayoutProps = {
  * - Desktop: título, texto e botão à esquerda; prévia à direita.
  * - Celular: uma coluna (título → texto → botão → prévia), com título e
  *   botão acima da dobra.
+ * - Antes da ferramenta: anúncio `top`, só no desktop.
  * - Depois da ferramenta: espaço de segurança → anúncio `below-tool` → texto,
  *   com o anúncio `in-content` no meio e o `sidebar` sticky (só desktop).
  */
@@ -43,6 +44,15 @@ export function ToolPageLayout({
 
   return (
     <Container className="flex flex-col py-6 sm:py-10">
+      {/*
+       * Anúncio do topo, só no desktop: no celular empurraria o botão para
+       * baixo da dobra. Fica a 48px da ferramenta (a prévia, com o ícone de
+       * download, começa no topo da grade).
+       */}
+      <div className="hidden lg:mb-12 lg:block">
+        <AdSlot position="top" />
+      </div>
+
       <div className="grid gap-5 sm:gap-6 lg:grid-cols-2 lg:gap-x-12 lg:gap-y-8">
         <header className="flex flex-col gap-3 lg:col-start-1 lg:row-start-1 lg:self-end">
           <Heading level={1}>{title}</Heading>

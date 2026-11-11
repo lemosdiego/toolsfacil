@@ -48,4 +48,14 @@ describe("AdSlot", () => {
     expect(slot).toHaveClass("hidden", "lg:flex");
     expect(slot.lastElementChild).toHaveClass("min-h-[600px]");
   });
+
+  it("o anúncio do topo fica escondido no celular e reserva 90px", () => {
+    vi.stubEnv("NODE_ENV", "development");
+
+    render(<AdSlot position="top" />);
+
+    const slot = screen.getByRole("complementary", { name: "Publicidade" });
+    expect(slot).toHaveClass("hidden", "lg:flex");
+    expect(slot.lastElementChild).toHaveClass("min-h-[90px]");
+  });
 });

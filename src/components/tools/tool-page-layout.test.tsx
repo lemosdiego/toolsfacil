@@ -74,10 +74,15 @@ describe("ToolPageLayout", () => {
     expect(screen.queryByRole("main")).not.toBeInTheDocument();
   });
 
-  it("coloca os três anúncios, com o in-content depois da primeira seção", () => {
+  it("coloca os quatro anúncios, com o in-content depois da primeira seção", () => {
     renderLayout();
 
-    expect(adPositions()).toEqual(["below-tool", "in-content", "sidebar"]);
+    expect(adPositions()).toEqual([
+      "top",
+      "below-tool",
+      "in-content",
+      "sidebar",
+    ]);
 
     const firstSection = screen.getByRole("heading", { name: "Como usar" });
     const inContent = screen
@@ -92,7 +97,7 @@ describe("ToolPageLayout", () => {
   it("sem segunda seção, não coloca o anúncio in-content", () => {
     renderLayout(1);
 
-    expect(adPositions()).toEqual(["below-tool", "sidebar"]);
+    expect(adPositions()).toEqual(["top", "below-tool", "sidebar"]);
   });
 
   it("a prévia pode ficar escondida no celular", () => {

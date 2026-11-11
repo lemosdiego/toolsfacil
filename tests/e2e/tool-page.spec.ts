@@ -133,12 +133,35 @@ test.describe("Molde da página de ferramenta", () => {
     await expect(sidebar).toBeVisible();
   });
 
-  test("tem as três posições de anúncio e o texto explicativo", async ({
+  test("o anúncio do topo só aparece no desktop, a 48px da ferramenta", async ({
+    page,
+  }) => {
+    const topAd = page.locator("[data-ad-position='top']");
+
+    await page.setViewportSize({ width: 360, height: 740 });
+    await page.goto(examplePath);
+    await expect(topAd).toBeHidden();
+
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await expect(topAd).toBeVisible();
+    await chooseSampleImage(page);
+    for (const part of [
+      page.getByRole("heading", { level: 1 }),
+      page.locator("figure"),
+      page.getByRole("link", { name: "Baixar imagem em WebP" }),
+    ]) {
+      expect(await verticalGap(topAd, part)).toBeGreaterThanOrEqual(48);
+    }
+    // Mesmo com o anúncio, o botão continua sem precisar rolar.
+    await expect(chooseButton(page)).toBeInViewport({ ratio: 1 });
+  });
+
+  test("tem as quatro posições de anúncio e o texto explicativo", async ({
     page,
   }) => {
     await page.goto(examplePath);
 
-    for (const position of ["below-tool", "in-content", "sidebar"]) {
+    for (const position of ["top", "below-tool", "in-content", "sidebar"]) {
       await expect(
         page.locator(`[data-ad-position='${position}']`),
       ).toHaveCount(1);
