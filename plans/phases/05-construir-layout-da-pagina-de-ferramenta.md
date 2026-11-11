@@ -105,13 +105,13 @@ Print do usuário (desktop), com os anúncios e o texto que o plano acrescenta:
 
 ## Tarefas
 
-- [ ] Trazer o `AdSlot` da branch da fase 03 (com os testes) e conferir as alturas e o rótulo
-- [ ] Criar o `PreviewCard` (estado vazio e com imagem, ícone de download, tamanho antes e depois)
-- [ ] Criar o `ToolPageLayout` com as duas colunas, as posições de anúncio e o `ToolPageSection`
-- [ ] Montar o exemplo em `/styleguide/ferramenta`, com os dois estados da prévia
-- [ ] Testes de componente e E2E (desktop e mobile)
-- [ ] Atualizar o `CLAUDE.md`
-- [ ] Preencher as notas desta fase, atualizar o `index.md` e abrir o PR
+- [x] Trazer o `AdSlot` da branch da fase 03 (com os testes) e conferir as alturas e o rótulo
+- [x] Criar o `PreviewCard` (estado vazio e com imagem, ícone de download, tamanho antes e depois)
+- [x] Criar o `ToolPageLayout` com as duas colunas, as posições de anúncio e o `ToolPageSection`
+- [x] Montar o exemplo em `/styleguide/ferramenta`, com os dois estados da prévia
+- [x] Testes de componente e E2E (desktop e mobile)
+- [x] Atualizar o `CLAUDE.md`
+- [x] Preencher as notas desta fase, atualizar o `index.md` e abrir o PR
 
 ## Commits previstos
 
@@ -148,12 +148,12 @@ Os testes de componente entram no mesmo commit do código.
 
 ## Critérios de aceite
 
-- [ ] A página de exemplo segue o print: título, texto e botão à esquerda, prévia com ícone de download à direita (desktop)
-- [ ] No celular, título e botão de envio acima da dobra, uma coluna, sem rolagem horizontal
-- [ ] Três posições de anúncio com altura reservada, sempre abaixo ou ao lado do texto, nunca coladas ao envio ou ao download
-- [ ] Área de texto explicativo pronta para "Como usar", perguntas frequentes e privacidade
-- [ ] axe sem violações nos dois temas
-- [ ] `lint`, `format:check`, `typecheck`, `test`, `test:e2e` e `build` passando
+- [x] A página de exemplo segue o print: título, texto e botão à esquerda, prévia com ícone de download à direita (desktop)
+- [x] No celular, título e botão de envio acima da dobra, uma coluna, sem rolagem horizontal
+- [x] Três posições de anúncio com altura reservada, sempre abaixo ou ao lado do texto, nunca coladas ao envio ou ao download
+- [x] Área de texto explicativo pronta para "Como usar", perguntas frequentes e privacidade
+- [x] axe sem violações nos dois temas
+- [x] `lint`, `format:check`, `typecheck`, `test`, `test:e2e` e `build` passando
 
 ## Decisões confirmadas
 
@@ -162,4 +162,18 @@ Os testes de componente entram no mesmo commit do código.
 
 ## Notas da implementação
 
-_Preenchido ao final: desvios do plano, pendências e aprendizados._
+**Desvios do plano**
+
+- **Botão e prévia na mesma ilha:** os dois dependem do mesmo estado (a imagem escolhida), então não podiam ser duas áreas separadas do layout preenchidas pelo servidor. O `ToolPageLayout` recebe a ilha em `tool`, e ela usa `ToolActionArea` e `ToolPreviewArea`, que se encaixam na grade de duas colunas (o invólucro da ilha usa `display: contents`). Título e texto continuam no servidor, para o SEO.
+- **`formatFileSize` e `formatSizeChange`** (`src/lib/image/`), com testes, para o tamanho antes e depois da prévia. Base 1024, vírgula decimal e sem ponto de milhar ("1023 B", não "1.023 B"). Commit próprio, fora da lista prevista.
+- **Utilitário `bg-checkerboard`** no `globals.css`, como fundo da prévia (mostra as áreas transparentes da imagem). Usa os tokens `surface` e `surface-muted`.
+- **`in-content` só quando há mais de uma seção:** o layout coloca o anúncio depois da primeira `ToolPageSection`. Com uma seção só, ele não aparece.
+- **Texto de apoio abaixo do botão** no exemplo ("PNG até 20 MB. A imagem não sai do seu aparelho."), para reforçar a privacidade. O texto real de cada ferramenta vem na fase dela.
+- A imagem de exemplo do styleguide é um SVG embutido (`data:`): nada é carregado de fora.
+
+**Testes:** 102 de unidade e componente; E2E com 58 testes em dev e 30 no build de produção (desktop e mobile), incluindo título e botão acima da dobra em 360px, distância mínima de 48px até o primeiro anúncio, lateral só a partir de 1024px e axe nos dois temas e nos dois estados da prévia.
+
+**Pendências**
+
+- As alturas do `AdSlot` são estimativas: ajustar na fase 16 com os tamanhos reais servidos.
+- O botão "Escolher imagem" real (seletor de arquivo, validação e download) entra na fase 07.
