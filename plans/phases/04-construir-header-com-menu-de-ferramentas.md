@@ -1,6 +1,6 @@
 # 04 — Construir header com menu de ferramentas
 
-**Status:** 🚧 Em andamento · **Branch:** `feat/04-construir-header-com-menu-de-ferramentas` · **Depende de:** 02
+**Status:** 🔍 Em revisão · **Branch:** `feat/04-construir-header-com-menu-de-ferramentas` · **Depende de:** 02
 
 ## Objetivo
 
