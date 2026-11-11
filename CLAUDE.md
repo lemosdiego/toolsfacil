@@ -208,6 +208,7 @@ Referência visual de tudo em **`/styleguide`** (só em `pnpm dev`; responde 404
 - **Reserve a altura** do espaço do anúncio (`min-height`) para não causar CLS.
 - **Políticas do AdSense:** nunca coloque um anúncio colado ao botão de download ou à área de soltar arquivo, nem de um jeito que pareça parte da ferramenta. Clique acidental pode suspender a conta.
 - Posições do `AdSlot`, já colocadas pelo `ToolPageLayout` (não espalhe `AdSlot` nas páginas de ferramenta):
+  - `top`: entre o header e a ferramenta, faixa de 90px, só a partir de `lg` (no celular empurraria o botão para baixo da dobra), a 48px da ferramenta.
   - `below-tool`: abaixo da ferramenta, depois de um espaço de segurança com divisória (pelo menos 48px). 280px no celular, 250px no desktop.
   - `in-content`: no meio do texto, depois da primeira `ToolPageSection`. Mesmas alturas.
   - `sidebar`: ao lado do texto (nunca da ferramenta), sticky, 600px, só a partir de `lg`.

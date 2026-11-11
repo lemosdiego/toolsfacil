@@ -171,7 +171,12 @@ Os testes de componente entram no mesmo commit do código.
 - **Texto de apoio abaixo do botão** no exemplo ("PNG até 20 MB. A imagem não sai do seu aparelho."), para reforçar a privacidade. O texto real de cada ferramenta vem na fase dela.
 - A imagem de exemplo do styleguide é um SVG embutido (`data:`): nada é carregado de fora.
 
-**Testes:** 102 de unidade e componente; E2E com 58 testes em dev e 30 no build de produção (desktop e mobile), incluindo título e botão acima da dobra em 360px, distância mínima de 48px até o primeiro anúncio, lateral só a partir de 1024px e axe nos dois temas e nos dois estados da prévia.
+**Ajustes pedidos pelo usuário na revisão**
+
+- **Anúncio no topo** (`top`): faixa de 90px entre o header e a ferramenta, só no desktop, a 48px da prévia (que tem o ícone de download). No celular ele empurraria o botão "Escolher imagem" para baixo da dobra, então fica de fora.
+- O usuário testou o header e a página com outras larguras e preferiu manter como estava: header na largura toda da tela e página na largura do conteúdo (`max-w-content`).
+
+**Testes:** 103 de unidade e componente; E2E com 60 testes em dev e 30 no build de produção (desktop e mobile), incluindo título e botão acima da dobra em 360px, distância mínima de 48px até o primeiro anúncio, lateral só a partir de 1024px e axe nos dois temas e nos dois estados da prévia.
 
 **Pendências**
 
