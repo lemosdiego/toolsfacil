@@ -1,6 +1,6 @@
 # 04 — Construir header com menu de ferramentas
 
-**Status:** 🔍 Em revisão · **Branch:** `feat/04-construir-header-com-menu-de-ferramentas` · **Depende de:** 02
+**Status:** ✅ Concluído · **Branch:** `feat/04-construir-header-com-menu-de-ferramentas` · **Depende de:** 02
 
 ## Objetivo
 
@@ -172,5 +172,5 @@ Os testes de unidade e de componente entram no mesmo commit do código.
 
 **Pendências**
 
-- Fechar o PR #3 (fase 03 descartada).
+- ~~Fechar o PR #3 (fase 03 descartada).~~ Fechado.
 - Footer e links institucionais: fase 12. Logo de verdade: fase 14.
