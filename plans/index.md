@@ -28,6 +28,7 @@ Numeradas na ordem em que os planos foram criados (o número nasce com o plano).
 | 05  | [Construir layout da página de ferramenta](phases/05-construir-layout-da-pagina-de-ferramenta.md) | ✅ Concluído  | `feat/05-construir-layout-da-pagina-de-ferramenta` | #5  |
 | 06  | [Construir home com roteador de imagem](phases/06-construir-home-com-roteador-de-imagem.md)       | 📝 Rascunho   | `feat/06-construir-home-com-roteador-de-imagem`    | —   |
 | 07  | [Mapear rotas e criar telas de erro](phases/07-mapear-rotas-e-criar-telas-de-erro.md)             | ✅ Concluído  | `feat/07-mapear-rotas-e-criar-telas-de-erro`       | #6  |
+| 08  | [Configurar SEO, dados estruturados e CSP](phases/08-configurar-seo-dados-estruturados-e-csp.md)  | 📝 Rascunho   | `feat/08-configurar-seo-dados-estruturados-e-csp`  | —   |
 
 ## Roteiro (fases sem plano)
 
@@ -35,7 +36,6 @@ Em ordem de prioridade, **sem número**: a fase só ganha número (e branch) qua
 
 | Fase                                           | Status        |
 | ---------------------------------------------- | ------------- |
-| Configurar SEO, dados estruturados e CSP       | ⬜ Não criado |
 | Criar envio, validação e download de imagens   | ⬜ Não criado |
 | Converter PNG e JPG para WebP                  | ⬜ Não criado |
 | Compactar imagens no navegador                 | ⬜ Não criado |
@@ -51,7 +51,7 @@ Em ordem de prioridade, **sem número**: a fase só ganha número (e branch) qua
 >
 > **Blocos do roteiro:**
 >
-> - **Fundação (01, 02, 04, 05, 07 e SEO):** projeto, testes, identidade visual neutra, header com o menu de ferramentas, molde da página de ferramenta com os espaços de anúncio, SEO de base e cabeçalhos de segurança (CSP). Toda ferramenta já nasce com SEO e CSP prontos.
+> - **Fundação (01, 02, 04, 05, 07 e 08):** projeto, testes, identidade visual neutra, header com o menu de ferramentas, molde da página de ferramenta com os espaços de anúncio, SEO de base e cabeçalhos de segurança (CSP). Toda ferramenta já nasce com SEO e CSP prontos.
 > - **Infraestrutura das ferramentas (envio, validação e download):** área de soltar arquivo, validação pelo tipo real, Web Worker e download. Peças reaproveitadas por todas as ferramentas.
 > - **Ferramentas do MVP:** uma fase por ferramenta, cada uma com rota própria, texto explicativo, FAQ e testes E2E com imagens reais. A compactação vem logo depois do WebP porque reaproveita quase tudo dele; o HEIC fica por último por ser o de maior risco técnico (biblioteca pesada).
 > - **Home (06):** a pessoa escolhe a imagem na home, que sugere as ferramentas compatíveis com o tipo do arquivo e leva a imagem até a escolhida, sem nova escolha. Só pode ser implementada depois do envio e download e do conversor de WebP.
