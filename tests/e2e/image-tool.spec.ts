@@ -46,6 +46,8 @@ test.describe("Peças das ferramentas de imagem", () => {
 
   test.beforeEach(async ({ page }) => {
     await page.goto(examplePath);
+    // Antes da hidratação, o seletor de arquivo não reage.
+    await page.waitForLoadState("networkidle");
   });
 
   test("PNG transparente: prévia, download com o nome certo e mesmas dimensões", async ({
@@ -121,6 +123,7 @@ test.describe("Peças das ferramentas de imagem", () => {
       };
     });
     await page.goto(examplePath);
+    await page.waitForLoadState("networkidle");
     const workerCreated = page.waitForEvent("worker");
 
     await input(page).setInputFiles(fixture("foto.jpg"));
