@@ -12,6 +12,7 @@ const baseTool: Tool = {
   category: "convert",
   status: "available",
   accepts: ["image/png"],
+  actionLabel: "Converter para WebP",
 };
 
 describe("ToolMenuItem", () => {
