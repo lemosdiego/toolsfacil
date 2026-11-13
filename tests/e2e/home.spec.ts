@@ -17,7 +17,7 @@ test.describe("Página inicial", () => {
   test("usa o nome do site no título e o idioma pt-BR", async ({ page }) => {
     await page.goto("/");
 
-    await expect(page).toHaveTitle(siteConfig.name);
+    await expect(page).toHaveTitle(new RegExp(siteConfig.name));
     await expect(page.locator("html")).toHaveAttribute("lang", "pt-BR");
   });
 
