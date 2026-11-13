@@ -42,7 +42,7 @@ export const tools: readonly Tool[] = [
     shortDescription:
       "Transforme PNG em WebP, mais leve e com fundo transparente preservado.",
     category: "convert",
-    status: "soon",
+    status: "available",
     accepts: ["image/png", "image/jpeg"],
   },
   {
@@ -51,7 +51,7 @@ export const tools: readonly Tool[] = [
     shortDescription:
       "Transforme fotos JPG em WebP, o formato mais leve para sites e lojas.",
     category: "convert",
-    status: "soon",
+    status: "available",
     accepts: ["image/png", "image/jpeg"],
   },
   {
