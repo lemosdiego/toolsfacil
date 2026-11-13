@@ -271,7 +271,9 @@ Formato: **`NN-verbo-entrega.md`**, por exemplo `03-converter-png-jpg-para-webp.
 - Começa por um **verbo de ação** e cita a **entrega concreta** (e a tecnologia principal, quando fizer sentido).
 - kebab-case, **sem acentos**, até cerca de 50 caracteres.
 - Proibido usar termos vagos: "base", "ajustes", "melhorias", "geral".
-- Uma fase nova recebe o próximo número livre. **Nunca renumere** fases que já têm plano criado. As fases ⬜ (sem plano) podem ser divididas, juntadas ou reordenadas no `index.md`.
+- **O número só nasce com o plano:** ao criar o plano, a fase recebe o número seguinte ao do último plano criado (o próximo da sequência em `phases/`), seja qual for a fase escolhida. **Nunca renumere** fases que já têm plano.
+- As fases previstas (⬜, sem plano) ficam no `index.md` **sem número e sem branch**, numa lista em ordem de prioridade. Podem ser divididas, juntadas ou reordenadas à vontade.
+- Para citar uma fase sem plano (em outro plano, no código ou na documentação), use o nome dela, nunca um número.
 
 ### Ciclo de vida de um plano
 
