@@ -112,13 +112,13 @@ A tela de erro segue o mesmo molde: `h1` "Algo deu errado", texto curto ("Tente 
 
 ## Tarefas
 
-- [ ] Escrever a seção "Mapa de rotas" no `CLAUDE.md` e atualizar a estrutura de pastas
-- [ ] Criar o `not-found.tsx` com a lista de ferramentas
-- [ ] Criar o `error.tsx` com "Tentar de novo"
-- [ ] Criar o `global-error.tsx` mínimo
-- [ ] Criar a rota `/styleguide/erro` (só em dev)
-- [ ] Testes de componente e E2E (desktop e mobile)
-- [ ] Preencher as notas desta fase, atualizar o `index.md` e abrir o PR
+- [x] Escrever a seção "Mapa de rotas" no `CLAUDE.md` e atualizar a estrutura de pastas
+- [x] Criar o `not-found.tsx` com a lista de ferramentas
+- [x] Criar o `error.tsx` com "Tentar de novo"
+- [x] Criar o `global-error.tsx` mínimo
+- [x] Criar a rota `/styleguide/erro` (só em dev)
+- [x] Testes de componente e E2E (desktop e mobile)
+- [x] Preencher as notas desta fase, atualizar o `index.md` e abrir o PR
 
 ## Commits previstos
 
@@ -154,12 +154,12 @@ Os testes de componente entram no mesmo commit do código.
 
 ## Critérios de aceite
 
-- [ ] O mapa de rotas está no `CLAUDE.md`, com todas as telas do MVP, a fase de cada uma e a regra do sitemap
-- [ ] URL inexistente e ferramenta `soon` respondem 404 com a página em português, header e lista de ferramentas
-- [ ] Erro inesperado mostra a tela de erro com "Tentar de novo", sem enviar nada para fora
-- [ ] No celular, sem rolagem horizontal e com o botão acima da dobra
-- [ ] axe sem violações nos dois temas
-- [ ] `lint`, `format:check`, `typecheck`, `test`, `test:e2e` e `build` passando
+- [x] O mapa de rotas está no `CLAUDE.md`, com todas as telas do MVP, a fase de cada uma e a regra do sitemap
+- [x] URL inexistente e ferramenta `soon` respondem 404 com a página em português, header e lista de ferramentas
+- [x] Erro inesperado mostra a tela de erro com "Tentar de novo", sem enviar nada para fora
+- [x] No celular, sem rolagem horizontal e com o botão acima da dobra
+- [x] axe sem violações nos dois temas
+- [x] `lint`, `format:check`, `typecheck`, `test`, `test:e2e` e `build` passando
 
 ## Pontos para a revisão do usuário
 
@@ -169,4 +169,18 @@ Os testes de componente entram no mesmo commit do código.
 
 ## Notas da implementação
 
-_Preenchido ao final: desvios do plano, pendências e aprendizados._
+**Desvios do plano**
+
+- **`ErrorScreen` compartilhado** (`src/components/layout/`): o `error.tsx` e o `global-error.tsx` usam o mesmo conteúdo (`h1`, texto, "Tentar de novo" e "Ir para a página inicial"). A mensagem do erro nunca é exibida.
+- **Título da aba no `error.tsx`** pelo `<title>` do React, porque arquivos `"use client"` não exportam `metadata`. A 404 usa `metadata` normalmente.
+- **`fireEvent` em vez de `user-event`** nos testes de componente: o `@testing-library/user-event` não está instalado, e um clique simples não justifica uma dependência nova.
+- **E2E da mensagem do erro só dentro do `<main>`:** em dev, o painel de erros do Next mostra a mensagem por cima da página. A garantia de que a página não a exibe fica no teste de componente.
+- **"Tentar de novo" no E2E:** o exemplo `/styleguide/erro` sempre falha, então o teste confere que o `retry` roda e que a tela de erro volta. A recuperação de verdade é coberta pelo teste de componente (o botão chama o `retry` do Next).
+- **Ferramenta em breve no E2E:** o teste usa `/heic-para-jpg`, a última ferramenta prevista para ficar pronta, para não quebrar quando o WebP virar `available`.
+
+**Testes:** 112 de unidade e componente; E2E com 80 testes em dev e 44 no build de produção (desktop e mobile).
+
+**Pendências**
+
+- A rota `/styleguide/erro` não tem link na página `/styleguide`: é acessada direto pela URL.
+- O `title` das telas ainda não tem o sufixo do site: o modelo de título entra com a fase de SEO.
