@@ -21,6 +21,9 @@ jobs:
     env:
       CI: true
       NEXT_TELEMETRY_DISABLED: 1
+      # Obrigatória no build de produção (ver src/lib/seo.ts). No CI, o site
+      # roda em localhost para os testes E2E.
+      NEXT_PUBLIC_SITE_URL: http://localhost:3000
     steps:
       - uses: actions/checkout@v5
 
