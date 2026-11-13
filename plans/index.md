@@ -19,16 +19,17 @@ Painel das fases do projeto. Cada fase é um plano em [`phases/`](phases/), cria
 
 Numeradas na ordem em que os planos foram criados (o número nasce com o plano).
 
-| #   | Fase                                                                                              | Status        | Branch                                             | PR  |
-| --- | ------------------------------------------------------------------------------------------------- | ------------- | -------------------------------------------------- | --- |
-| 01  | [Configurar Next.js, Tailwind e testes](phases/01-configurar-nextjs-tailwind-e-testes.md)         | ✅ Concluído  | `feat/01-configurar-nextjs-tailwind-e-testes`      | #1  |
-| 02  | [Definir design tokens e componentes base](phases/02-definir-design-tokens-e-componentes-base.md) | ✅ Concluído  | `feat/02-definir-design-tokens-e-componentes-base` | #2  |
-| 03  | [Construir layout e home das ferramentas](phases/03-construir-layout-e-home-das-ferramentas.md)   | 🚫 Descartado | `feat/03-construir-layout-e-home-das-ferramentas`  | #3  |
-| 04  | [Construir header com menu de ferramentas](phases/04-construir-header-com-menu-de-ferramentas.md) | ✅ Concluído  | `feat/04-construir-header-com-menu-de-ferramentas` | #4  |
-| 05  | [Construir layout da página de ferramenta](phases/05-construir-layout-da-pagina-de-ferramenta.md) | ✅ Concluído  | `feat/05-construir-layout-da-pagina-de-ferramenta` | #5  |
-| 06  | [Construir home com roteador de imagem](phases/06-construir-home-com-roteador-de-imagem.md)       | 📝 Rascunho   | `feat/06-construir-home-com-roteador-de-imagem`    | —   |
-| 07  | [Mapear rotas e criar telas de erro](phases/07-mapear-rotas-e-criar-telas-de-erro.md)             | ✅ Concluído  | `feat/07-mapear-rotas-e-criar-telas-de-erro`       | #6  |
-| 08  | [Configurar SEO, dados estruturados e CSP](phases/08-configurar-seo-dados-estruturados-e-csp.md)  | 📝 Rascunho   | `feat/08-configurar-seo-dados-estruturados-e-csp`  | —   |
+| #   | Fase                                                                                                     | Status        | Branch                                                | PR  |
+| --- | -------------------------------------------------------------------------------------------------------- | ------------- | ----------------------------------------------------- | --- |
+| 01  | [Configurar Next.js, Tailwind e testes](phases/01-configurar-nextjs-tailwind-e-testes.md)                | ✅ Concluído  | `feat/01-configurar-nextjs-tailwind-e-testes`         | #1  |
+| 02  | [Definir design tokens e componentes base](phases/02-definir-design-tokens-e-componentes-base.md)        | ✅ Concluído  | `feat/02-definir-design-tokens-e-componentes-base`    | #2  |
+| 03  | [Construir layout e home das ferramentas](phases/03-construir-layout-e-home-das-ferramentas.md)          | 🚫 Descartado | `feat/03-construir-layout-e-home-das-ferramentas`     | #3  |
+| 04  | [Construir header com menu de ferramentas](phases/04-construir-header-com-menu-de-ferramentas.md)        | ✅ Concluído  | `feat/04-construir-header-com-menu-de-ferramentas`    | #4  |
+| 05  | [Construir layout da página de ferramenta](phases/05-construir-layout-da-pagina-de-ferramenta.md)        | ✅ Concluído  | `feat/05-construir-layout-da-pagina-de-ferramenta`    | #5  |
+| 06  | [Construir home com roteador de imagem](phases/06-construir-home-com-roteador-de-imagem.md)              | 📝 Rascunho   | `feat/06-construir-home-com-roteador-de-imagem`       | —   |
+| 07  | [Mapear rotas e criar telas de erro](phases/07-mapear-rotas-e-criar-telas-de-erro.md)                    | ✅ Concluído  | `feat/07-mapear-rotas-e-criar-telas-de-erro`          | #6  |
+| 08  | [Configurar SEO, dados estruturados e CSP](phases/08-configurar-seo-dados-estruturados-e-csp.md)         | 📝 Rascunho   | `feat/08-configurar-seo-dados-estruturados-e-csp`     | —   |
+| 09  | [Criar envio, validação e download de imagens](phases/09-criar-envio-validacao-e-download-de-imagens.md) | 📝 Rascunho   | `feat/09-criar-envio-validacao-e-download-de-imagens` | —   |
 
 ## Roteiro (fases sem plano)
 
@@ -36,7 +37,6 @@ Em ordem de prioridade, **sem número**: a fase só ganha número (e branch) qua
 
 | Fase                                           | Status        |
 | ---------------------------------------------- | ------------- |
-| Criar envio, validação e download de imagens   | ⬜ Não criado |
 | Converter PNG e JPG para WebP                  | ⬜ Não criado |
 | Compactar imagens no navegador                 | ⬜ Não criado |
 | Cortar e redimensionar com Cropper.js          | ⬜ Não criado |
@@ -52,7 +52,7 @@ Em ordem de prioridade, **sem número**: a fase só ganha número (e branch) qua
 > **Blocos do roteiro:**
 >
 > - **Fundação (01, 02, 04, 05, 07 e 08):** projeto, testes, identidade visual neutra, header com o menu de ferramentas, molde da página de ferramenta com os espaços de anúncio, SEO de base e cabeçalhos de segurança (CSP). Toda ferramenta já nasce com SEO e CSP prontos.
-> - **Infraestrutura das ferramentas (envio, validação e download):** área de soltar arquivo, validação pelo tipo real, Web Worker e download. Peças reaproveitadas por todas as ferramentas.
+> - **Infraestrutura das ferramentas (09):** área de soltar arquivo, validação pelo tipo real, Web Worker e download. Peças reaproveitadas por todas as ferramentas.
 > - **Ferramentas do MVP:** uma fase por ferramenta, cada uma com rota própria, texto explicativo, FAQ e testes E2E com imagens reais. A compactação vem logo depois do WebP porque reaproveita quase tudo dele; o HEIC fica por último por ser o de maior risco técnico (biblioteca pesada).
 > - **Home (06):** a pessoa escolhe a imagem na home, que sugere as ferramentas compatíveis com o tipo do arquivo e leva a imagem até a escolhida, sem nova escolha. Só pode ser implementada depois do envio e download e do conversor de WebP.
 > - **Preparação para o lançamento:** páginas exigidas pelo AdSense (Sobre, Contato, Privacidade, Termos), auditoria antes de publicar e a identidade visual (paleta, logo e ícone) do Tools Fácil.
