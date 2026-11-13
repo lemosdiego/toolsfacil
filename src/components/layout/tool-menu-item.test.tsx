@@ -11,6 +11,7 @@ const baseTool: Tool = {
   shortDescription: "PNG para WebP.",
   category: "convert",
   status: "available",
+  accepts: ["image/png"],
 };
 
 describe("ToolMenuItem", () => {

@@ -5,6 +5,7 @@ import {
   getToolBySlug,
   getToolHref,
   getToolsByCategory,
+  getToolsForFileType,
   toolCategories,
   tools,
 } from "./tools";
@@ -31,6 +32,14 @@ describe("registro de ferramentas", () => {
       expect(toolCategories.map((category) => category.id)).toContain(
         tool.category,
       );
+    },
+  );
+
+  it.each(tools.map((tool) => [tool.slug, tool]))(
+    "%s aceita pelo menos um tipo de imagem, sem repetir",
+    (_slug, tool) => {
+      expect(tool.accepts.length).toBeGreaterThan(0);
+      expect(new Set(tool.accepts).size).toBe(tool.accepts.length);
     },
   );
 
@@ -92,5 +101,26 @@ describe("consultas ao registro", () => {
 
   it("getToolHref monta a rota a partir do slug", () => {
     expect(getToolHref({ slug: "compactar-imagem" })).toBe("/compactar-imagem");
+  });
+});
+
+describe("getToolsForFileType", () => {
+  it("devolve as ferramentas que aceitam o tipo, na ordem do registro", () => {
+    expect(getToolsForFileType("image/png").map((tool) => tool.slug)).toEqual([
+      "png-para-webp",
+      "jpg-para-webp",
+      "compactar-imagem",
+      "cortador-de-imagem",
+    ]);
+  });
+
+  it("sugere o conversor de HEIC para fotos do iPhone", () => {
+    expect(getToolsForFileType("image/heic").map((tool) => tool.slug)).toEqual([
+      "heic-para-jpg",
+    ]);
+  });
+
+  it("devolve lista vazia para tipo sem ferramenta", () => {
+    expect(getToolsForFileType("image/gif")).toEqual([]);
   });
 });
