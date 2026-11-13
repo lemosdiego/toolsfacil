@@ -24,6 +24,8 @@ export function buildContentSecurityPolicy({
     "script-src": [
       "'self'",
       "'unsafe-inline'",
+      // Só a compilação de WebAssembly (codificador WebP no Safari), não o eval de JS.
+      "'wasm-unsafe-eval'",
       ...(isDevelopment ? ["'unsafe-eval'"] : []),
     ],
     "style-src": ["'self'", "'unsafe-inline'"],

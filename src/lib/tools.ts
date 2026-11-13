@@ -42,7 +42,7 @@ export const tools: readonly Tool[] = [
     shortDescription:
       "Transforme PNG em WebP, mais leve e com fundo transparente preservado.",
     category: "convert",
-    status: "soon",
+    status: "available",
     accepts: ["image/png", "image/jpeg"],
   },
   {
@@ -51,7 +51,7 @@ export const tools: readonly Tool[] = [
     shortDescription:
       "Transforme fotos JPG em WebP, o formato mais leve para sites e lojas.",
     category: "convert",
-    status: "soon",
+    status: "available",
     accepts: ["image/png", "image/jpeg"],
   },
   {
@@ -89,6 +89,13 @@ export function getToolHref(tool: Pick<Tool, "slug">): string {
 
 export function getToolBySlug(slug: string): Tool | undefined {
   return tools.find((tool) => tool.slug === slug);
+}
+
+/** A ferramenta do slug, ou erro no build (para as páginas das ferramentas). */
+export function requireTool(slug: string): Tool {
+  const tool = getToolBySlug(slug);
+  if (!tool) throw new Error(`Ferramenta não registrada em tools.ts: ${slug}`);
+  return tool;
 }
 
 export function getAvailableTools(): Tool[] {

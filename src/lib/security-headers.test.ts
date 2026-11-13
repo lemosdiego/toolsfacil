@@ -41,7 +41,11 @@ describe("buildContentSecurityPolicy em produção", () => {
   });
 
   it("não libera eval nem WebSocket", () => {
-    expect(policy["script-src"]).toEqual(["'self'", "'unsafe-inline'"]);
+    expect(policy["script-src"]).toEqual([
+      "'self'",
+      "'unsafe-inline'",
+      "'wasm-unsafe-eval'",
+    ]);
     expect(policy["connect-src"]).not.toContain("ws:");
   });
 

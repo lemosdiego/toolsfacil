@@ -26,7 +26,12 @@ async function cspViolations(page: Page) {
   return page.evaluate(() => window.__cspViolations);
 }
 
-const pages = ["/", "/endereco-que-nao-existe"];
+const pages = [
+  "/",
+  "/endereco-que-nao-existe",
+  "/png-para-webp",
+  "/jpg-para-webp",
+];
 const devPages = ["/styleguide", "/styleguide/erro"];
 
 test.describe("Cabeçalhos de segurança", () => {

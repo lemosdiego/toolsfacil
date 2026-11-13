@@ -14,6 +14,8 @@ function chooseButton(page: Page) {
 }
 
 async function chooseSampleImage(page: Page) {
+  // Antes da hidratação, o seletor de arquivo não reage.
+  await page.waitForLoadState("networkidle");
   await page.getByTestId("image-input").setInputFiles(sampleImage);
   await expect(
     page.getByRole("img", { name: "Prévia da imagem convertida" }),
