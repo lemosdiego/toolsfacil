@@ -64,14 +64,14 @@ O molde da fase 05, sem layout novo:
 
 ## Tarefas
 
-- [ ] Conferir o peso do codificador WASM e pedir a aprovação para instalar
-- [ ] Criar a ilha `WebpConverter` com o controle de qualidade e o aviso de arquivo maior
-- [ ] Ligar o codificador WASM como reserva, dentro do worker
-- [ ] Criar as rotas `/png-para-webp` e `/jpg-para-webp` com textos, FAQ, metadados e JSON-LD
-- [ ] Trocar o status das duas ferramentas para `available`
-- [ ] Testes de componente e E2E (desktop e mobile)
-- [ ] Atualizar o `CLAUDE.md`
-- [ ] Preencher as notas desta fase, atualizar o `index.md` e abrir o PR
+- [x] Conferir o peso do codificador WASM e pedir a aprovação para instalar
+- [x] Criar a ilha `WebpConverter` com o controle de qualidade e o aviso de arquivo maior
+- [x] Ligar o codificador WASM como reserva, dentro do worker
+- [x] Criar as rotas `/png-para-webp` e `/jpg-para-webp` com textos, FAQ, metadados e JSON-LD
+- [x] Trocar o status das duas ferramentas para `available`
+- [x] Testes de componente e E2E (desktop e mobile)
+- [x] Atualizar o `CLAUDE.md`
+- [x] Preencher as notas desta fase, atualizar o `index.md` e abrir o PR
 
 ## Commits previstos
 
@@ -111,12 +111,18 @@ Os testes de unidade e de componente entram no mesmo commit do código. A instal
 
 ## Critérios de aceite
 
-- [ ] `/png-para-webp` e `/jpg-para-webp` convertem no navegador e baixam um WebP de verdade, inclusive na simulação do Safari
-- [ ] Transparência preservada, foto de pé, tamanho antes e depois e aviso quando o WebP fica maior
-- [ ] Texto original, FAQ, metadados e JSON-LD em cada página
-- [ ] As duas ferramentas aparecem como link no menu e no sitemap
-- [ ] Nenhuma requisição leva o arquivo; Lighthouse mobile ≥ 90 nas duas páginas
-- [ ] `lint`, `format:check`, `typecheck`, `test`, `test:e2e` e `build` passando
+- [x] `/png-para-webp` e `/jpg-para-webp` convertem no navegador e baixam um WebP de verdade, inclusive na simulação do Safari
+- [x] Transparência preservada, foto de pé, tamanho antes e depois e aviso quando o WebP fica maior
+- [x] Texto original, FAQ, metadados e JSON-LD em cada página
+- [x] As duas ferramentas aparecem como link no menu e no sitemap
+- [x] Nenhuma requisição leva o arquivo
+- [ ] Lighthouse mobile ≥ 90 nas duas páginas (não medido: ver as notas)
+- [x] `lint`, `format:check`, `typecheck`, `test`, `test:e2e` e `build` passando
+
+## Decisões confirmadas
+
+- **Codificador WASM:** `@jsquash/webp` 1.5.0 aprovado pelo usuário (~126 KB gzip na versão SIMD, ~114 KB na comum, Apache-2.0), junto com `'wasm-unsafe-eval'` na CSP.
+- **Controle de qualidade:** visível, logo abaixo do botão.
 
 ## Pontos para a revisão do usuário
 
@@ -126,4 +132,20 @@ Os testes de unidade e de componente entram no mesmo commit do código. A instal
 
 ## Notas da implementação
 
-_Preenchido ao final: desvios do plano, pendências e aprendizados._
+**Desvios do plano**
+
+- **Qualidade refeita "ao parar de mexer"** (350 ms depois da última mudança), em vez de "ao soltar o controle": funciona igual com mouse, toque e teclado (setas), que não têm um evento de "soltar" comum.
+- **Codificador escolhido na thread principal:** o `WebpConverter` pergunta `canEncode("image/webp")` e passa `encoder: "wasm"` ao `processImage`. O worker carrega o `@jsquash/webp` com `import()` só nesse caso. Assim o E2E consegue simular o Safari trocando o `toBlob` da página (o script do teste não roda dentro do worker).
+- **CSP com `'wasm-unsafe-eval'`:** necessário para compilar o WASM em produção. Libera só WebAssembly, não o `eval` de JavaScript.
+- **`FaqList`** (componente das perguntas em `<details>`) e **`requireTool()`** no registro: as páginas usam a mesma lista para o texto e para o JSON-LD.
+- **E2E mais estáveis:** os testes de escolha de arquivo passaram a esperar a hidratação (`networkidle`) depois do `goto`. No primeiro acesso em dev, a compilação da página atrasava a hidratação, e o arquivo escolhido antes dela era ignorado. Valeu também para os specs da fase 09.
+- **Páginas novas no teste de CSP** (`security-headers.spec.ts`), como pede o `CLAUDE.md`.
+
+**Conferido no build de produção:** as duas páginas são estáticas, o worker roda compilado e os dois `.wasm` saem em `static/media`. A simulação do Safari passa em produção (o WASM carrega com status 200 e o download é WebP de verdade, com transparência).
+
+**Testes:** 218 de unidade e componente; E2E com 164 testes em dev (estáveis em 3 repetições dos specs de imagem) e 96 no build de produção (desktop e mobile).
+
+**Pendências**
+
+- **Lighthouse mobile ≥ 90 não foi medido:** o comando (`pnpm dlx lighthouse` contra o `pnpm start`) foi bloqueado pelo controle de permissões desta sessão. Para medir: `NEXT_PUBLIC_SITE_URL=http://localhost:3100 pnpm build`, `PORT=3100 pnpm start` e o Lighthouse do Chrome (DevTools → Lighthouse → Mobile) em `/png-para-webp` e `/jpg-para-webp`. Também entra na fase de auditoria.
+- O Safari real não foi testado (o CI só tem Chromium); a simulação cobre o caminho do WASM.
