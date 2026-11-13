@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 
 import { SiteHeader } from "@/components/layout/site-header";
 import { MAIN_CONTENT_ID, SkipLink } from "@/components/layout/skip-link";
+import { baseOpenGraph, getSiteUrl } from "@/lib/seo";
 import { siteConfig } from "@/lib/site-config";
 
 import "./globals.css";
@@ -15,8 +16,18 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: siteConfig.name,
+  // Base das URLs relativas (canonical, Open Graph). Ver seo.ts.
+  metadataBase: new URL(getSiteUrl()),
+  title: {
+    default: siteConfig.name,
+    template: `%s | ${siteConfig.name}`,
+  },
   description: siteConfig.description,
+  openGraph: {
+    ...baseOpenGraph,
+    title: siteConfig.name,
+    description: siteConfig.description,
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

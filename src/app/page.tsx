@@ -1,4 +1,12 @@
+import { createPageMetadata } from "@/lib/seo";
 import { siteConfig } from "@/lib/site-config";
+
+export const metadata = createPageMetadata({
+  title: `${siteConfig.name}: ${siteConfig.tagline}`,
+  description: siteConfig.description,
+  path: "/",
+  absoluteTitle: true,
+});
 
 export default function Home() {
   return (
