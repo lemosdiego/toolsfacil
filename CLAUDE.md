@@ -87,7 +87,8 @@ src/
       termos-de-uso/
     api/                    # route handlers (futuro: webhooks do Pix)
     layout.tsx              # SkipLink, header, <main> e script do AdSense
-    page.tsx                # home (roteador de imagem, fase 06)
+    page.tsx                # home: roteador de imagem + grade de ferramentas
+    home-content.ts         # textos e FAQ da home
     not-found.tsx           # 404: toda URL sem rota (e ferramenta "soon")
     error.tsx               # erro inesperado, com "Tentar de novo"
     global-error.tsx        # erro no próprio layout raiz (documento mínimo)
@@ -98,6 +99,7 @@ src/
     ui/                     # componentes genéricos (Button, Card...)
     layout/                 # SkipLink, SiteHeader, ToolsMenu (Footer depois)
     ads/                    # AdSlot
+    home/                   # ImageRouter e ToolGrid
     seo/                    # JsonLd
     tools/                  # ToolPageLayout, FileDropzone, DownloadButton...
   lib/
@@ -191,6 +193,14 @@ Toda tela do site está neste mapa. **Rota nova só entra depois de entrar aqui*
 - **Contato sem formulário:** só e-mail, vindo do `site-config.ts` (formulário exigiria servidor ou serviço externo).
 - **Erros:** as telas de erro não registram nem enviam o erro para fora (a mensagem pode ter o nome do arquivo do usuário). Erro esperado (arquivo inválido, grande demais) é tratado dentro da ferramenta, com `Alert`.
 - **Fora do MVP:** páginas de categoria (`/converter`, `/editar`) e "Todas as ferramentas", só quando houver ferramentas suficientes por grupo.
+
+### Home
+
+- **Topo:** `h1` "Ferramentas de imagem online e grátis", texto curto e o **`ImageRouter`** (`src/components/home/`): a pessoa escolhe ou arrasta a imagem, a home confere (tipo real, tamanho e dimensões, com `getAllAcceptedTypes()`) e mostra as ações de `getActionsForFileType()`.
+- **Ações:** uma por `actionLabel` do registro (PNG não mostra dois "Converter para WebP"; no empate, a ferramenta pronta e do formato principal, `accepts[0]`). "Em breve" aparece sem link.
+- **Passagem do arquivo:** o clique comum na ação chama `setPendingFile()` (`src/lib/image/pending-file.ts`, só memória). O `useImageTool` de qualquer ferramenta abre o arquivo com `takePendingFile()` ao montar. Nova aba ou recarregar: a ferramenta abre vazia.
+- **Depois do topo:** `ToolGrid` (todas as ferramentas, por categoria), o `AdSlot` `below-tool` com o espaço de segurança, e o texto (como funciona, privacidade, FAQ). JSON-LD `WebSite` + `FAQPage`. Nenhum anúncio perto da área de escolher.
+- Ferramenta nova aparece sozinha na grade e no roteador: basta o registro (`accepts`, `actionLabel`, `status`).
 
 ### Layout e header
 
