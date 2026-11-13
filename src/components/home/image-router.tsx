@@ -166,7 +166,9 @@ export function ImageRouter() {
                     className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-control border border-line px-6 text-base text-muted sm:w-auto"
                   >
                     {tool.actionLabel}
-                    <Badge>Em breve</Badge>
+                    <Badge className="shrink-0 whitespace-nowrap">
+                      Em breve
+                    </Badge>
                   </span>
                 )}
               </li>
