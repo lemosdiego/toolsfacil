@@ -60,16 +60,16 @@ Ao final, cada ferramenta (WebP, compactar, cortar, HEIC) só diz **o que aceita
 
 ## Tarefas
 
-- [ ] Criar `detect-image-type`, `read-image-dimensions`, `image-limits`, `image-formats`, `validate-image` e `output-file-name`, com testes
-- [ ] Adicionar `accepts` ao registro e `getToolsForFileType()`, com testes
-- [ ] Criar o worker, o `process-image` (com a reserva na thread principal) e o `canEncode()`
-- [ ] Criar o `ImagePicker`, a área de soltar e o `useImageTool`
-- [ ] Ligar o download do `PreviewCard` ao resultado
-- [ ] Trocar o exemplo do styleguide pelo fluxo real
-- [ ] Criar o script das fixtures e gerar as imagens
-- [ ] Testes de componente e E2E (desktop e mobile)
-- [ ] Atualizar o README das fixtures e o `CLAUDE.md`
-- [ ] Preencher as notas desta fase, atualizar o `index.md` e abrir o PR
+- [x] Criar `detect-image-type`, `read-image-dimensions`, `image-limits`, `image-formats`, `validate-image` e `output-file-name`, com testes
+- [x] Adicionar `accepts` ao registro e `getToolsForFileType()`, com testes
+- [x] Criar o worker, o `process-image` (com a reserva na thread principal) e o `canEncode()`
+- [x] Criar o `ImagePicker`, a área de soltar e o `useImageTool`
+- [x] Ligar o download do `PreviewCard` ao resultado
+- [x] Trocar o exemplo do styleguide pelo fluxo real
+- [x] Criar o script das fixtures e gerar as imagens
+- [x] Testes de componente e E2E (desktop e mobile)
+- [x] Atualizar o README das fixtures e o `CLAUDE.md`
+- [x] Preencher as notas desta fase, atualizar o `index.md` e abrir o PR
 
 ## Commits previstos
 
@@ -114,13 +114,13 @@ Os testes de unidade e de componente entram no mesmo commit do código.
 
 ## Critérios de aceite
 
-- [ ] Escolher ou arrastar a imagem funciona no desktop e no celular, com o `accept` da ferramenta
-- [ ] O tipo é conferido pelos bytes; tamanho e dimensões fora do limite dão erro claro, em português e com o que fazer
-- [ ] O processamento roda em Web Worker (com reserva), sem travar a tela, e a foto sai de pé e sem EXIF
-- [ ] O download sai com o nome previsível, e o tamanho antes e depois aparece
-- [ ] URLs `blob:` revogadas e `bitmap.close()` chamado; nenhuma requisição leva o arquivo
-- [ ] O exemplo do styleguide usa o fluxo real
-- [ ] `lint`, `format:check`, `typecheck`, `test`, `test:e2e` e `build` passando
+- [x] Escolher ou arrastar a imagem funciona no desktop e no celular, com o `accept` da ferramenta
+- [x] O tipo é conferido pelos bytes; tamanho e dimensões fora do limite dão erro claro, em português e com o que fazer
+- [x] O processamento roda em Web Worker (com reserva), sem travar a tela, e a foto sai de pé e sem EXIF
+- [x] O download sai com o nome previsível, e o tamanho antes e depois aparece
+- [x] URLs `blob:` revogadas e `bitmap.close()` chamado; nenhuma requisição leva o arquivo
+- [x] O exemplo do styleguide usa o fluxo real
+- [x] `lint`, `format:check`, `typecheck`, `test`, `test:e2e` e `build` passando
 
 ## Pontos para a revisão do usuário
 
@@ -129,4 +129,23 @@ Os testes de unidade e de componente entram no mesmo commit do código.
 
 ## Notas da implementação
 
-_Preenchido ao final: desvios do plano, pendências e aprendizados._
+**Desvios do plano**
+
+- **Ordem dos commits:** o `accepts` do registro entrou antes da validação, porque a mensagem de erro sugere a ferramenta certa a partir dele. Os conversores de WebP já aceitam PNG e JPG (decisão do plano 10).
+- **Sem um componente `ImagePicker` separado:** o seletor de arquivo ficou dentro do `ImageToolView`, que junta botão, área de soltar, estados e prévia. As ferramentas usam só `useImageTool` + `ImageToolView`.
+- **Arrastar e soltar em qualquer parte da página** (desktop), e não só na prévia: além de mais fácil, evita que o navegador abra o arquivo solto fora da área e saia da ferramenta. A prévia fica destacada enquanto se arrasta.
+- **"Escolher outra imagem"** no lugar de "Trocar imagem": o botão principal muda de texto depois da primeira escolha. O `reset()` continua no hook (vai ser usado pelo roteador da home).
+- **`inspectImageFile()`** em arquivo próprio: a única parte que lê o arquivo (só os primeiros 256 KB). O `validateImage()` continua puro.
+- **Mensagem de tamanho:** logo acima do limite, os dois valores arredondavam igual ("20 MB e o limite é 20 MB"). Agora diz "mais de 20 MB".
+- **`PreviewCard`** ganhou `emptyContent` (o estado vazio vira o botão "Arraste uma imagem para cá ou clique para escolher") e `busy` ("Processando…" por cima da prévia).
+- **Exemplo do styleguide** passou a se chamar "Regravar imagem em PNG", que é o que ele faz.
+- **`grande-demais.png` gerado em Node**, em tons de cinza e com compressão máxima: pelo canvas do Chromium ficava com 391 KB; assim tem 28 KB.
+- **Worker no build:** o Turbopack compila o worker (`turbopack-worker-*.js`) e também copia o `.ts` original para `static/media`, por causa do `new URL(...)`. A cópia não é usada (conferido no código gerado). O E2E do worker desliga a codificação na thread principal: a imagem só sai pronta se o worker processar.
+- **E2E em CommonJS:** os testes usam `__dirname` para achar as fixtures (o Playwright não aceita `import.meta`), e procuram alertas dentro do `<main>` (o Next tem um anunciador de rota com `role="alert"`).
+
+**Testes:** 208 de unidade e componente; E2E com 130 testes em dev e 62 no build de produção (desktop e mobile).
+
+**Pendências**
+
+- O processamento real só é testado em dev, porque o exemplo do styleguide não existe em produção. A fase 10 testa o fluxo completo no build de produção, nas rotas reais.
+- HEIC só é reconhecido (com a sugestão do conversor). A decodificação entra na fase do HEIC.
