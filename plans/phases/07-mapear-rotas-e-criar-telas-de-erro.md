@@ -1,6 +1,6 @@
 # 07 — Mapear rotas e criar telas de erro
 
-**Status:** 🚧 Em andamento · **Branch:** `feat/07-mapear-rotas-e-criar-telas-de-erro` · **Depende de:** 04 e 05
+**Status:** 🔍 Em revisão · **Branch:** `feat/07-mapear-rotas-e-criar-telas-de-erro` · **Depende de:** 04 e 05
 
 ## Objetivo
 

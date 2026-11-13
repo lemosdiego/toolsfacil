@@ -19,15 +19,15 @@ Painel das fases do projeto. Cada fase é um plano em [`phases/`](phases/), cria
 
 Numeradas na ordem em que os planos foram criados (o número nasce com o plano).
 
-| #   | Fase                                                                                              | Status          | Branch                                             | PR  |
-| --- | ------------------------------------------------------------------------------------------------- | --------------- | -------------------------------------------------- | --- |
-| 01  | [Configurar Next.js, Tailwind e testes](phases/01-configurar-nextjs-tailwind-e-testes.md)         | ✅ Concluído    | `feat/01-configurar-nextjs-tailwind-e-testes`      | #1  |
-| 02  | [Definir design tokens e componentes base](phases/02-definir-design-tokens-e-componentes-base.md) | ✅ Concluído    | `feat/02-definir-design-tokens-e-componentes-base` | #2  |
-| 03  | [Construir layout e home das ferramentas](phases/03-construir-layout-e-home-das-ferramentas.md)   | 🚫 Descartado   | `feat/03-construir-layout-e-home-das-ferramentas`  | #3  |
-| 04  | [Construir header com menu de ferramentas](phases/04-construir-header-com-menu-de-ferramentas.md) | ✅ Concluído    | `feat/04-construir-header-com-menu-de-ferramentas` | #4  |
-| 05  | [Construir layout da página de ferramenta](phases/05-construir-layout-da-pagina-de-ferramenta.md) | ✅ Concluído    | `feat/05-construir-layout-da-pagina-de-ferramenta` | #5  |
-| 06  | [Construir home com roteador de imagem](phases/06-construir-home-com-roteador-de-imagem.md)       | 📝 Rascunho     | `feat/06-construir-home-com-roteador-de-imagem`    | —   |
-| 07  | [Mapear rotas e criar telas de erro](phases/07-mapear-rotas-e-criar-telas-de-erro.md)             | 🚧 Em andamento | `feat/07-mapear-rotas-e-criar-telas-de-erro`       | —   |
+| #   | Fase                                                                                              | Status        | Branch                                             | PR  |
+| --- | ------------------------------------------------------------------------------------------------- | ------------- | -------------------------------------------------- | --- |
+| 01  | [Configurar Next.js, Tailwind e testes](phases/01-configurar-nextjs-tailwind-e-testes.md)         | ✅ Concluído  | `feat/01-configurar-nextjs-tailwind-e-testes`      | #1  |
+| 02  | [Definir design tokens e componentes base](phases/02-definir-design-tokens-e-componentes-base.md) | ✅ Concluído  | `feat/02-definir-design-tokens-e-componentes-base` | #2  |
+| 03  | [Construir layout e home das ferramentas](phases/03-construir-layout-e-home-das-ferramentas.md)   | 🚫 Descartado | `feat/03-construir-layout-e-home-das-ferramentas`  | #3  |
+| 04  | [Construir header com menu de ferramentas](phases/04-construir-header-com-menu-de-ferramentas.md) | ✅ Concluído  | `feat/04-construir-header-com-menu-de-ferramentas` | #4  |
+| 05  | [Construir layout da página de ferramenta](phases/05-construir-layout-da-pagina-de-ferramenta.md) | ✅ Concluído  | `feat/05-construir-layout-da-pagina-de-ferramenta` | #5  |
+| 06  | [Construir home com roteador de imagem](phases/06-construir-home-com-roteador-de-imagem.md)       | 📝 Rascunho   | `feat/06-construir-home-com-roteador-de-imagem`    | —   |
+| 07  | [Mapear rotas e criar telas de erro](phases/07-mapear-rotas-e-criar-telas-de-erro.md)             | 🔍 Em revisão | `feat/07-mapear-rotas-e-criar-telas-de-erro`       | #6  |
 
 ## Roteiro (fases sem plano)
 
