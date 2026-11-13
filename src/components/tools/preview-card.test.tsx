@@ -48,4 +48,17 @@ describe("PreviewCard", () => {
 
     expect(container.querySelector("figcaption")).toBeNull();
   });
+
+  it("aceita outro conteúdo no estado vazio", () => {
+    render(<PreviewCard emptyContent={<p>Arraste uma imagem</p>} />);
+
+    expect(screen.getByText("Arraste uma imagem")).toBeInTheDocument();
+    expect(screen.queryByText("A prévia aparece aqui")).not.toBeInTheDocument();
+  });
+
+  it("mostra o aviso de processamento por cima da prévia", () => {
+    render(<PreviewCard busy />);
+
+    expect(screen.getByText("Processando…")).toBeInTheDocument();
+  });
 });
