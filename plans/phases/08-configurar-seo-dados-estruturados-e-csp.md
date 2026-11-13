@@ -52,16 +52,16 @@ Depois desta fase, uma página de ferramenta só chama uma função do `seo.ts` 
 
 ## Tarefas
 
-- [ ] Criar o `seo.ts` com as funções de URL e de metadados, com testes
-- [ ] Aplicar os metadados base no layout raiz e o `createPageMetadata` na home
-- [ ] Criar a imagem do Open Graph
-- [ ] Criar o `JsonLd` e os montadores de JSON-LD, com testes
-- [ ] Criar o `sitemap.ts` e o `robots.ts`, com testes
-- [ ] Criar o `security-headers.ts` e aplicar os cabeçalhos no `next.config.ts`
-- [ ] Definir `NEXT_PUBLIC_SITE_URL` no `ci.yml`
-- [ ] Testes E2E (desktop e mobile, dev e build de produção)
-- [ ] Atualizar o `.env.example` e o `CLAUDE.md`
-- [ ] Preencher as notas desta fase, atualizar o `index.md` e abrir o PR
+- [x] Criar o `seo.ts` com as funções de URL e de metadados, com testes
+- [x] Aplicar os metadados base no layout raiz e o `createPageMetadata` na home
+- [x] Criar a imagem do Open Graph
+- [x] Criar o `JsonLd` e os montadores de JSON-LD, com testes
+- [x] Criar o `sitemap.ts` e o `robots.ts`, com testes
+- [x] Criar o `security-headers.ts` e aplicar os cabeçalhos no `next.config.ts`
+- [x] Definir `NEXT_PUBLIC_SITE_URL` no `ci.yml`
+- [x] Testes E2E (desktop e mobile, dev e build de produção)
+- [x] Atualizar o `.env.example` e o `CLAUDE.md`
+- [x] Preencher as notas desta fase, atualizar o `index.md` e abrir o PR
 
 ## Commits previstos
 
@@ -106,12 +106,12 @@ Os testes de unidade entram no mesmo commit do código.
 
 ## Critérios de aceite
 
-- [ ] A home sai com `title`, `description`, `canonical` e Open Graph completos, e com URLs absolutas
-- [ ] `sitemap.xml` lista só a home e as ferramentas prontas; `robots.txt` bloqueia `/api/`
-- [ ] `JsonLd` escapa o conteúdo e é o único uso de `dangerouslySetInnerHTML`
-- [ ] Todas as páginas respondem com a CSP e os cabeçalhos de segurança, sem violações no console
-- [ ] Build de produção sem `NEXT_PUBLIC_SITE_URL` falha com uma mensagem clara
-- [ ] `lint`, `format:check`, `typecheck`, `test`, `test:e2e` e `build` passando
+- [x] A home sai com `title`, `description`, `canonical` e Open Graph completos, e com URLs absolutas
+- [x] `sitemap.xml` lista só a home e as ferramentas prontas; `robots.txt` bloqueia `/api/`
+- [x] `JsonLd` escapa o conteúdo e é o único uso de `dangerouslySetInnerHTML`
+- [x] Todas as páginas respondem com a CSP e os cabeçalhos de segurança, sem violações no console
+- [x] Build de produção sem `NEXT_PUBLIC_SITE_URL` falha com uma mensagem clara
+- [x] `lint`, `format:check`, `typecheck`, `test`, `test:e2e` e `build` passando
 
 ## Pontos para a revisão do usuário
 
@@ -120,4 +120,21 @@ Os testes de unidade entram no mesmo commit do código.
 
 ## Notas da implementação
 
-_Preenchido ao final: desvios do plano, pendências e aprendizados._
+**Desvios do plano**
+
+- **`tagline` no `site-config.ts`** ("Ferramentas de imagem online e grátis"): usada no título da home e na imagem do Open Graph. O título da home virou "Tools Fácil: Ferramentas de imagem online e grátis", e o E2E antigo da home passou a conferir só que o nome está no título.
+- **`site-pages.ts`** com as páginas fixas do sitemap (por enquanto só `/`). A fase das institucionais acrescenta as dela ali.
+- **Canonical da home sem a barra final** (`https://site.com.br`): o Next normaliza a URL da raiz. É equivalente para o Google.
+- **Regra `react/no-danger` no ESLint**, liberada só no `json-ld.tsx`: garante a regra do `CLAUDE.md` sem depender de revisão.
+- **Cabeçalhos a mais:** `X-Frame-Options: DENY` (reforço do `frame-ancestors` para navegadores antigos), `manifest-src 'self'` e `blob:` no `connect-src` (leitura local de URLs `blob:` pelas ferramentas).
+- **`upgrade-insecure-requests` só em produção:** em dev o site roda em `http://localhost`. No build de produção rodando em `localhost`, os testes passaram com a diretiva ligada.
+- **Imagem do Open Graph sem negrito:** a fonte padrão do `next/og` não tem o peso 700. Serve até a identidade visual, que traz a fonte e a arte finais.
+
+**Como rodar o build de produção localmente:** `NEXT_PUBLIC_SITE_URL=http://localhost:3100 pnpm build` e `NEXT_PUBLIC_SITE_URL=http://localhost:3100 CI=1 PORT=3100 pnpm test:e2e` (a porta 3000 costuma estar com o `pnpm dev`).
+
+**Testes:** 138 de unidade e componente; E2E com 104 testes em dev e 62 no build de produção (desktop e mobile), sem nenhuma violação de CSP. O build sem `NEXT_PUBLIC_SITE_URL` falha com a mensagem em português. Todas as rotas continuam estáticas.
+
+**Pendências**
+
+- Os domínios do AdSense entram na CSP na fase do AdSense.
+- Ícones, `manifest` e a arte final do Open Graph ficam para a identidade visual.
