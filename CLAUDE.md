@@ -208,20 +208,37 @@ Toda tela do site está neste mapa. **Rota nova só entra depois de entrar aqui*
 - **Desktop:** título, texto e botão à esquerda, prévia à direita. **Celular:** uma coluna, com título e botão acima da dobra.
 - A ilha renderiza o botão dentro de `ToolActionArea` e a prévia dentro de `ToolPreviewArea`, que se encaixam na grade. Use `hiddenOnMobile` na prévia enquanto não há imagem.
 - **`PreviewCard`:** imagem sobre o xadrez de transparência, ícone de download tradicional no canto (desativado até haver resultado, com `aria-label` como "Baixar imagem em WebP") e tamanho antes e depois.
-- O botão de envio diz **"Escolher imagem"** (nunca "enviar" ou "upload": o arquivo não sai do aparelho).
+- **A ilha de uma ferramenta de imagem** usa `useImageTool()` + `ImageToolView` (`src/components/tools/`) e só diz **o que aceita** e **o que faz**:
+  ```tsx
+  const tool = useImageTool({
+    accepts: getToolBySlug("png-para-webp")!.accepts,
+    process: (file) => processImage(file, { type: "image/webp", quality: 0.8 }),
+    getFileName: (file) => getOutputFileName(file.name, { extension: "webp" }),
+  });
+  return <ImageToolView tool={tool} accepts={...} outputLabel="WebP" previewAlt="..." controls={...} />;
+  ```
+  - `useImageTool`: estados `idle → checking → processing → done | error`, validação, URLs `blob:` (revogadas), encerramento do worker ao sair, `reprocess()` para mudar uma opção (ex.: qualidade) e `reset()`.
+  - `ImageToolView`: botão, `accept` do seletor, aviso de privacidade, erros com o que fazer (e link para a ferramenta sugerida, quando pronta), arrastar e soltar em qualquer parte da página (desktop) e a prévia com download e tamanhos. Opções da ferramenta entram em `controls`.
+- O botão de envio diz **"Escolher imagem"** (depois, "Escolher outra imagem"). Nunca "enviar" ou "upload": o arquivo não sai do aparelho.
 - Tamanhos de arquivo só por `formatFileSize()` e `formatSizeChange()` (`src/lib/image/format-file-size.ts`).
 
 ### Processamento de imagem (client-side)
 
 - **Regra de ouro:** nenhum byte do arquivo do usuário sai do navegador. Nunca envie arquivo, `Blob`, base64 ou nome do arquivo para `fetch`, API, analytics ou log.
 - **Lógica separada da interface:** cálculos (proporções, dimensões, nome do arquivo de saída, formatação de KB) ficam em funções puras em `src/lib/image/`, com testes. Os componentes só chamam essas funções.
-- **Não travar a tela:** processamento pesado roda em **Web Worker** com `OffscreenCanvas` quando o navegador suportar, com um fallback na thread principal.
+- **Peças prontas (`src/lib/image/`):**
+  - `inspectImageFile()` lê só os primeiros 256 KB: tipo real (`detectImageType()`, pelos bytes) e dimensões (`readImageDimensions()`, pelo cabeçalho, sem decodificar).
+  - `validateImage(inspection, accepts)`: tamanho, tipo e dimensões, com mensagem em português e a ferramenta sugerida (`getToolsForFileType()`). Limites em `image-limits.ts`: **20 MB**, **16.777.216 pixels** (4096 × 4096, teto do iOS) e **16.384 px** de lado.
+  - `processImage(file, { type, quality })`: decodifica com a orientação do EXIF, desenha e codifica. Roda no **Web Worker** (`src/workers/image.worker.ts`, com `OffscreenCanvas`) e cai na thread principal se o navegador não suporta ou o worker não carrega. JPG ganha fundo branco.
+  - `canEncode(type)`: o navegador gera o formato pelo canvas? (o Safari não gera WebP). Se o formato devolvido não for o pedido, `processImage` dá erro, nunca um arquivo com a extensão errada.
+  - `getOutputFileName(nome, { extension, suffix })`: `foto.webp`, `foto-cortada.jpg`, ou `imagem.webp` sem nome aproveitável.
+  - Formatos (`image-formats.ts`): rótulo, extensões, `getAcceptAttribute()` e `formatTypeList()` ("PNG ou JPG").
+- **Formatos aceitos** vêm do `accepts` da ferramenta no `tools.ts`, nunca de uma lista na página.
+- **Worker no build:** o Turbopack compila o worker em `turbopack-worker-*.js`, e também copia o `.ts` original para `static/media` por causa do `new URL(...)`. Essa cópia não é usada.
 - **Bibliotecas pesadas sob demanda:** o decodificador de HEIC e qualquer WASM são carregados com `import()` dinâmico, só na página que usa e só quando o usuário escolhe um arquivo. Nunca no bundle global.
-- **Orientação EXIF:** use `createImageBitmap(file, { imageOrientation: "from-image" })` para a foto do celular não sair deitada.
-- **Metadados:** a saída é regravada pelo canvas, e com isso perde o EXIF (inclusive GPS). Isso é um ganho de privacidade: mencione na interface.
-- **Memória:** chame `URL.revokeObjectURL()` em toda URL criada, e `bitmap.close()` depois de usar. Celulares (principalmente iOS) têm limite de área de canvas: valide as dimensões antes e mostre uma mensagem clara em vez de falhar em silêncio.
-- **Validação de entrada:** confira o tipo real do arquivo (assinatura dos bytes), e não só a extensão. Limite de tamanho com mensagem em português.
-- **Download:** nome de saída previsível (`foto.webp`, `foto-cortada.jpg`), gerado por função testada. Mostre o tamanho antes e depois.
+- **Metadados:** a saída é regravada pelo canvas, e com isso perde o EXIF (inclusive GPS). O `ImageToolView` já avisa isso na interface.
+- **Memória:** chame `URL.revokeObjectURL()` em toda URL criada, e `bitmap.close()` depois de usar (o `useImageTool` e o `processImage` já fazem).
+- **Uma imagem por vez:** soltar vários arquivos abre o primeiro, com aviso.
 - **Lote (quando houver):** processe um arquivo por vez e baixe em `.zip` com uma biblioteca leve, carregada sob demanda.
 
 ### Performance
@@ -347,7 +364,8 @@ Formato: **`NN-verbo-entrega.md`**, por exemplo `03-converter-png-jpg-para-webp.
 ## Testes
 
 - **Vitest + Testing Library:** funções puras de `src/lib/image/` (proporções, dimensões, nome do arquivo de saída, formatação de KB, detecção de tipo pelos bytes), registro de ferramentas, SEO e componentes.
-- **Canvas não funciona no jsdom:** o processamento real de imagem é testado no **Playwright**, em navegador de verdade, com as imagens de `tests/fixtures/`.
+- **Canvas não funciona no jsdom:** o processamento real de imagem é testado no **Playwright**, em navegador de verdade, com as imagens de `tests/fixtures/` (geradas por `pnpm fixtures:generate`, ver o README da pasta). Nos testes de unidade, simule `createImageBitmap`/`OffscreenCanvas`.
+- **Nos E2E:** caminho das fixtures com `join(__dirname, "..", "fixtures", nome)` (o Playwright compila como CommonJS, sem `import.meta`); arquivo escolhido pelo `getByTestId("image-input")`; alertas buscados dentro do `<main>` (o Next tem um anunciador de rota com `role="alert"`); arrastar e soltar só depois da hidratação (`waitForLoadState("networkidle")`).
 - **Playwright** (desktop + mobile): fluxos críticos de cada ferramenta (escolher arquivo → processar → baixar → conferir formato, dimensões e tamanho do arquivo baixado). Um teste confere que **nenhuma requisição de rede leva o arquivo** durante o processamento.
 - Os testes leem o `<head>` de cada ferramenta (title, description, canonical, JSON-LD).
 - Toda funcionalidade nova deve vir com testes que façam sentido para ela.
