@@ -9,6 +9,9 @@ vi.mock("@/lib/image/process-image", () => ({
   disposeImageWorker: vi.fn(),
 }));
 
+const canEncode = vi.hoisted(() => vi.fn());
+vi.mock("@/lib/image/can-encode", () => ({ canEncode }));
+
 const { WebpConverter } = await import("./webp-converter");
 
 function chooseFile(size = 1000) {
@@ -30,6 +33,7 @@ function webpResult(size: number) {
 }
 
 beforeEach(() => {
+  canEncode.mockResolvedValue(true);
   vi.stubGlobal(
     "URL",
     Object.assign(URL, {
@@ -58,7 +62,23 @@ describe("WebpConverter", () => {
     expect(processImage).toHaveBeenCalledWith(expect.any(File), {
       type: "image/webp",
       quality: 0.8,
+      encoder: "canvas",
     });
+  });
+
+  it("usa o codificador WASM quando o canvas não gera WebP (Safari)", async () => {
+    canEncode.mockResolvedValue(false);
+    processImage.mockResolvedValue(webpResult(300));
+    render(<WebpConverter />);
+
+    chooseFile();
+    await screen.findByRole("link", { name: "Baixar imagem em WebP" });
+
+    expect(canEncode).toHaveBeenCalledWith("image/webp");
+    expect(processImage).toHaveBeenCalledWith(
+      expect.any(File),
+      expect.objectContaining({ encoder: "wasm" }),
+    );
   });
 
   it("tem o controle de qualidade com nome e valor", () => {
@@ -88,6 +108,7 @@ describe("WebpConverter", () => {
     expect(processImage).toHaveBeenLastCalledWith(expect.any(File), {
       type: "image/webp",
       quality: 0.6,
+      encoder: "canvas",
     });
   });
 

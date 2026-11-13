@@ -21,6 +21,7 @@
     "fixtures:generate": "node scripts/generate-fixtures.mjs"
   },
   "dependencies": {
+    "@jsquash/webp": "1.5.0",
     "clsx": "^2.1.1",
     "lucide-react": "^1.71.0",
     "next": "16.4.5",

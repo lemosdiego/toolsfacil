@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import { Alert } from "@/components/ui/alert";
+import { canEncode } from "@/lib/image/can-encode";
 import { getOutputFileName } from "@/lib/image/output-file-name";
 import { processImage } from "@/lib/image/process-image";
 import { getToolBySlug } from "@/lib/tools";
@@ -30,10 +31,12 @@ export function WebpConverter() {
 
   const tool = useImageTool({
     accepts,
-    process: (file) =>
+    process: async (file) =>
       processImage(file, {
         type: "image/webp",
         quality: qualityRef.current / 100,
+        // Safari: o canvas não gera WebP, então entra o codificador WASM.
+        encoder: (await canEncode("image/webp")) ? "canvas" : "wasm",
       }),
     getFileName: (file) => getOutputFileName(file.name, { extension: "webp" }),
   });

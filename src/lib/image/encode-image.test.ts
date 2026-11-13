@@ -1,5 +1,8 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
+const encodeWebpWithWasm = vi.hoisted(() => vi.fn());
+vi.mock("./wasm-webp-encoder", () => ({ encodeWebpWithWasm }));
+
 import { encodeImage, ImageProcessingError } from "./encode-image";
 
 /*
@@ -16,6 +19,7 @@ function fakeOffscreenCanvas(outputType: string) {
     fillStyle: "",
     fillRect: vi.fn(),
     drawImage: vi.fn(),
+    getImageData: vi.fn(() => ({ data: new Uint8ClampedArray(4) })),
   };
   const instances: { width: number; height: number }[] = [];
 
@@ -111,5 +115,33 @@ describe("encodeImage", () => {
       encodeImage(new Blob(["a"]), { type: "image/webp" }),
     ).rejects.toEqual(new ImageProcessingError("encode-failed"));
     expect(bitmap.close).toHaveBeenCalledOnce();
+  });
+
+  it("usa o codificador WASM para WebP quando pedido (Safari)", async () => {
+    vi.stubGlobal("createImageBitmap", vi.fn().mockResolvedValue(fakeBitmap()));
+    const { context } = fakeOffscreenCanvas("image/png");
+    encodeWebpWithWasm.mockResolvedValue(
+      new Blob(["w"], { type: "image/webp" }),
+    );
+
+    const result = await encodeImage(new Blob(["a"]), {
+      type: "image/webp",
+      quality: 0.7,
+      encoder: "wasm",
+    });
+
+    expect(context.getImageData).toHaveBeenCalledWith(0, 0, 40, 30);
+    expect(encodeWebpWithWasm).toHaveBeenCalledWith(expect.anything(), 0.7);
+    expect(result.blob.type).toBe("image/webp");
+  });
+
+  it("falha com encode-failed quando o WASM não carrega", async () => {
+    vi.stubGlobal("createImageBitmap", vi.fn().mockResolvedValue(fakeBitmap()));
+    fakeOffscreenCanvas("image/png");
+    encodeWebpWithWasm.mockRejectedValue(new Error("sem wasm"));
+
+    await expect(
+      encodeImage(new Blob(["a"]), { type: "image/webp", encoder: "wasm" }),
+    ).rejects.toEqual(new ImageProcessingError("encode-failed"));
   });
 });
