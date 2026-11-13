@@ -1,6 +1,6 @@
 # 09 — Criar envio, validação e download de imagens
 
-**Status:** 🚧 Em andamento · **Branch:** `feat/09-criar-envio-validacao-e-download-de-imagens` · **Depende de:** 05 e 08
+**Status:** 🔍 Em revisão · **Branch:** `feat/09-criar-envio-validacao-e-download-de-imagens` · **Depende de:** 05 e 08
 
 ## Objetivo
 
