@@ -30,6 +30,7 @@ Numeradas na ordem em que os planos foram criados (o número nasce com o plano).
 | 07  | [Mapear rotas e criar telas de erro](phases/07-mapear-rotas-e-criar-telas-de-erro.md)                    | ✅ Concluído  | `feat/07-mapear-rotas-e-criar-telas-de-erro`          | #6  |
 | 08  | [Configurar SEO, dados estruturados e CSP](phases/08-configurar-seo-dados-estruturados-e-csp.md)         | 📝 Rascunho   | `feat/08-configurar-seo-dados-estruturados-e-csp`     | —   |
 | 09  | [Criar envio, validação e download de imagens](phases/09-criar-envio-validacao-e-download-de-imagens.md) | 📝 Rascunho   | `feat/09-criar-envio-validacao-e-download-de-imagens` | —   |
+| 10  | [Converter PNG e JPG para WebP](phases/10-converter-png-e-jpg-para-webp.md)                              | 📝 Rascunho   | `feat/10-converter-png-e-jpg-para-webp`               | —   |
 
 ## Roteiro (fases sem plano)
 
@@ -37,7 +38,6 @@ Em ordem de prioridade, **sem número**: a fase só ganha número (e branch) qua
 
 | Fase                                           | Status        |
 | ---------------------------------------------- | ------------- |
-| Converter PNG e JPG para WebP                  | ⬜ Não criado |
 | Compactar imagens no navegador                 | ⬜ Não criado |
 | Cortar e redimensionar com Cropper.js          | ⬜ Não criado |
 | Converter HEIC para JPG                        | ⬜ Não criado |
@@ -53,8 +53,8 @@ Em ordem de prioridade, **sem número**: a fase só ganha número (e branch) qua
 >
 > - **Fundação (01, 02, 04, 05, 07 e 08):** projeto, testes, identidade visual neutra, header com o menu de ferramentas, molde da página de ferramenta com os espaços de anúncio, SEO de base e cabeçalhos de segurança (CSP). Toda ferramenta já nasce com SEO e CSP prontos.
 > - **Infraestrutura das ferramentas (09):** área de soltar arquivo, validação pelo tipo real, Web Worker e download. Peças reaproveitadas por todas as ferramentas.
-> - **Ferramentas do MVP:** uma fase por ferramenta, cada uma com rota própria, texto explicativo, FAQ e testes E2E com imagens reais. A compactação vem logo depois do WebP porque reaproveita quase tudo dele; o HEIC fica por último por ser o de maior risco técnico (biblioteca pesada).
-> - **Home (06):** a pessoa escolhe a imagem na home, que sugere as ferramentas compatíveis com o tipo do arquivo e leva a imagem até a escolhida, sem nova escolha. Só pode ser implementada depois do envio e download e do conversor de WebP.
+> - **Ferramentas do MVP (10 em diante):** uma fase por ferramenta, cada uma com rota própria, texto explicativo, FAQ e testes E2E com imagens reais. A compactação vem logo depois do WebP porque reaproveita quase tudo dele; o HEIC fica por último por ser o de maior risco técnico (biblioteca pesada).
+> - **Home (06):** a pessoa escolhe a imagem na home, que sugere as ferramentas compatíveis com o tipo do arquivo e leva a imagem até a escolhida, sem nova escolha. Só pode ser implementada depois das fases 08, 09 e 10.
 > - **Preparação para o lançamento:** páginas exigidas pelo AdSense (Sobre, Contato, Privacidade, Termos), auditoria antes de publicar e a identidade visual (paleta, logo e ícone) do Tools Fácil.
 > - **Lançamento:** publicar com conteúdo suficiente para pedir a aprovação do AdSense e, depois de aprovado, ativar os anúncios com o consentimento de cookies.
 > - **Depois do MVP:** novas ferramentas e pagamentos avulsos via Pix, cada um com plano próprio.
