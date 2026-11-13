@@ -8,6 +8,7 @@ import {
   type EncodedImage,
 } from "@/lib/image/encode-image";
 import { inspectImageFile } from "@/lib/image/inspect-image-file";
+import { takePendingFile } from "@/lib/image/pending-file";
 import { disposeImageWorker } from "@/lib/image/process-image";
 import {
   processingErrors,
@@ -142,6 +143,18 @@ export function useImageTool(options: ImageToolOptions) {
     revokeUrl();
     setState({ status: "idle" });
   }, [revokeUrl]);
+
+  // Imagem escolhida na home: abre direto, sem nova escolha. A ref guarda o
+  // arquivo porque o React (em dev) monta o componente duas vezes, e o
+  // store só entrega o arquivo uma vez.
+  // undefined: ainda não olhou o store; null: não havia arquivo.
+  const pendingRef = useRef<File | null | undefined>(undefined);
+  useEffect(() => {
+    if (pendingRef.current === undefined) {
+      pendingRef.current = takePendingFile() ?? null;
+    }
+    if (pendingRef.current) void selectFile(pendingRef.current);
+  }, [selectFile]);
 
   // Ao sair da página: libera a URL e encerra o worker.
   useEffect(
