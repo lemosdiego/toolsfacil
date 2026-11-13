@@ -5,6 +5,8 @@ import {
   getToolBySlug,
   getToolHref,
   getToolsByCategory,
+  getActionsForFileType,
+  getAllAcceptedTypes,
   getToolsForFileType,
   requireTool,
   toolCategories,
@@ -41,6 +43,13 @@ describe("registro de ferramentas", () => {
     (_slug, tool) => {
       expect(tool.accepts.length).toBeGreaterThan(0);
       expect(new Set(tool.accepts).size).toBe(tool.accepts.length);
+    },
+  );
+
+  it.each(tools.map((tool) => [tool.slug, tool]))(
+    "%s tem rótulo de ação",
+    (_slug, tool) => {
+      expect(tool.actionLabel.trim()).not.toBe("");
     },
   );
 
@@ -128,5 +137,54 @@ describe("getToolsForFileType", () => {
 
   it("devolve lista vazia para tipo sem ferramenta", () => {
     expect(getToolsForFileType("image/gif")).toEqual([]);
+  });
+});
+
+describe("getActionsForFileType", () => {
+  const slugsFor = (type: Parameters<typeof getActionsForFileType>[0]) =>
+    getActionsForFileType(type).map((tool) => tool.slug);
+
+  it("PNG: um conversor de WebP (o do PNG), compactar e cortar", () => {
+    expect(slugsFor("image/png")).toEqual([
+      "png-para-webp",
+      "compactar-imagem",
+      "cortador-de-imagem",
+    ]);
+  });
+
+  it("JPG: o conversor de WebP do JPG", () => {
+    expect(slugsFor("image/jpeg")[0]).toBe("jpg-para-webp");
+  });
+
+  it("não repete rótulos", () => {
+    const labels = getActionsForFileType("image/png").map(
+      (tool) => tool.actionLabel,
+    );
+    expect(new Set(labels).size).toBe(labels.length);
+  });
+
+  it("HEIC: só o conversor de HEIC", () => {
+    expect(slugsFor("image/heic")).toEqual(["heic-para-jpg"]);
+  });
+
+  it("tipo sem ferramenta: nenhuma ação", () => {
+    expect(slugsFor("image/gif")).toEqual([]);
+  });
+});
+
+describe("getAllAcceptedTypes", () => {
+  it("junta os tipos de todas as ferramentas, sem repetir", () => {
+    const types = getAllAcceptedTypes();
+
+    expect(new Set(types).size).toBe(types.length);
+    expect(types).toEqual(
+      expect.arrayContaining([
+        "image/png",
+        "image/jpeg",
+        "image/webp",
+        "image/heic",
+      ]),
+    );
+    expect(types).not.toContain("image/gif");
   });
 });

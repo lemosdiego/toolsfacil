@@ -22,8 +22,14 @@ export type Tool = {
   /**
    * Tipos reais de imagem (pelos bytes) que a ferramenta aceita. Usado na
    * validação, no `accept` do seletor e para sugerir a ferramenta certa.
+   * O primeiro é o formato principal da página (desempate na home).
    */
   accepts: readonly ImageMimeType[];
+  /**
+   * O que a ferramenta faz, como ação na home (ex.: "Converter para WebP").
+   * Ferramentas com o mesmo rótulo viram uma ação só.
+   */
+  actionLabel: string;
 };
 
 /** Categorias na ordem das colunas do menu, com o rótulo em português. */
@@ -44,6 +50,7 @@ export const tools: readonly Tool[] = [
     category: "convert",
     status: "available",
     accepts: ["image/png", "image/jpeg"],
+    actionLabel: "Converter para WebP",
   },
   {
     slug: "jpg-para-webp",
@@ -52,7 +59,8 @@ export const tools: readonly Tool[] = [
       "Transforme fotos JPG em WebP, o formato mais leve para sites e lojas.",
     category: "convert",
     status: "available",
-    accepts: ["image/png", "image/jpeg"],
+    accepts: ["image/jpeg", "image/png"],
+    actionLabel: "Converter para WebP",
   },
   {
     slug: "heic-para-jpg",
@@ -62,6 +70,7 @@ export const tools: readonly Tool[] = [
     category: "convert",
     status: "soon",
     accepts: ["image/heic"],
+    actionLabel: "Converter para JPG",
   },
   {
     slug: "compactar-imagem",
@@ -71,6 +80,7 @@ export const tools: readonly Tool[] = [
     category: "edit",
     status: "soon",
     accepts: ["image/jpeg", "image/png", "image/webp"],
+    actionLabel: "Compactar",
   },
   {
     slug: "cortador-de-imagem",
@@ -80,6 +90,7 @@ export const tools: readonly Tool[] = [
     category: "edit",
     status: "soon",
     accepts: ["image/jpeg", "image/png", "image/webp"],
+    actionLabel: "Cortar e redimensionar",
   },
 ];
 
@@ -113,4 +124,33 @@ export function getToolsByCategory(category: ToolCategory): Tool[] {
  */
 export function getToolsForFileType(type: ImageMimeType): Tool[] {
   return tools.filter((tool) => tool.accepts.includes(type));
+}
+
+/**
+ * Ações da home para um tipo de imagem: uma por rótulo, na ordem do
+ * registro. No empate (ex.: PNG serve aos dois conversores de WebP), fica a
+ * ferramenta cujo formato principal é o da imagem; entre as prontas e as
+ * "Em breve", a pronta vence.
+ */
+export function getActionsForFileType(type: ImageMimeType): Tool[] {
+  const byLabel = new Map<string, Tool>();
+
+  for (const tool of getToolsForFileType(type)) {
+    const current = byLabel.get(tool.actionLabel);
+    if (!current) {
+      byLabel.set(tool.actionLabel, tool);
+      continue;
+    }
+    const score = (candidate: Tool) =>
+      (candidate.status === "available" ? 2 : 0) +
+      (candidate.accepts[0] === type ? 1 : 0);
+    if (score(tool) > score(current)) byLabel.set(tool.actionLabel, tool);
+  }
+
+  return [...byLabel.values()];
+}
+
+/** Todos os tipos aceitos por alguma ferramenta (validação da home). */
+export function getAllAcceptedTypes(): ImageMimeType[] {
+  return [...new Set(tools.flatMap((tool) => tool.accepts))];
 }

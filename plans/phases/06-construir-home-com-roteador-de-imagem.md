@@ -1,6 +1,6 @@
 # 06 — Construir home com roteador de imagem
 
-**Status:** 📝 Rascunho · **Branch:** `feat/06-construir-home-com-roteador-de-imagem` · **Depende de:** 08, 09 e 10
+**Status:** 🔍 Em revisão · **Branch:** `feat/06-construir-home-com-roteador-de-imagem` · **Depende de:** 08, 09 e 10
 
 ## Objetivo
 
@@ -96,15 +96,15 @@ Ainda sem print do usuário. O rascunho abaixo segue o padrão das outras telas 
 
 ## Tarefas
 
-- [ ] Criar o store `pending-file.ts` (`setPendingFile`, `takePendingFile`) com testes
-- [ ] Criar a ilha `ImageRouter`: área de soltar, validação, resumo do arquivo, "Trocar imagem", ações compatíveis e erros
-- [ ] Integrar `takePendingFile()` na ilha das ferramentas `available` (no mínimo PNG e JPG para WebP)
-- [ ] Criar o `ToolGrid` lido do registro, com o selo "Em breve"
-- [ ] Montar a home nova: textos, anúncio, metadados e JSON-LD
-- [ ] Incluir o `ToolGrid` no `/styleguide`
-- [ ] Testes de componente e E2E (desktop e mobile)
-- [ ] Atualizar o `CLAUDE.md`
-- [ ] Preencher as notas desta fase, atualizar o `index.md` e abrir o PR
+- [x] Criar o store `pending-file.ts` (`setPendingFile`, `takePendingFile`) com testes
+- [x] Criar a ilha `ImageRouter`: área de soltar, validação, resumo do arquivo, "Trocar imagem", ações compatíveis e erros
+- [x] Integrar `takePendingFile()` na ilha das ferramentas `available` (no mínimo PNG e JPG para WebP)
+- [x] Criar o `ToolGrid` lido do registro, com o selo "Em breve"
+- [x] Montar a home nova: textos, anúncio, metadados e JSON-LD
+- [x] Incluir o `ToolGrid` no `/styleguide`
+- [x] Testes de componente e E2E (desktop e mobile)
+- [x] Atualizar o `CLAUDE.md`
+- [x] Preencher as notas desta fase, atualizar o `index.md` e abrir o PR
 
 ## Commits previstos
 
@@ -146,14 +146,18 @@ Os testes de unidade e de componente entram no mesmo commit do código.
 
 ## Critérios de aceite
 
-- [ ] A pessoa escolhe a imagem na home e vê só as ações que servem para aquele tipo de arquivo
-- [ ] Ao clicar numa ação, a ferramenta abre com a imagem já carregada, sem nova escolha e sem nenhuma requisição levando o arquivo
-- [ ] Ferramentas `soon` aparecem com "Em breve" e sem link, na grade e nas ações
-- [ ] No celular, `h1` e "Escolher imagem" acima da dobra, uma coluna, sem rolagem horizontal
-- [ ] Anúncio só depois da grade, com espaço de segurança; nenhum anúncio perto da área de soltar ou das ações
-- [ ] Texto original (como funciona, privacidade, perguntas frequentes) no HTML, com metadados e JSON-LD
-- [ ] axe sem violações nos dois temas
-- [ ] `lint`, `format:check`, `typecheck`, `test`, `test:e2e` e `build` passando
+- [x] A pessoa escolhe a imagem na home e vê só as ações que servem para aquele tipo de arquivo
+- [x] Ao clicar numa ação, a ferramenta abre com a imagem já carregada, sem nova escolha e sem nenhuma requisição levando o arquivo
+- [x] Ferramentas `soon` aparecem com "Em breve" e sem link, na grade e nas ações
+- [x] No celular, `h1` e "Escolher imagem" acima da dobra, uma coluna, sem rolagem horizontal
+- [x] Anúncio só depois da grade, com espaço de segurança; nenhum anúncio perto da área de soltar ou das ações
+- [x] Texto original (como funciona, privacidade, perguntas frequentes) no HTML, com metadados e JSON-LD
+- [x] axe sem violações nos dois temas
+- [x] `lint`, `format:check`, `typecheck`, `test`, `test:e2e` e `build` passando
+
+## Decisões confirmadas
+
+- O usuário mandou implementar sem print nem respostas aos pontos abaixo: valeram as propostas do plano (layout do rascunho, um anúncio `below-tool` depois da grade e o `h1` "Ferramentas de imagem online e grátis").
 
 ## Pontos para a revisão do usuário
 
@@ -164,4 +168,19 @@ Os testes de unidade e de componente entram no mesmo commit do código.
 
 ## Notas da implementação
 
-_Preenchido ao final: desvios do plano, pendências e aprendizados._
+**Desvios do plano**
+
+- **Rótulo de ação no registro (`actionLabel`)** e `getActionsForFileType()`: um PNG serve aos dois conversores de WebP, e mostrar "PNG para WebP" e "JPG para WebP" lado a lado confundiria. A home mostra uma ação por rótulo ("Converter para WebP"); no empate, vale a ferramenta pronta e cujo formato principal (`accepts[0]`) é o da imagem. Por isso o JPG para WebP passou a listar o JPG primeiro. Commit próprio, fora da lista prevista.
+- **`getAllAcceptedTypes()`** valida a imagem na home contra todos os formatos do registro.
+- **Arquivo pendente numa `ref`** no `useImageTool`: em dev, o React monta o componente duas vezes, e o store entrega o arquivo uma vez só. A `ref` sobrevive à remontagem; num carregamento novo, a ferramenta abre vazia.
+- **"Trocar imagem"** abre o seletor direto (em vez de voltar ao estado vazio primeiro).
+- **Ações "Em breve"** aparecem como item desativado com o selo; quando nenhuma ação está pronta (ex.: HEIC), um aviso explica.
+- **Selo sem quebra de linha** no celular, ajustado depois de conferir a tela em 360px.
+- **E2E:** a distância até o anúncio só é testada em dev (no build de produção, sem `NEXT_PUBLIC_ADSENSE_CLIENT_ID`, não há anúncio). O teste do menu do conversor passou a buscar o link pelo nome exato, porque a grade da home tem um card com o mesmo texto.
+
+**Testes:** 245 de unidade e componente; E2E com 187 testes em dev (duas rodadas completas limpas; o spec da home, 3 repetições) e 117 no build de produção (desktop e mobile).
+
+**Pendências**
+
+- Lighthouse mobile da home ainda não medido (mesma pendência da fase 10).
+- O texto da FAQ "Quais formatos posso usar?" cita o HEIC "em breve": atualizar quando o conversor de HEIC ficar pronto.

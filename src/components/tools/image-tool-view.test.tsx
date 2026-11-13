@@ -223,3 +223,25 @@ describe("useImageTool", () => {
     expect(revokeObjectURL).toHaveBeenCalledWith("blob:teste-1");
   });
 });
+
+describe("useImageTool com imagem vinda da home", () => {
+  it("abre direto a imagem guardada, uma vez só", async () => {
+    const { setPendingFile, takePendingFile } =
+      await import("@/lib/image/pending-file");
+    const process = vi.fn().mockResolvedValue(encoded());
+    const file = pngFile("da-home.png");
+    setPendingFile(file);
+
+    const { result } = renderHook(() => useImageTool(options({ process })));
+
+    await waitFor(() => expect(result.current.state.status).toBe("done"));
+    expect(process.mock.calls[0][0]).toBe(file);
+    expect(takePendingFile()).toBeUndefined();
+  });
+
+  it("sem imagem guardada, começa vazio", () => {
+    const { result } = renderHook(() => useImageTool(options()));
+
+    expect(result.current.state.status).toBe("idle");
+  });
+});
