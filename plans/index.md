@@ -26,7 +26,7 @@ Numeradas na ordem em que os planos foram criados (o número nasce com o plano).
 | 03  | [Construir layout e home das ferramentas](phases/03-construir-layout-e-home-das-ferramentas.md)          | 🚫 Descartado | `feat/03-construir-layout-e-home-das-ferramentas`     | #3  |
 | 04  | [Construir header com menu de ferramentas](phases/04-construir-header-com-menu-de-ferramentas.md)        | ✅ Concluído  | `feat/04-construir-header-com-menu-de-ferramentas`    | #4  |
 | 05  | [Construir layout da página de ferramenta](phases/05-construir-layout-da-pagina-de-ferramenta.md)        | ✅ Concluído  | `feat/05-construir-layout-da-pagina-de-ferramenta`    | #5  |
-| 06  | [Construir home com roteador de imagem](phases/06-construir-home-com-roteador-de-imagem.md)              | 🔍 Em revisão | `feat/06-construir-home-com-roteador-de-imagem`       | #10 |
+| 06  | [Construir home com roteador de imagem](phases/06-construir-home-com-roteador-de-imagem.md)              | ✅ Concluído  | `feat/06-construir-home-com-roteador-de-imagem`       | #10 |
 | 07  | [Mapear rotas e criar telas de erro](phases/07-mapear-rotas-e-criar-telas-de-erro.md)                    | ✅ Concluído  | `feat/07-mapear-rotas-e-criar-telas-de-erro`          | #6  |
 | 08  | [Configurar SEO, dados estruturados e CSP](phases/08-configurar-seo-dados-estruturados-e-csp.md)         | ✅ Concluído  | `feat/08-configurar-seo-dados-estruturados-e-csp`     | #7  |
 | 09  | [Criar envio, validação e download de imagens](phases/09-criar-envio-validacao-e-download-de-imagens.md) | ✅ Concluído  | `feat/09-criar-envio-validacao-e-download-de-imagens` | #8  |
