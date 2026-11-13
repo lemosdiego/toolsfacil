@@ -1,6 +1,6 @@
 # 06 — Construir home com roteador de imagem
 
-**Status:** 📝 Rascunho · **Branch:** `feat/06-construir-home-com-roteador-de-imagem` · **Depende de:** 08, 09 e 10
+**Status:** 🚧 Em andamento · **Branch:** `feat/06-construir-home-com-roteador-de-imagem` · **Depende de:** 08, 09 e 10
 
 ## Objetivo
 
