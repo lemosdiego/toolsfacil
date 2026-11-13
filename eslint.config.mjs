@@ -6,6 +6,14 @@ import prettier from "eslint-config-prettier/flat";
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
+  {
+    // HTML cru só pelo JsonLd, que escapa o conteúdo (regra do CLAUDE.md).
+    rules: { "react/no-danger": "error" },
+  },
+  {
+    files: ["src/components/seo/json-ld.tsx"],
+    rules: { "react/no-danger": "off" },
+  },
   // Desliga as regras de estilo que conflitam com o Prettier (deve ser o último).
   prettier,
   globalIgnores([
