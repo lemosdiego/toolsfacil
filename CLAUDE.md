@@ -204,7 +204,8 @@ Toda tela do site está neste mapa. **Rota nova só entra depois de entrar aqui*
 
 ### Página de ferramenta
 
-- Toda página de ferramenta usa o **`ToolPageLayout`** (`src/components/tools/`): `title` (o `h1`), `description` (2 ou 3 linhas), `tool` (a ilha `"use client"`) e o texto em `ToolPageSection` (`h2`). Exemplo vivo em `/styleguide/ferramenta` (só em dev).
+- Toda página de ferramenta usa o **`ToolPageLayout`** (`src/components/tools/`): `title` (o `h1`), `description` (2 ou 3 linhas), `tool` (a ilha `"use client"`) e o texto em `ToolPageSection` (`h2`). Exemplo vivo em `/styleguide/ferramenta` (só em dev); ferramentas reais em `src/app/(tools)/`.
+- **Molde da rota** (ver `png-para-webp/`): `page.tsx` (Server Component) com `const tool = requireTool("slug")`, `export const metadata = createToolMetadata(tool, ...)`, `<JsonLd data={[webApplicationJsonLd(...), faqPageJsonLd(faq)]} />` e o `ToolPageLayout`; textos e FAQ em `content.ts`, ao lado. A FAQ aparece com `FaqList` e vai para o JSON-LD a partir da mesma lista. Ilha compartilhada por várias rotas fica em `src/components/tools/` (ex.: `WebpConverter`).
 - **Desktop:** título, texto e botão à esquerda, prévia à direita. **Celular:** uma coluna, com título e botão acima da dobra.
 - A ilha renderiza o botão dentro de `ToolActionArea` e a prévia dentro de `ToolPreviewArea`, que se encaixam na grade. Use `hiddenOnMobile` na prévia enquanto não há imagem.
 - **`PreviewCard`:** imagem sobre o xadrez de transparência, ícone de download tradicional no canto (desativado até haver resultado, com `aria-label` como "Baixar imagem em WebP") e tamanho antes e depois.
@@ -236,6 +237,7 @@ Toda tela do site está neste mapa. **Rota nova só entra depois de entrar aqui*
 - **Formatos aceitos** vêm do `accepts` da ferramenta no `tools.ts`, nunca de uma lista na página.
 - **Worker no build:** o Turbopack compila o worker em `turbopack-worker-*.js`, e também copia o `.ts` original para `static/media` por causa do `new URL(...)`. Essa cópia não é usada.
 - **Bibliotecas pesadas sob demanda:** o decodificador de HEIC e qualquer WASM são carregados com `import()` dinâmico, só na página que usa e só quando o usuário escolhe um arquivo. Nunca no bundle global.
+- **WebP no Safari:** o canvas do Safari não gera WebP. O `WebpConverter` pergunta `canEncode("image/webp")` e, se não, pede `encoder: "wasm"` ao `processImage`: o worker carrega `@jsquash/webp` (`wasm-webp-encoder.ts`, ~126 KB gzip) só nesse caso. No E2E, o Safari é simulado trocando o `toBlob` da página para devolver PNG.
 - **Metadados:** a saída é regravada pelo canvas, e com isso perde o EXIF (inclusive GPS). O `ImageToolView` já avisa isso na interface.
 - **Memória:** chame `URL.revokeObjectURL()` em toda URL criada, e `bitmap.close()` depois de usar (o `useImageTool` e o `processImage` já fazem).
 - **Uma imagem por vez:** soltar vários arquivos abre o primeiro, com aviso.
@@ -282,7 +284,7 @@ Toda tela do site está neste mapa. **Rota nova só entra depois de entrar aqui*
 ### Segurança
 
 - **Cabeçalhos e CSP** montados em `src/lib/security-headers.ts` (função pura, com testes) e aplicados pelo `next.config.ts` em todas as respostas, inclusive em dev.
-- **CSP sem nonce** (`script-src 'self' 'unsafe-inline'`): com nonce, toda página teria de ser renderizada no servidor a cada visita, sem página estática nem cache. Não troque sem plano próprio.
+- **CSP sem nonce** (`script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'`): com nonce, toda página teria de ser renderizada no servidor a cada visita, sem página estática nem cache. Não troque sem plano próprio. O `'wasm-unsafe-eval'` libera só a compilação de WebAssembly (codificador WebP no Safari), não o `eval` de JavaScript.
 - O resto é restrito: `default-src 'self'`, `connect-src 'self' blob:`, `object-src 'none'`, `frame-ancestors 'none'`, `base-uri` e `form-action` só do site. `img-src` aceita `blob:` e `data:` (prévias locais), e `worker-src` aceita `'self'` e `blob:`. Em dev, entram `'unsafe-eval'` e `ws:`.
 - **Um serviço externo novo** precisa entrar na política. Os domínios do AdSense (`script-src`, `img-src`, `frame-src`, `connect-src`) entram na fase do AdSense, junto com o script real.
 - O teste E2E `security-headers.spec.ts` falha com qualquer violação de CSP: página nova entra na lista dele.
@@ -365,7 +367,7 @@ Formato: **`NN-verbo-entrega.md`**, por exemplo `03-converter-png-jpg-para-webp.
 
 - **Vitest + Testing Library:** funções puras de `src/lib/image/` (proporções, dimensões, nome do arquivo de saída, formatação de KB, detecção de tipo pelos bytes), registro de ferramentas, SEO e componentes.
 - **Canvas não funciona no jsdom:** o processamento real de imagem é testado no **Playwright**, em navegador de verdade, com as imagens de `tests/fixtures/` (geradas por `pnpm fixtures:generate`, ver o README da pasta). Nos testes de unidade, simule `createImageBitmap`/`OffscreenCanvas`.
-- **Nos E2E:** caminho das fixtures com `join(__dirname, "..", "fixtures", nome)` (o Playwright compila como CommonJS, sem `import.meta`); arquivo escolhido pelo `getByTestId("image-input")`; alertas buscados dentro do `<main>` (o Next tem um anunciador de rota com `role="alert"`); arrastar e soltar só depois da hidratação (`waitForLoadState("networkidle")`).
+- **Nos E2E:** caminho das fixtures com `join(__dirname, "..", "fixtures", nome)` (o Playwright compila como CommonJS, sem `import.meta`); arquivo escolhido pelo `getByTestId("image-input")`; alertas buscados dentro do `<main>` (o Next tem um anunciador de rota com `role="alert"`); escolher ou soltar arquivo **só depois da hidratação** (`waitForLoadState("networkidle")` depois do `goto`): antes dela, o seletor não reage e o teste fica instável no primeiro acesso em dev.
 - **Playwright** (desktop + mobile): fluxos críticos de cada ferramenta (escolher arquivo → processar → baixar → conferir formato, dimensões e tamanho do arquivo baixado). Um teste confere que **nenhuma requisição de rede leva o arquivo** durante o processamento.
 - Os testes leem o `<head>` de cada ferramenta (title, description, canonical, JSON-LD).
 - Toda funcionalidade nova deve vir com testes que façam sentido para ela.
