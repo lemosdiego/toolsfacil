@@ -87,7 +87,10 @@ src/
       termos-de-uso/
     api/                    # route handlers (futuro: webhooks do Pix)
     layout.tsx              # SkipLink, header, <main> e script do AdSense
-    page.tsx                # home (layout definido por print do usuário)
+    page.tsx                # home (roteador de imagem, fase 06)
+    not-found.tsx           # 404: toda URL sem rota (e ferramenta "soon")
+    error.tsx               # erro inesperado, com "Tentar de novo"
+    global-error.tsx        # erro no próprio layout raiz (documento mínimo)
     sitemap.ts
     robots.ts
   components/
@@ -163,6 +166,26 @@ Referência visual de tudo em **`/styleguide`** (só em `pnpm dev`; responde 404
 - **Categorias** (`toolCategories`, na ordem das colunas do menu): `convert` ("Converter") e `edit` ("Editar"). Categoria nova entra nessa lista, com o rótulo em português.
 - **Status:** `soon` aparece no menu com o selo "Em breve", **sem link** (nada de link quebrado). Ao terminar a fase da ferramenta, troque para `available`: só então ela vira link (e entra no sitemap).
 - Consultas prontas: `getToolsByCategory()`, `getAvailableTools()`, `getToolBySlug()` e `getToolHref()`.
+
+### Mapa de rotas
+
+Toda tela do site está neste mapa. **Rota nova só entra depois de entrar aqui** (o plano da fase traz a linha nova).
+
+| Rota                                                               | Tela                        | Layout                           | Sitemap                 |
+| ------------------------------------------------------------------ | --------------------------- | -------------------------------- | ----------------------- |
+| `/`                                                                | Home (roteador de imagem)   | Próprio                          | Sim                     |
+| `/<slug>` de cada ferramenta do `tools.ts`                         | Ferramenta                  | `ToolPageLayout`                 | Só quando `available`   |
+| `/sobre`, `/contato`, `/politica-de-privacidade`, `/termos-de-uso` | Institucional               | Texto longo (`max-w-prose`)      | Sim                     |
+| Qualquer outra URL                                                 | Página não encontrada (404) | `not-found.tsx`                  | Não (`noindex` do Next) |
+| Erro inesperado                                                    | Erro                        | `error.tsx` / `global-error.tsx` | Não                     |
+| `/styleguide`, `/styleguide/*`                                     | Referência visual (só dev)  | Próprio                          | Não (404 em produção)   |
+
+- **As ferramentas vêm do `tools.ts`:** o mapa não repete slugs nem nomes. Uma ferramenta `soon` **não tem rota** (responde 404): a página nasce junto com a ferramenta pronta, nunca como "Em breve".
+- **Rotas que não são telas:** `/sitemap.xml` e `/robots.txt` (gerados), `/ads.txt` (`public/`) e `/api/*` (futuro, webhooks do Pix).
+- **Navegação:** header (home e menu "Ferramentas"), footer com as páginas institucionais (fase das institucionais) e a 404 (home e lista de ferramentas).
+- **Contato sem formulário:** só e-mail, vindo do `site-config.ts` (formulário exigiria servidor ou serviço externo).
+- **Erros:** as telas de erro não registram nem enviam o erro para fora (a mensagem pode ter o nome do arquivo do usuário). Erro esperado (arquivo inválido, grande demais) é tratado dentro da ferramenta, com `Alert`.
+- **Fora do MVP:** páginas de categoria (`/converter`, `/editar`) e "Todas as ferramentas", só quando houver ferramentas suficientes por grupo.
 
 ### Layout e header
 

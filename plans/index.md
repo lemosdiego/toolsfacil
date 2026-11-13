@@ -27,7 +27,7 @@ Numeradas na ordem em que os planos foram criados (o número nasce com o plano).
 | 04  | [Construir header com menu de ferramentas](phases/04-construir-header-com-menu-de-ferramentas.md) | ✅ Concluído  | `feat/04-construir-header-com-menu-de-ferramentas` | #4  |
 | 05  | [Construir layout da página de ferramenta](phases/05-construir-layout-da-pagina-de-ferramenta.md) | ✅ Concluído  | `feat/05-construir-layout-da-pagina-de-ferramenta` | #5  |
 | 06  | [Construir home com roteador de imagem](phases/06-construir-home-com-roteador-de-imagem.md)       | 📝 Rascunho   | `feat/06-construir-home-com-roteador-de-imagem`    | —   |
-| 07  | [Mapear rotas e criar telas de erro](phases/07-mapear-rotas-e-criar-telas-de-erro.md)             | 📝 Rascunho   | `feat/07-mapear-rotas-e-criar-telas-de-erro`       | —   |
+| 07  | [Mapear rotas e criar telas de erro](phases/07-mapear-rotas-e-criar-telas-de-erro.md)             | 🔍 Em revisão | `feat/07-mapear-rotas-e-criar-telas-de-erro`       | #6  |
 
 ## Roteiro (fases sem plano)
 
