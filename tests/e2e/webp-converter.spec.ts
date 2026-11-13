@@ -286,7 +286,7 @@ test.describe("Ferramentas liberadas", () => {
     if (isMobile) await button.click();
     else await button.hover();
 
-    const link = page.getByRole("link", { name: "JPG para WebP" });
+    const link = page.getByRole("link", { name: "JPG para WebP", exact: true });
     await expect(link).toBeVisible();
     await link.click();
 
