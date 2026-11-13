@@ -91,6 +91,13 @@ export function getToolBySlug(slug: string): Tool | undefined {
   return tools.find((tool) => tool.slug === slug);
 }
 
+/** A ferramenta do slug, ou erro no build (para as páginas das ferramentas). */
+export function requireTool(slug: string): Tool {
+  const tool = getToolBySlug(slug);
+  if (!tool) throw new Error(`Ferramenta não registrada em tools.ts: ${slug}`);
+  return tool;
+}
+
 export function getAvailableTools(): Tool[] {
   return tools.filter((tool) => tool.status === "available");
 }

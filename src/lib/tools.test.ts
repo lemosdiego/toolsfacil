@@ -6,6 +6,7 @@ import {
   getToolHref,
   getToolsByCategory,
   getToolsForFileType,
+  requireTool,
   toolCategories,
   tools,
 } from "./tools";
@@ -68,6 +69,11 @@ describe("consultas ao registro", () => {
   it("getToolBySlug acha a ferramenta ou devolve undefined", () => {
     expect(getToolBySlug("png-para-webp")?.name).toBe("PNG para WebP");
     expect(getToolBySlug("nao-existe")).toBeUndefined();
+  });
+
+  it("requireTool acha a ferramenta ou falha com o slug na mensagem", () => {
+    expect(requireTool("png-para-webp").name).toBe("PNG para WebP");
+    expect(() => requireTool("nao-existe")).toThrow(/nao-existe/);
   });
 
   it("getAvailableTools só devolve ferramentas disponíveis", () => {
