@@ -1,3 +1,5 @@
+import { join } from "node:path";
+
 import { expect, test, type Locator, type Page } from "@playwright/test";
 
 import { findAccessibilityViolations } from "./accessibility";
@@ -5,12 +7,14 @@ import { isProductionServer } from "./server-mode";
 
 const examplePath = "/styleguide/ferramenta";
 
+const sampleImage = join(__dirname, "..", "fixtures", "transparente.png");
+
 function chooseButton(page: Page) {
-  return page.getByRole("button", { name: "Escolher imagem" });
+  return page.getByRole("button", { name: /^Escolher (outra )?imagem$/ });
 }
 
 async function chooseSampleImage(page: Page) {
-  await chooseButton(page).click();
+  await page.getByTestId("image-input").setInputFiles(sampleImage);
   await expect(
     page.getByRole("img", { name: "Prévia da imagem convertida" }),
   ).toBeVisible();
@@ -63,7 +67,9 @@ test.describe("Molde da página de ferramenta", () => {
     test.skip(!isMobile, "comportamento do celular");
     await page.goto(examplePath);
 
-    await expect(page.getByText("A prévia aparece aqui")).toBeHidden();
+    await expect(
+      page.getByText("Arraste uma imagem para cá ou clique para escolher"),
+    ).toBeHidden();
     await chooseSampleImage(page);
 
     const button = await chooseButton(page).boundingBox();
@@ -80,7 +86,9 @@ test.describe("Molde da página de ferramenta", () => {
     test.skip(isMobile, "comportamento do desktop");
     await page.goto(examplePath);
 
-    await expect(page.getByText("A prévia aparece aqui")).toBeVisible();
+    await expect(
+      page.getByText("Arraste uma imagem para cá ou clique para escolher"),
+    ).toBeVisible();
     const title = await page.getByRole("heading", { level: 1 }).boundingBox();
     const preview = await page.locator("figure").boundingBox();
     if (!title || !preview) throw new Error("sem medidas");
@@ -97,10 +105,13 @@ test.describe("Molde da página de ferramenta", () => {
     ).toBeDisabled();
 
     await chooseSampleImage(page);
-    const download = page.getByRole("link", { name: "Baixar imagem em WebP" });
+    const download = page.getByRole("link", { name: "Baixar imagem em PNG" });
     await expect(download).toBeVisible();
-    await expect(download).toHaveAttribute("download", "exemplo.svg");
-    await expect(page.getByText("-72%")).toBeVisible();
+    await expect(download).toHaveAttribute(
+      "download",
+      "transparente-exemplo.png",
+    );
+    await expect(page.locator("figcaption")).toContainText("→");
   });
 
   test("o primeiro anúncio fica a pelo menos 48px da ferramenta", async ({
@@ -113,7 +124,7 @@ test.describe("Molde da página de ferramenta", () => {
     const toolParts = [
       chooseButton(page),
       page.locator("figure"),
-      page.getByRole("link", { name: "Baixar imagem em WebP" }),
+      page.getByRole("link", { name: "Baixar imagem em PNG" }),
     ];
     for (const part of toolParts) {
       expect(await verticalGap(part, firstAd)).toBeGreaterThanOrEqual(48);
@@ -148,7 +159,7 @@ test.describe("Molde da página de ferramenta", () => {
     for (const part of [
       page.getByRole("heading", { level: 1 }),
       page.locator("figure"),
-      page.getByRole("link", { name: "Baixar imagem em WebP" }),
+      page.getByRole("link", { name: "Baixar imagem em PNG" }),
     ]) {
       expect(await verticalGap(topAd, part)).toBeGreaterThanOrEqual(48);
     }
@@ -174,13 +185,19 @@ test.describe("Molde da página de ferramenta", () => {
   });
 
   for (const colorScheme of ["light", "dark"] as const) {
-    for (const state of ["vazio", "com imagem"] as const) {
+    for (const state of ["vazio", "com imagem", "com erro"] as const) {
       test(`sem violações de acessibilidade (tema ${colorScheme}, prévia ${state})`, async ({
         page,
       }) => {
         await page.emulateMedia({ colorScheme });
         await page.goto(examplePath);
         if (state === "com imagem") await chooseSampleImage(page);
+        if (state === "com erro") {
+          await page
+            .getByTestId("image-input")
+            .setInputFiles(join(__dirname, "..", "fixtures", "falso.png"));
+          await expect(page.getByRole("main").getByRole("alert")).toBeVisible();
+        }
 
         expect(await findAccessibilityViolations(page)).toEqual([]);
       });

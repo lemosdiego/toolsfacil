@@ -5,6 +5,8 @@
  * "available" (só então ela vira link).
  */
 
+import type { ImageMimeType } from "./image/detect-image-type";
+
 export type ToolCategory = "convert" | "edit";
 
 export type ToolStatus = "available" | "soon";
@@ -17,6 +19,11 @@ export type Tool = {
   shortDescription: string;
   category: ToolCategory;
   status: ToolStatus;
+  /**
+   * Tipos reais de imagem (pelos bytes) que a ferramenta aceita. Usado na
+   * validação, no `accept` do seletor e para sugerir a ferramenta certa.
+   */
+  accepts: readonly ImageMimeType[];
 };
 
 /** Categorias na ordem das colunas do menu, com o rótulo em português. */
@@ -36,6 +43,7 @@ export const tools: readonly Tool[] = [
       "Transforme PNG em WebP, mais leve e com fundo transparente preservado.",
     category: "convert",
     status: "soon",
+    accepts: ["image/png", "image/jpeg"],
   },
   {
     slug: "jpg-para-webp",
@@ -44,6 +52,7 @@ export const tools: readonly Tool[] = [
       "Transforme fotos JPG em WebP, o formato mais leve para sites e lojas.",
     category: "convert",
     status: "soon",
+    accepts: ["image/png", "image/jpeg"],
   },
   {
     slug: "heic-para-jpg",
@@ -52,6 +61,7 @@ export const tools: readonly Tool[] = [
       "Abra as fotos do iPhone em qualquer lugar, convertendo HEIC para JPG.",
     category: "convert",
     status: "soon",
+    accepts: ["image/heic"],
   },
   {
     slug: "compactar-imagem",
@@ -60,6 +70,7 @@ export const tools: readonly Tool[] = [
       "Reduza o tamanho em KB sem perder qualidade visível, para enviar ou publicar.",
     category: "edit",
     status: "soon",
+    accepts: ["image/jpeg", "image/png", "image/webp"],
   },
   {
     slug: "cortador-de-imagem",
@@ -68,6 +79,7 @@ export const tools: readonly Tool[] = [
       "Corte livre ou nas proporções das redes sociais, e ajuste as dimensões.",
     category: "edit",
     status: "soon",
+    accepts: ["image/jpeg", "image/png", "image/webp"],
   },
 ];
 
@@ -86,4 +98,12 @@ export function getAvailableTools(): Tool[] {
 /** Ferramentas de uma categoria, na ordem do registro. */
 export function getToolsByCategory(category: ToolCategory): Tool[] {
   return tools.filter((tool) => tool.category === category);
+}
+
+/**
+ * Ferramentas que aceitam um tipo de imagem, na ordem do registro (para
+ * sugerir a ferramenta certa quando o arquivo não serve para a atual).
+ */
+export function getToolsForFileType(type: ImageMimeType): Tool[] {
+  return tools.filter((tool) => tool.accepts.includes(type));
 }

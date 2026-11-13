@@ -22,8 +22,8 @@ export default function ToolLayoutExamplePage() {
 
   return (
     <ToolPageLayout
-      title="PNG para WebP"
-      description="Exemplo do molde das páginas de ferramenta: texto curto sobre o que a ferramenta faz, em duas ou três linhas, com o botão logo abaixo."
+      title="Regravar imagem em PNG"
+      description="Exemplo do molde com o fluxo real das ferramentas: escolha ou arraste uma imagem PNG, JPG ou WebP, e ela é regravada em PNG no seu navegador."
       tool={<ExampleTool />}
     >
       <ToolPageSection title="Como usar">

@@ -1,8 +1,10 @@
 import { Download } from "lucide-react";
+import type { ReactNode } from "react";
 
 import { buttonBase, buttonVariants } from "@/components/ui/button-styles";
 import { Badge } from "@/components/ui/badge";
 import { IconButton } from "@/components/ui/icon-button";
+import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/cn";
 import { formatFileSize, formatSizeChange } from "@/lib/image/format-file-size";
 
@@ -18,6 +20,10 @@ type PreviewCardProps = {
   };
   /** Tamanhos em bytes, antes e depois do processamento. */
   sizes?: { before: number; after: number };
+  /** Conteúdo do estado vazio (padrão: "A prévia aparece aqui"). */
+  emptyContent?: ReactNode;
+  /** Processando: mostra um aviso por cima da prévia. */
+  busy?: boolean;
   className?: string;
 };
 
@@ -32,6 +38,8 @@ export function PreviewCard({
   image,
   download,
   sizes,
+  emptyContent,
+  busy = false,
   className,
 }: PreviewCardProps) {
   return (
@@ -51,9 +59,20 @@ export function PreviewCard({
             className="size-full object-contain p-4"
           />
         ) : (
-          <p className="rounded-control bg-surface px-3 py-1.5 text-sm text-muted">
-            A prévia aparece aqui
-          </p>
+          (emptyContent ?? (
+            <p className="rounded-control bg-surface px-3 py-1.5 text-sm text-muted">
+              A prévia aparece aqui
+            </p>
+          ))
+        )}
+
+        {busy && (
+          <div className="absolute inset-0 grid place-items-center bg-surface/70">
+            <span className="inline-flex items-center gap-2 rounded-control bg-surface px-3 py-2 text-sm shadow-card">
+              <Spinner size="sm" />
+              Processando…
+            </span>
+          </div>
         )}
 
         {download ? (

@@ -1,3 +1,5 @@
+import { join } from "node:path";
+
 import { expect, test, type Page } from "@playwright/test";
 
 import { isProductionServer } from "./server-mode";
@@ -91,13 +93,15 @@ test.describe("Sem violações de CSP", () => {
     });
   }
 
-  test("na prévia com imagem data: do exemplo de ferramenta (só em dev)", async ({
+  test("ao processar uma imagem no exemplo de ferramenta (só em dev)", async ({
     page,
   }) => {
     test.skip(isProductionServer, "a página só existe em desenvolvimento");
     await watchCspViolations(page);
     await page.goto("/styleguide/ferramenta");
-    await page.getByRole("button", { name: "Escolher imagem" }).click();
+    await page
+      .getByTestId("image-input")
+      .setInputFiles(join(__dirname, "..", "fixtures", "transparente.png"));
     await expect(
       page.getByRole("img", { name: "Prévia da imagem convertida" }),
     ).toBeVisible();
