@@ -1,6 +1,6 @@
 # 08 — Configurar SEO, dados estruturados e CSP
 
-**Status:** 🔍 Em revisão · **Branch:** `feat/08-configurar-seo-dados-estruturados-e-csp` · **Depende de:** 07
+**Status:** ✅ Concluído · **Branch:** `feat/08-configurar-seo-dados-estruturados-e-csp` · **Depende de:** 07
 
 ## Objetivo
 

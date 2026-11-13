@@ -28,7 +28,7 @@ Numeradas na ordem em que os planos foram criados (o número nasce com o plano).
 | 05  | [Construir layout da página de ferramenta](phases/05-construir-layout-da-pagina-de-ferramenta.md)        | ✅ Concluído  | `feat/05-construir-layout-da-pagina-de-ferramenta`    | #5  |
 | 06  | [Construir home com roteador de imagem](phases/06-construir-home-com-roteador-de-imagem.md)              | 📝 Rascunho   | `feat/06-construir-home-com-roteador-de-imagem`       | —   |
 | 07  | [Mapear rotas e criar telas de erro](phases/07-mapear-rotas-e-criar-telas-de-erro.md)                    | ✅ Concluído  | `feat/07-mapear-rotas-e-criar-telas-de-erro`          | #6  |
-| 08  | [Configurar SEO, dados estruturados e CSP](phases/08-configurar-seo-dados-estruturados-e-csp.md)         | 🔍 Em revisão | `feat/08-configurar-seo-dados-estruturados-e-csp`     | #7  |
+| 08  | [Configurar SEO, dados estruturados e CSP](phases/08-configurar-seo-dados-estruturados-e-csp.md)         | ✅ Concluído  | `feat/08-configurar-seo-dados-estruturados-e-csp`     | #7  |
 | 09  | [Criar envio, validação e download de imagens](phases/09-criar-envio-validacao-e-download-de-imagens.md) | 📝 Rascunho   | `feat/09-criar-envio-validacao-e-download-de-imagens` | —   |
 | 10  | [Converter PNG e JPG para WebP](phases/10-converter-png-e-jpg-para-webp.md)                              | 📝 Rascunho   | `feat/10-converter-png-e-jpg-para-webp`               | —   |
 
