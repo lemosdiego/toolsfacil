@@ -12,7 +12,7 @@ Três princípios guiam todas as decisões:
 - **Privacidade:** os arquivos **nunca saem do navegador**. Todo processamento é _client-side_.
 - **Custo zero de infraestrutura:** site estático/serverless, sem servidor processando arquivos.
 
-> O nome do projeto é **Tools Fácil** (domínio sugerido: `toolsfacil.com.br`). Não espalhe o nome pelo código: o nome e a URL do site vêm só de `src/lib/site-config.ts`.
+> O nome do projeto é **Tools Fácil** (domínio sugerido: `toolsfacil.com.br`). Não espalhe o nome pelo código: o nome vem só de `src/lib/site-config.ts`, e a URL só de `getSiteUrl()` (`src/lib/seo.ts`).
 
 ### Escopo do MVP
 
@@ -91,17 +91,22 @@ src/
     not-found.tsx           # 404: toda URL sem rota (e ferramenta "soon")
     error.tsx               # erro inesperado, com "Tentar de novo"
     global-error.tsx        # erro no próprio layout raiz (documento mínimo)
-    sitemap.ts
+    opengraph-image.tsx     # imagem de compartilhamento, gerada no build
+    sitemap.ts              # páginas fixas + ferramentas "available"
     robots.ts
   components/
     ui/                     # componentes genéricos (Button, Card...)
     layout/                 # SkipLink, SiteHeader, ToolsMenu (Footer depois)
     ads/                    # AdSlot
+    seo/                    # JsonLd
     tools/                  # ToolPageLayout, FileDropzone, DownloadButton...
   lib/
     tools.ts                # registro único das ferramentas (fonte da verdade)
-    site-config.ts          # nome, URL e contatos do site
-    seo.ts
+    site-config.ts          # nome, frase e textos do site
+    site-pages.ts           # páginas fixas do sitemap
+    seo.ts                  # URLs absolutas e metadados das páginas
+    structured-data.ts      # montadores de JSON-LD
+    security-headers.ts     # CSP e cabeçalhos (lidos pelo next.config.ts)
     image/                  # funções puras de cálculo e processamento
   workers/                  # Web Workers de processamento de imagem
   types/
@@ -135,7 +140,7 @@ referencias/
 - Prefira **Server Components** para o conteúdo da página (título, texto explicativo, FAQ), que precisa chegar pronto no HTML para o SEO. A parte interativa da ferramenta é uma **ilha `"use client"`** dentro da página.
 - Constantes exportadas de um arquivo `"use client"` não chegam como valor aos Server Components: deixe-as em um arquivo comum.
 - Classes condicionais via `cn()` (`src/lib/cn.ts`). Reaproveite os componentes de `src/components/ui/` antes de criar estilos novos.
-- Use os tokens semânticos do Tailwind definidos em `globals.css` (ex.: `bg-surface`, `text-muted`), e nunca hex soltos nos componentes. A identidade visual ainda não foi definida (ver "Pontos em aberto").
+- Use os tokens semânticos do Tailwind definidos em `globals.css` (ex.: `bg-surface`, `text-muted`), e nunca hex soltos nos componentes (única exceção: `opengraph-image.tsx`, porque o `ImageResponse` não lê as variáveis CSS). A identidade visual ainda não foi definida (ver "Pontos em aberto").
 
 ### Tokens e componentes base
 
@@ -241,11 +246,13 @@ Toda tela do site está neste mapa. **Rota nova só entra depois de entrar aqui*
 
 ### SEO (`src/lib/seo.ts`)
 
-- **Cada ferramenta tem sua rota**, com `title` e `description` próprios, `alternates.canonical` e `openGraph`. O `openGraph` da página substitui o do layout inteiro, sem mesclar: parta de um objeto base do `seo.ts`.
+- **Metadados só pelo `seo.ts`:** a página de ferramenta exporta `createToolMetadata(tool, { title, description })`, e as outras páginas `createPageMetadata({ title, description, path })`. Os dois geram `title`, `description`, `alternates.canonical` e `openGraph` a partir do `baseOpenGraph`. Nunca monte `openGraph` à mão: o da página substitui o do layout inteiro, sem mesclar.
+- **Título:** o layout aplica o modelo `%s | Tools Fácil`. A página passa só o próprio título (`absoluteTitle: true` para usar sem o sufixo, como na home).
 - **Conteúdo textual em cada página de ferramenta** (Server Component, abaixo da ferramenta): o que é, como usar (passo a passo), perguntas frequentes e um aviso de privacidade. Texto original e útil, nunca encheção: o AdSense recusa sites com pouco conteúdo.
-- **Dados estruturados** só pelo componente `JsonLd`, que escapa o `<`: `WebApplication` (ou `SoftwareApplication`) e `FAQPage`. Nunca invente avaliações, notas ou número de usuários.
-- **Endereços:** `getSiteUrl()` e `absoluteUrl()` a partir de `NEXT_PUBLIC_SITE_URL`, obrigatória em produção (sem ela, os robôs recebem `localhost`).
-- `sitemap.ts` gerado a partir do registro de ferramentas; `robots.ts` liberando tudo, menos `/api/`.
+- **Dados estruturados** só pelo componente `JsonLd` (`src/components/seo/`), que escapa o `<`, com os montadores de `src/lib/structured-data.ts`: `webApplicationJsonLd()` e `faqPageJsonLd()` nas ferramentas, `webSiteJsonLd()` na home. As perguntas do `FAQPage` são as mesmas do texto. Nunca invente avaliações, notas ou número de usuários.
+- **Endereços:** `getSiteUrl()` e `absoluteUrl()` a partir de `NEXT_PUBLIC_SITE_URL`. **No build de produção, sem a variável, o build falha** (para os robôs nunca receberem `localhost`). Em dev, o padrão é `http://localhost:3000`.
+- **Imagem de compartilhamento:** `src/app/opengraph-image.tsx`, gerada no build, vale para todas as páginas. A arte final vem com a identidade visual.
+- `sitemap.ts` lista as páginas fixas de `site-pages.ts` (página institucional nova entra lá) e as ferramentas `available`; `robots.ts` libera tudo, menos `/api/`.
 - Um `h1` por página, com a palavra-chave principal (ex.: "Converter imagem para WebP").
 
 ### Responsividade e acessibilidade
@@ -257,9 +264,12 @@ Toda tela do site está neste mapa. **Rota nova só entra depois de entrar aqui*
 
 ### Segurança
 
-- **Cabeçalhos e CSP** no `next.config.ts`. A CSP precisa liberar os domínios do AdSense (`script-src`, `img-src`, `frame-src`, `connect-src`). **Um serviço externo novo** precisa entrar na política.
-- `img-src` aceita `blob:` e `data:` para as prévias locais. `worker-src` aceita `blob:` e `'self'`.
-- Nunca use `dangerouslySetInnerHTML` com texto de fora, a não ser pelo `JsonLd`.
+- **Cabeçalhos e CSP** montados em `src/lib/security-headers.ts` (função pura, com testes) e aplicados pelo `next.config.ts` em todas as respostas, inclusive em dev.
+- **CSP sem nonce** (`script-src 'self' 'unsafe-inline'`): com nonce, toda página teria de ser renderizada no servidor a cada visita, sem página estática nem cache. Não troque sem plano próprio.
+- O resto é restrito: `default-src 'self'`, `connect-src 'self' blob:`, `object-src 'none'`, `frame-ancestors 'none'`, `base-uri` e `form-action` só do site. `img-src` aceita `blob:` e `data:` (prévias locais), e `worker-src` aceita `'self'` e `blob:`. Em dev, entram `'unsafe-eval'` e `ws:`.
+- **Um serviço externo novo** precisa entrar na política. Os domínios do AdSense (`script-src`, `img-src`, `frame-src`, `connect-src`) entram na fase do AdSense, junto com o script real.
+- O teste E2E `security-headers.spec.ts` falha com qualquer violação de CSP: página nova entra na lista dele.
+- Nunca use `dangerouslySetInnerHTML` fora do `JsonLd` (a regra `react/no-danger` do ESLint bloqueia).
 
 ### Privacidade e LGPD
 
@@ -273,7 +283,7 @@ Toda tela do site está neste mapa. **Rota nova só entra depois de entrar aqui*
 - Ao precisar de uma nova variável: adicione-a ao `.env.example` (sem valor real) e avise o usuário.
 - Nunca commite `.env*` (exceto o `.env.example`).
 - Variáveis previstas:
-  - `NEXT_PUBLIC_SITE_URL`: URL pública do site (obrigatória em produção).
+  - `NEXT_PUBLIC_SITE_URL`: URL pública do site. **Obrigatória no build de produção** (o build falha sem ela); para rodar `pnpm build` localmente, o usuário a preenche no `.env.local`. O CI usa `http://localhost:3000`.
   - `NEXT_PUBLIC_ADSENSE_CLIENT_ID`: ID do publisher (`ca-pub-...`). Sem ela, os anúncios não aparecem.
 - As `NEXT_PUBLIC_*` entram na página durante o build: depois de mudar, é preciso publicar de novo.
 
