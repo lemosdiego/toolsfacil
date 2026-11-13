@@ -1,6 +1,6 @@
 # 10 — Converter PNG e JPG para WebP
 
-**Status:** 🚧 Em andamento · **Branch:** `feat/10-converter-png-e-jpg-para-webp` · **Depende de:** 08 e 09
+**Status:** 🔍 Em revisão · **Branch:** `feat/10-converter-png-e-jpg-para-webp` · **Depende de:** 08 e 09
 
 ## Objetivo
 
