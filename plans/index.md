@@ -19,19 +19,19 @@ Painel das fases do projeto. Cada fase é um plano em [`phases/`](phases/), cria
 
 Numeradas na ordem em que os planos foram criados (o número nasce com o plano).
 
-| #   | Fase                                                                                                     | Status        | Branch                                                | PR  |
-| --- | -------------------------------------------------------------------------------------------------------- | ------------- | ----------------------------------------------------- | --- |
-| 01  | [Configurar Next.js, Tailwind e testes](phases/01-configurar-nextjs-tailwind-e-testes.md)                | ✅ Concluído  | `feat/01-configurar-nextjs-tailwind-e-testes`         | #1  |
-| 02  | [Definir design tokens e componentes base](phases/02-definir-design-tokens-e-componentes-base.md)        | ✅ Concluído  | `feat/02-definir-design-tokens-e-componentes-base`    | #2  |
-| 03  | [Construir layout e home das ferramentas](phases/03-construir-layout-e-home-das-ferramentas.md)          | 🚫 Descartado | `feat/03-construir-layout-e-home-das-ferramentas`     | #3  |
-| 04  | [Construir header com menu de ferramentas](phases/04-construir-header-com-menu-de-ferramentas.md)        | ✅ Concluído  | `feat/04-construir-header-com-menu-de-ferramentas`    | #4  |
-| 05  | [Construir layout da página de ferramenta](phases/05-construir-layout-da-pagina-de-ferramenta.md)        | ✅ Concluído  | `feat/05-construir-layout-da-pagina-de-ferramenta`    | #5  |
-| 06  | [Construir home com roteador de imagem](phases/06-construir-home-com-roteador-de-imagem.md)              | ✅ Concluído  | `feat/06-construir-home-com-roteador-de-imagem`       | #10 |
-| 07  | [Mapear rotas e criar telas de erro](phases/07-mapear-rotas-e-criar-telas-de-erro.md)                    | ✅ Concluído  | `feat/07-mapear-rotas-e-criar-telas-de-erro`          | #6  |
-| 08  | [Configurar SEO, dados estruturados e CSP](phases/08-configurar-seo-dados-estruturados-e-csp.md)         | ✅ Concluído  | `feat/08-configurar-seo-dados-estruturados-e-csp`     | #7  |
-| 09  | [Criar envio, validação e download de imagens](phases/09-criar-envio-validacao-e-download-de-imagens.md) | ✅ Concluído  | `feat/09-criar-envio-validacao-e-download-de-imagens` | #8  |
-| 10  | [Converter PNG e JPG para WebP](phases/10-converter-png-e-jpg-para-webp.md)                              | ✅ Concluído  | `feat/10-converter-png-e-jpg-para-webp`               | #9  |
-| 11  | [Compactar imagens no navegador](phases/11-compactar-imagens-no-navegador.md)                            | 📝 Rascunho   | `feat/11-compactar-imagens-no-navegador`              | —   |
+| #   | Fase                                                                                                     | Status          | Branch                                                | PR  |
+| --- | -------------------------------------------------------------------------------------------------------- | --------------- | ----------------------------------------------------- | --- |
+| 01  | [Configurar Next.js, Tailwind e testes](phases/01-configurar-nextjs-tailwind-e-testes.md)                | ✅ Concluído    | `feat/01-configurar-nextjs-tailwind-e-testes`         | #1  |
+| 02  | [Definir design tokens e componentes base](phases/02-definir-design-tokens-e-componentes-base.md)        | ✅ Concluído    | `feat/02-definir-design-tokens-e-componentes-base`    | #2  |
+| 03  | [Construir layout e home das ferramentas](phases/03-construir-layout-e-home-das-ferramentas.md)          | 🚫 Descartado   | `feat/03-construir-layout-e-home-das-ferramentas`     | #3  |
+| 04  | [Construir header com menu de ferramentas](phases/04-construir-header-com-menu-de-ferramentas.md)        | ✅ Concluído    | `feat/04-construir-header-com-menu-de-ferramentas`    | #4  |
+| 05  | [Construir layout da página de ferramenta](phases/05-construir-layout-da-pagina-de-ferramenta.md)        | ✅ Concluído    | `feat/05-construir-layout-da-pagina-de-ferramenta`    | #5  |
+| 06  | [Construir home com roteador de imagem](phases/06-construir-home-com-roteador-de-imagem.md)              | ✅ Concluído    | `feat/06-construir-home-com-roteador-de-imagem`       | #10 |
+| 07  | [Mapear rotas e criar telas de erro](phases/07-mapear-rotas-e-criar-telas-de-erro.md)                    | ✅ Concluído    | `feat/07-mapear-rotas-e-criar-telas-de-erro`          | #6  |
+| 08  | [Configurar SEO, dados estruturados e CSP](phases/08-configurar-seo-dados-estruturados-e-csp.md)         | ✅ Concluído    | `feat/08-configurar-seo-dados-estruturados-e-csp`     | #7  |
+| 09  | [Criar envio, validação e download de imagens](phases/09-criar-envio-validacao-e-download-de-imagens.md) | ✅ Concluído    | `feat/09-criar-envio-validacao-e-download-de-imagens` | #8  |
+| 10  | [Converter PNG e JPG para WebP](phases/10-converter-png-e-jpg-para-webp.md)                              | ✅ Concluído    | `feat/10-converter-png-e-jpg-para-webp`               | #9  |
+| 11  | [Compactar imagens no navegador](phases/11-compactar-imagens-no-navegador.md)                            | 🚧 Em andamento | `feat/11-compactar-imagens-no-navegador`              | —   |
 
 ## Roteiro (fases sem plano)
 

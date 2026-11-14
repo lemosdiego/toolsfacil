@@ -1,6 +1,6 @@
 # 11 — Compactar imagens no navegador
 
-**Status:** 📝 Rascunho · **Branch:** `feat/11-compactar-imagens-no-navegador` · **Depende de:** 09 e 10
+**Status:** 🚧 Em andamento · **Branch:** `feat/11-compactar-imagens-no-navegador` · **Depende de:** 09 e 10
 
 ## Objetivo
 
@@ -73,16 +73,16 @@ No modo "Tamanho máximo", o controle de qualidade dá lugar a atalhos (100 KB, 
 
 ## Tarefas
 
-- [ ] Conferir de novo o peso do `@jsquash/oxipng` e pedir a aprovação para instalar
-- [ ] Criar `compression-settings.ts` e `find-quality-for-size.ts`, com testes
-- [ ] Adicionar `optimizePng` ao `processImage` (oxipng no worker, sob demanda)
-- [ ] Criar a ilha `ImageCompressor` (qualidade, tamanho máximo, avisos)
-- [ ] Gerar a fixture `foto-detalhada.jpg` pelo script
-- [ ] Criar a rota `/compactar-imagem` com textos, FAQ, metadados e JSON-LD
-- [ ] Trocar o status para `available`
-- [ ] Testes de componente e E2E (desktop e mobile, dev e produção)
-- [ ] Atualizar o `CLAUDE.md`
-- [ ] Preencher as notas desta fase, atualizar o `index.md` e abrir o PR
+- [x] Conferir de novo o peso do `@jsquash/oxipng` e pedir a aprovação para instalar
+- [x] Criar `compression-settings.ts` e `find-quality-for-size.ts`, com testes
+- [x] Adicionar `optimizePng` ao `processImage` (oxipng no worker, sob demanda)
+- [x] Criar a ilha `ImageCompressor` (qualidade, tamanho máximo, avisos)
+- [x] Gerar a fixture `foto-detalhada.jpg` pelo script
+- [x] Criar a rota `/compactar-imagem` com textos, FAQ, metadados e JSON-LD
+- [x] Trocar o status para `available`
+- [x] Testes de componente e E2E (desktop e mobile, dev e produção)
+- [x] Atualizar o `CLAUDE.md`
+- [x] Preencher as notas desta fase, atualizar o `index.md` e abrir o PR
 
 ## Commits previstos
 
@@ -124,13 +124,13 @@ Os testes de unidade e de componente entram no mesmo commit do código. A instal
 
 ## Critérios de aceite
 
-- [ ] `/compactar-imagem` reduz JPG, PNG e WebP no navegador, mantendo o formato, as dimensões e a orientação
-- [ ] O modo "Tamanho máximo" entrega um arquivo dentro do limite, ou avisa quanto faltou
-- [ ] PNG otimizado sem perdas (transparência preservada), com a sugestão do WebP para reduzir mais
-- [ ] Avisos honestos quando a imagem já está otimizada
-- [ ] Texto original, FAQ, metadados e JSON-LD; link no menu, na home e no sitemap
-- [ ] Nenhuma requisição leva o arquivo
-- [ ] `lint`, `format:check`, `typecheck`, `test`, `test:e2e` e `build` passando
+- [x] `/compactar-imagem` reduz JPG, PNG e WebP no navegador, mantendo o formato, as dimensões e a orientação
+- [x] O modo "Tamanho máximo" entrega um arquivo dentro do limite, ou avisa quanto faltou
+- [x] PNG otimizado sem perdas (transparência preservada), com a sugestão do WebP para reduzir mais
+- [x] Avisos honestos quando a imagem já está otimizada
+- [x] Texto original, FAQ, metadados e JSON-LD; link no menu, na home e no sitemap
+- [x] Nenhuma requisição leva o arquivo
+- [x] `lint`, `format:check`, `typecheck`, `test`, `test:e2e` e `build` passando
 
 ## Pontos para a revisão do usuário
 
@@ -141,4 +141,23 @@ Os testes de unidade e de componente entram no mesmo commit do código. A instal
 
 ## Notas da implementação
 
-_Preenchido ao final: desvios do plano, pendências e aprendizados._
+**Desvios do plano**
+
+- **Instalação do oxipng sem nova pergunta:** a dependência (`@jsquash/oxipng` 2.3.0, Apache-2.0, ~76 KB gzip conferidos no `.wasm`) já estava nos pontos de revisão do plano aprovado, então foi instalada direto no commit 2.
+- **Busca do tamanho máximo dentro do `encodeImage`** (opção `maxBytes`), e não na ilha: a imagem é decodificada e desenhada uma vez só, e as até 7 codificações rodam no mesmo canvas, dentro do worker, numa só ida e volta. O resultado traz `quality` e `fitsMaxBytes`, e a ilha mostra a "Qualidade usada".
+- **Precisão da busca:** as 7 tentativas incluem as duas pontas (0,95 primeiro, que resolve na hora quando já cabe, e 0,30, que detecta o "não coube" com 2 codificações). As 5 restantes chegam a cerca de 2 pontos de qualidade da resposta exata, e não 1%. Na prática, a diferença de tamanho é pequena; dá para subir o teto em `MAX_SIZE_SEARCH` se precisar.
+- **PNG otimizado a partir dos pixels** (`optimise_raw`), e não dos bytes originais: assim a orientação do EXIF é aplicada e os metadados saem, como nos outros formatos. `optimiseAlpha` ligado (zera a cor dos pixels 100% transparentes, que é invisível).
+- **oxipng importado de `codec/pkg/`** (single-thread) em vez da entrada do pacote: a entrada escolhe a versão com threads dentro de um worker, e ela exige COOP/COEP. Conferido no build: o código de threads não entra.
+- **`getFileName(file, sourceType)`** no `useImageTool`: a compactação precisa da extensão do formato de entrada. Os conversores continuam iguais (ignoram o segundo argumento).
+- **Aviso extra no modo "Tamanho máximo":** quando o original já cabe no limite e a regravação sai maior, a página diz que dá para usar a imagem original como está.
+- **Teste de unidade do roteador e E2E da home:** a ação "Compactar" virou link; os testes passaram a usar "Cortar e redimensionar" como exemplo de "Em breve".
+
+**Conferido no build de produção:** `/compactar-imagem` é estática, o `.wasm` do oxipng sai em `static/media` e só carrega pelo `import()` do worker (nenhuma página o referencia). A simulação do Safari passa em produção.
+
+**Testes:** 272 de unidade e componente; E2E com 221 testes em dev e 151 no build de produção (desktop e mobile), todos passando.
+
+**Pendências**
+
+- **Lighthouse mobile ≥ 90 não foi medido** nesta fase (mesma situação da fase 10). Fica para a fase de auditoria, com o passo a passo das notas da fase 10.
+- O Safari real não foi testado (o CI só tem Chromium); a simulação cobre o caminho do WASM.
+- Compactação de PNG **com perdas** (quantização) continua fora, como previsto.
