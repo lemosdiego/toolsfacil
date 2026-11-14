@@ -26,6 +26,12 @@ export type ImageToolState =
   | { status: "idle" }
   | { status: "checking"; file: File }
   | {
+      /** Imagem válida, esperando a pessoa ajustar e aplicar (ex.: corte). */
+      status: "editing";
+      file: File;
+      sourceType: ImageMimeType;
+    }
+  | {
       status: "processing";
       file: File;
       sourceType: ImageMimeType;
@@ -47,6 +53,11 @@ export type ImageToolOptions = {
   process: (file: File, sourceType: ImageMimeType) => Promise<EncodedImage>;
   /** Nome do arquivo baixado (via `getOutputFileName`). */
   getFileName: (file: File, sourceType: ImageMimeType) => string;
+  /**
+   * `false`: depois de validar, para em `editing` e só processa no `apply()`
+   * (ferramentas com ajuste antes, como o cortador). Padrão: `true`.
+   */
+  processOnSelect?: boolean;
 };
 
 /**
@@ -124,6 +135,10 @@ export function useImageTool(options: ImageToolOptions) {
         setState({ status: "error", file, error: validation.error });
         return;
       }
+      if (optionsRef.current.processOnSelect === false) {
+        setState({ status: "editing", file, sourceType: validation.type });
+        return;
+      }
       await runProcess(run, file, validation.type);
     },
     [revokeUrl, runProcess],
@@ -136,6 +151,27 @@ export function useImageTool(options: ImageToolOptions) {
     const run = ++runRef.current;
     await runProcess(run, current.file, current.sourceType, current.result);
   }, [runProcess]);
+
+  /** Processa a imagem em edição (com as opções atuais da ferramenta). */
+  const apply = useCallback(async () => {
+    const current = stateRef.current;
+    if (current.status !== "editing") return;
+    const run = ++runRef.current;
+    await runProcess(run, current.file, current.sourceType);
+  }, [runProcess]);
+
+  /** Descarta o resultado e volta a editar a mesma imagem. */
+  const backToEditing = useCallback(() => {
+    const current = stateRef.current;
+    if (current.status !== "done" && current.status !== "processing") return;
+    runRef.current++;
+    revokeUrl();
+    setState({
+      status: "editing",
+      file: current.file,
+      sourceType: current.sourceType,
+    });
+  }, [revokeUrl]);
 
   /** Volta ao estado vazio. */
   const reset = useCallback(() => {
@@ -166,7 +202,7 @@ export function useImageTool(options: ImageToolOptions) {
     [revokeUrl],
   );
 
-  return { state, selectFile, reprocess, reset };
+  return { state, selectFile, reprocess, apply, backToEditing, reset };
 }
 
 export type ImageTool = ReturnType<typeof useImageTool>;
