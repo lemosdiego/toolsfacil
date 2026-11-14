@@ -215,7 +215,7 @@ Toda tela do site está neste mapa. **Rota nova só entra depois de entrar aqui*
 ### Página de ferramenta
 
 - Toda página de ferramenta usa o **`ToolPageLayout`** (`src/components/tools/`): `title` (o `h1`), `description` (2 ou 3 linhas), `tool` (a ilha `"use client"`) e o texto em `ToolPageSection` (`h2`). Exemplo vivo em `/styleguide/ferramenta` (só em dev); ferramentas reais em `src/app/(tools)/`.
-- **Molde da rota** (ver `png-para-webp/`): `page.tsx` (Server Component) com `const tool = requireTool("slug")`, `export const metadata = createToolMetadata(tool, ...)`, `<JsonLd data={[webApplicationJsonLd(...), faqPageJsonLd(faq)]} />` e o `ToolPageLayout`; textos e FAQ em `content.ts`, ao lado. A FAQ aparece com `FaqList` e vai para o JSON-LD a partir da mesma lista. Ilha compartilhada por várias rotas fica em `src/components/tools/` (ex.: `WebpConverter`).
+- **Molde da rota** (ver `png-para-webp/`): `page.tsx` (Server Component) com `const tool = requireTool("slug")`, `export const metadata = createToolMetadata(tool, ...)`, `<JsonLd data={[webApplicationJsonLd(...), faqPageJsonLd(faq)]} />` e o `ToolPageLayout`; textos e FAQ em `content.ts`, ao lado. A FAQ aparece com `FaqList` e vai para o JSON-LD a partir da mesma lista. Ilhas ficam em `src/components/tools/` (ex.: `WebpConverter`, compartilhada por duas rotas, e `ImageCompressor`).
 - **Desktop:** título, texto e botão à esquerda, prévia à direita. **Celular:** uma coluna, com título e botão acima da dobra.
 - A ilha renderiza o botão dentro de `ToolActionArea` e a prévia dentro de `ToolPreviewArea`, que se encaixam na grade. Use `hiddenOnMobile` na prévia enquanto não há imagem.
 - **`PreviewCard`:** imagem sobre o xadrez de transparência, ícone de download tradicional no canto (desativado até haver resultado, com `aria-label` como "Baixar imagem em WebP") e tamanho antes e depois.
@@ -247,6 +247,10 @@ Toda tela do site está neste mapa. **Rota nova só entra depois de entrar aqui*
 - **Formatos aceitos** vêm do `accepts` da ferramenta no `tools.ts`, nunca de uma lista na página.
 - **Worker no build:** o Turbopack compila o worker em `turbopack-worker-*.js`, e também copia o `.ts` original para `static/media` por causa do `new URL(...)`. Essa cópia não é usada.
 - **Bibliotecas pesadas sob demanda:** o decodificador de HEIC e qualquer WASM são carregados com `import()` dinâmico, só na página que usa e só quando o usuário escolhe um arquivo. Nunca no bundle global.
+- **Compactação** (`ImageCompressor`, `/compactar-imagem`): regrava **no mesmo formato** (nome `foto-compactada.jpg`). Padrões e limites em `compression-settings.ts` (qualidade 40 a 95, padrão 75; atalhos de 100 KB a 1 MB; `getCompressionOutput()` diz o formato e o modo de cada tipo).
+  - **JPG e WebP:** `quality`, ou `maxBytes` (modo "Tamanho máximo"): o `encodeImage` decodifica uma vez e chama `findQualityForSize()` (busca binária pura, até 7 codificações, qualidade de 0,30 a 0,95). Se nem a mínima cabe, devolve o menor com `fitsMaxBytes: false`, e a ilha avisa.
+  - **PNG:** `optimizePng: true` recomprime os pixels **sem perdas** com o oxipng (`wasm-png-optimizer.ts`, ~76 KB gzip), carregado com `import()` dentro do worker. Use só a versão **single-thread** (importada direto de `codec/pkg/`): a com threads exige COOP/COEP, que atrapalham o AdSense.
+  - O `getFileName` do `useImageTool` recebe o tipo real (`(file, sourceType)`), para a saída ter a extensão do formato de entrada.
 - **WebP no Safari:** o canvas do Safari não gera WebP. O `WebpConverter` pergunta `canEncode("image/webp")` e, se não, pede `encoder: "wasm"` ao `processImage`: o worker carrega `@jsquash/webp` (`wasm-webp-encoder.ts`, ~126 KB gzip) só nesse caso. No E2E, o Safari é simulado trocando o `toBlob` da página para devolver PNG.
 - **Metadados:** a saída é regravada pelo canvas, e com isso perde o EXIF (inclusive GPS). O `ImageToolView` já avisa isso na interface.
 - **Memória:** chame `URL.revokeObjectURL()` em toda URL criada, e `bitmap.close()` depois de usar (o `useImageTool` e o `processImage` já fazem).
@@ -397,5 +401,6 @@ Formato: **`NN-verbo-entrega.md`**, por exemplo `03-converter-png-jpg-para-webp.
 - [ ] **Hospedagem:** o plano gratuito (Hobby) da Vercel **não permite uso comercial**, e um site com AdSense é comercial. Decidir entre o Vercel Pro ou uma alternativa com plano gratuito comercial (ex.: Netlify ou Cloudflare Pages, como no Babeloop).
 - [ ] **Identidade visual:** paleta, fontes, logo e ícone. Até lá, tokens neutros em `globals.css` (paleta provisória e Inter, ver "Tokens e componentes base").
 - [ ] **Decodificador de HEIC:** escolher a biblioteca (peso x compatibilidade) no plano do conversor.
-- [ ] **Compactação de PNG:** o canvas não compacta PNG sem perdas de forma eficiente. Avaliar uma biblioteca WASM leve ou oferecer a conversão para WebP.
+- [x] **Compactação de PNG sem perdas:** oxipng em WASM (fase 11), com a sugestão do conversor para WebP.
+- [ ] **Compactação de PNG com perdas** (quantização de cores, no estilo TinyPNG): avaliar a biblioteca numa fase própria.
 - [ ] **CMP de cookies:** escolher a solução de consentimento antes de ativar o AdSense.
