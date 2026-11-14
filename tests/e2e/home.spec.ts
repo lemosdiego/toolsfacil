@@ -144,13 +144,16 @@ test.describe("Roteador de imagem", () => {
     await expect(
       page.getByRole("link", { name: "Converter para WebP" }),
     ).toHaveCount(1);
-    // Compactar ainda não está pronta: aparece sem link, com o selo.
+    await expect(
+      page.getByRole("link", { name: "Compactar", exact: true }),
+    ).toHaveAttribute("href", "/compactar-imagem");
+    // Cortar ainda não está pronta: aparece sem link, com o selo.
     const router = input(page).locator("..");
-    const compress = router
+    const crop = router
       .getByRole("listitem")
-      .filter({ hasText: /^Compactar/ });
-    await expect(compress).toContainText("Em breve");
-    await expect(compress.getByRole("link")).toHaveCount(0);
+      .filter({ hasText: /^Cortar e redimensionar/ });
+    await expect(crop).toContainText("Em breve");
+    await expect(crop.getByRole("link")).toHaveCount(0);
   });
 
   test("leva a imagem até a ferramenta, sem escolher de novo", async ({

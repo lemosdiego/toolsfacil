@@ -31,6 +31,7 @@ const pages = [
   "/endereco-que-nao-existe",
   "/png-para-webp",
   "/jpg-para-webp",
+  "/compactar-imagem",
 ];
 const devPages = ["/styleguide", "/styleguide/erro"];
 
