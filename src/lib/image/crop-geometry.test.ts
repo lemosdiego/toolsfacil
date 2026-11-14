@@ -101,7 +101,7 @@ describe("toImagePixels", () => {
     ).toEqual({ x: 100, y: 40, width: 200, height: 100 });
   });
 
-  it("gruda nas bordas a menos de 1 pixel da tela", () => {
+  it("gruda nas bordas a menos de 1,5 pixel da tela", () => {
     expect(
       toImagePixels(
         { x: 30.6, y: 40.4, width: 239, height: 159.2 },

@@ -56,7 +56,7 @@ export function isRectWithin(rect: Rect, area: Rect, tolerance = 0.5): boolean {
  * - `display`: onde a imagem aparece no editor (mesma referência da seleção)
  * - `image`: dimensões reais da imagem (já girada)
  * - `ratio`: com proporção fixa, o resultado a respeita exatamente
- * Bordas a menos de 1 pixel da tela da borda da imagem grudam nela.
+ * Bordas a menos de 1,5 pixel da tela da borda da imagem grudam nela.
  */
 export function toImagePixels(
   selection: Rect,
@@ -65,7 +65,9 @@ export function toImagePixels(
   ratio?: number,
 ): Rect {
   const scale = image.width / display.width;
-  const snap = scale; // 1 pixel da tela, em pixels da imagem
+  // 1,5 pixel da tela, em pixels da imagem: cobre o arredondamento do editor
+  // e a imagem numa posição fracionária da tela.
+  const snap = 1.5 * scale;
 
   let left = (selection.x - display.x) * scale;
   let top = (selection.y - display.y) * scale;
