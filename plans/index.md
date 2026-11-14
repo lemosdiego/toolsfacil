@@ -31,7 +31,7 @@ Numeradas na ordem em que os planos foram criados (o número nasce com o plano).
 | 08  | [Configurar SEO, dados estruturados e CSP](phases/08-configurar-seo-dados-estruturados-e-csp.md)         | ✅ Concluído  | `feat/08-configurar-seo-dados-estruturados-e-csp`     | #7  |
 | 09  | [Criar envio, validação e download de imagens](phases/09-criar-envio-validacao-e-download-de-imagens.md) | ✅ Concluído  | `feat/09-criar-envio-validacao-e-download-de-imagens` | #8  |
 | 10  | [Converter PNG e JPG para WebP](phases/10-converter-png-e-jpg-para-webp.md)                              | ✅ Concluído  | `feat/10-converter-png-e-jpg-para-webp`               | #9  |
-| 11  | [Compactar imagens no navegador](phases/11-compactar-imagens-no-navegador.md)                            | 🔍 Em revisão | `feat/11-compactar-imagens-no-navegador`              | #11 |
+| 11  | [Compactar imagens no navegador](phases/11-compactar-imagens-no-navegador.md)                                | ✅ Concluído  | `feat/11-compactar-imagens-no-navegador`                 | #11 |
 
 ## Roteiro (fases sem plano)
 

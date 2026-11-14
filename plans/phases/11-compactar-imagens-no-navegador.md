@@ -1,6 +1,6 @@
 # 11 — Compactar imagens no navegador
 
-**Status:** 🔍 Em revisão · **Branch:** `feat/11-compactar-imagens-no-navegador` · **Depende de:** 09 e 10
+**Status:** ✅ Concluído · **Branch:** `feat/11-compactar-imagens-no-navegador` · **Depende de:** 09 e 10
 
 ## Objetivo
 
