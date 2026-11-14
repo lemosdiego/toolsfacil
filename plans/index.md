@@ -19,26 +19,26 @@ Painel das fases do projeto. Cada fase é um plano em [`phases/`](phases/), cria
 
 Numeradas na ordem em que os planos foram criados (o número nasce com o plano).
 
-| #   | Fase                                                                                                         | Status        | Branch                                                   | PR  |
-| --- | ------------------------------------------------------------------------------------------------------------ | ------------- | -------------------------------------------------------- | --- |
-| 01  | [Configurar Next.js, Tailwind e testes](phases/01-configurar-nextjs-tailwind-e-testes.md)                    | ✅ Concluído  | `feat/01-configurar-nextjs-tailwind-e-testes`            | #1  |
-| 02  | [Definir design tokens e componentes base](phases/02-definir-design-tokens-e-componentes-base.md)            | ✅ Concluído  | `feat/02-definir-design-tokens-e-componentes-base`       | #2  |
-| 03  | [Construir layout e home das ferramentas](phases/03-construir-layout-e-home-das-ferramentas.md)              | 🚫 Descartado | `feat/03-construir-layout-e-home-das-ferramentas`        | #3  |
-| 04  | [Construir header com menu de ferramentas](phases/04-construir-header-com-menu-de-ferramentas.md)            | ✅ Concluído  | `feat/04-construir-header-com-menu-de-ferramentas`       | #4  |
-| 05  | [Construir layout da página de ferramenta](phases/05-construir-layout-da-pagina-de-ferramenta.md)            | ✅ Concluído  | `feat/05-construir-layout-da-pagina-de-ferramenta`       | #5  |
-| 06  | [Construir home com roteador de imagem](phases/06-construir-home-com-roteador-de-imagem.md)                  | ✅ Concluído  | `feat/06-construir-home-com-roteador-de-imagem`          | #10 |
-| 07  | [Mapear rotas e criar telas de erro](phases/07-mapear-rotas-e-criar-telas-de-erro.md)                        | ✅ Concluído  | `feat/07-mapear-rotas-e-criar-telas-de-erro`             | #6  |
-| 08  | [Configurar SEO, dados estruturados e CSP](phases/08-configurar-seo-dados-estruturados-e-csp.md)             | ✅ Concluído  | `feat/08-configurar-seo-dados-estruturados-e-csp`        | #7  |
-| 09  | [Criar envio, validação e download de imagens](phases/09-criar-envio-validacao-e-download-de-imagens.md)     | ✅ Concluído  | `feat/09-criar-envio-validacao-e-download-de-imagens`    | #8  |
-| 10  | [Converter PNG e JPG para WebP](phases/10-converter-png-e-jpg-para-webp.md)                                  | ✅ Concluído  | `feat/10-converter-png-e-jpg-para-webp`                  | #9  |
-| 11  | [Compactar imagens no navegador](phases/11-compactar-imagens-no-navegador.md)                                | ✅ Concluído  | `feat/11-compactar-imagens-no-navegador`                 | #11 |
-| 12  | [Cortar e redimensionar com Cropper.js](phases/12-cortar-e-redimensionar-com-cropperjs.md)                   | 📝 Rascunho   | `feat/12-cortar-e-redimensionar-com-cropperjs`           | —   |
-| 13  | [Converter HEIC para JPG](phases/13-converter-heic-para-jpg.md)                                              | 📝 Rascunho   | `feat/13-converter-heic-para-jpg`                        | —   |
-| 14  | [Criar páginas institucionais e de privacidade](phases/14-criar-paginas-institucionais-e-de-privacidade.md)  | 📝 Rascunho   | `feat/14-criar-paginas-institucionais-e-de-privacidade`  | —   |
-| 15  | [Auditar segurança, desempenho e acessibilidade](phases/15-auditar-seguranca-desempenho-e-acessibilidade.md) | 📝 Rascunho   | `chore/15-auditar-seguranca-desempenho-e-acessibilidade` | —   |
-| 16  | [Aplicar identidade visual e logo](phases/16-aplicar-identidade-visual-e-logo.md)                            | 📝 Rascunho   | `feat/16-aplicar-identidade-visual-e-logo`               | —   |
-| 17  | [Publicar o site e configurar o domínio](phases/17-publicar-o-site-e-configurar-o-dominio.md)                | 📝 Rascunho   | `chore/17-publicar-o-site-e-configurar-o-dominio`        | —   |
-| 18  | [Integrar AdSense com consentimento de cookies](phases/18-integrar-adsense-com-consentimento-de-cookies.md)  | 📝 Rascunho   | `feat/18-integrar-adsense-com-consentimento-de-cookies`  | —   |
+| #   | Fase                                                                                                         | Status          | Branch                                                   | PR  |
+| --- | ------------------------------------------------------------------------------------------------------------ | --------------- | -------------------------------------------------------- | --- |
+| 01  | [Configurar Next.js, Tailwind e testes](phases/01-configurar-nextjs-tailwind-e-testes.md)                    | ✅ Concluído    | `feat/01-configurar-nextjs-tailwind-e-testes`            | #1  |
+| 02  | [Definir design tokens e componentes base](phases/02-definir-design-tokens-e-componentes-base.md)            | ✅ Concluído    | `feat/02-definir-design-tokens-e-componentes-base`       | #2  |
+| 03  | [Construir layout e home das ferramentas](phases/03-construir-layout-e-home-das-ferramentas.md)              | 🚫 Descartado   | `feat/03-construir-layout-e-home-das-ferramentas`        | #3  |
+| 04  | [Construir header com menu de ferramentas](phases/04-construir-header-com-menu-de-ferramentas.md)            | ✅ Concluído    | `feat/04-construir-header-com-menu-de-ferramentas`       | #4  |
+| 05  | [Construir layout da página de ferramenta](phases/05-construir-layout-da-pagina-de-ferramenta.md)            | ✅ Concluído    | `feat/05-construir-layout-da-pagina-de-ferramenta`       | #5  |
+| 06  | [Construir home com roteador de imagem](phases/06-construir-home-com-roteador-de-imagem.md)                  | ✅ Concluído    | `feat/06-construir-home-com-roteador-de-imagem`          | #10 |
+| 07  | [Mapear rotas e criar telas de erro](phases/07-mapear-rotas-e-criar-telas-de-erro.md)                        | ✅ Concluído    | `feat/07-mapear-rotas-e-criar-telas-de-erro`             | #6  |
+| 08  | [Configurar SEO, dados estruturados e CSP](phases/08-configurar-seo-dados-estruturados-e-csp.md)             | ✅ Concluído    | `feat/08-configurar-seo-dados-estruturados-e-csp`        | #7  |
+| 09  | [Criar envio, validação e download de imagens](phases/09-criar-envio-validacao-e-download-de-imagens.md)     | ✅ Concluído    | `feat/09-criar-envio-validacao-e-download-de-imagens`    | #8  |
+| 10  | [Converter PNG e JPG para WebP](phases/10-converter-png-e-jpg-para-webp.md)                                  | ✅ Concluído    | `feat/10-converter-png-e-jpg-para-webp`                  | #9  |
+| 11  | [Compactar imagens no navegador](phases/11-compactar-imagens-no-navegador.md)                                | ✅ Concluído    | `feat/11-compactar-imagens-no-navegador`                 | #11 |
+| 12  | [Cortar e redimensionar com Cropper.js](phases/12-cortar-e-redimensionar-com-cropperjs.md)                   | 🚧 Em andamento | `feat/12-cortar-e-redimensionar-com-cropperjs`           | —   |
+| 13  | [Converter HEIC para JPG](phases/13-converter-heic-para-jpg.md)                                              | 📝 Rascunho     | `feat/13-converter-heic-para-jpg`                        | —   |
+| 14  | [Criar páginas institucionais e de privacidade](phases/14-criar-paginas-institucionais-e-de-privacidade.md)  | 📝 Rascunho     | `feat/14-criar-paginas-institucionais-e-de-privacidade`  | —   |
+| 15  | [Auditar segurança, desempenho e acessibilidade](phases/15-auditar-seguranca-desempenho-e-acessibilidade.md) | 📝 Rascunho     | `chore/15-auditar-seguranca-desempenho-e-acessibilidade` | —   |
+| 16  | [Aplicar identidade visual e logo](phases/16-aplicar-identidade-visual-e-logo.md)                            | 📝 Rascunho     | `feat/16-aplicar-identidade-visual-e-logo`               | —   |
+| 17  | [Publicar o site e configurar o domínio](phases/17-publicar-o-site-e-configurar-o-dominio.md)                | 📝 Rascunho     | `chore/17-publicar-o-site-e-configurar-o-dominio`        | —   |
+| 18  | [Integrar AdSense com consentimento de cookies](phases/18-integrar-adsense-com-consentimento-de-cookies.md)  | 📝 Rascunho     | `feat/18-integrar-adsense-com-consentimento-de-cookies`  | —   |
 
 ## Roteiro (fases sem plano)
 
