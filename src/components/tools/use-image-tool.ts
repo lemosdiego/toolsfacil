@@ -46,7 +46,7 @@ export type ImageToolOptions = {
   /** O que a ferramenta faz com a imagem (em geral, `processImage`). */
   process: (file: File, sourceType: ImageMimeType) => Promise<EncodedImage>;
   /** Nome do arquivo baixado (via `getOutputFileName`). */
-  getFileName: (file: File) => string;
+  getFileName: (file: File, sourceType: ImageMimeType) => string;
 };
 
 /**
@@ -95,7 +95,7 @@ export function useImageTool(options: ImageToolOptions) {
           result: {
             ...encoded,
             url,
-            fileName: optionsRef.current.getFileName(file),
+            fileName: optionsRef.current.getFileName(file, sourceType),
           },
         });
       } catch (error) {
