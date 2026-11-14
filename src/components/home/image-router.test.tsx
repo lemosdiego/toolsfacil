@@ -73,8 +73,9 @@ describe("ImageRouter", () => {
       "href",
       "/compactar-imagem",
     );
-    // Cortar ainda não está pronta: aparece sem link.
-    expect(screen.getByText("Cortar e redimensionar").closest("a")).toBeNull();
+    expect(
+      screen.getByRole("link", { name: "Cortar e redimensionar" }),
+    ).toHaveAttribute("href", "/cortador-de-imagem");
   });
 
   it("guarda o arquivo para a ferramenta ao clicar na ação", async () => {

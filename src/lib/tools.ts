@@ -88,7 +88,7 @@ export const tools: readonly Tool[] = [
     shortDescription:
       "Corte livre ou nas proporções das redes sociais, e ajuste as dimensões.",
     category: "edit",
-    status: "soon",
+    status: "available",
     accepts: ["image/jpeg", "image/png", "image/webp"],
     actionLabel: "Cortar e redimensionar",
   },
