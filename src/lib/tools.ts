@@ -78,7 +78,7 @@ export const tools: readonly Tool[] = [
     shortDescription:
       "Reduza o tamanho em KB sem perder qualidade visível, para enviar ou publicar.",
     category: "edit",
-    status: "soon",
+    status: "available",
     accepts: ["image/jpeg", "image/png", "image/webp"],
     actionLabel: "Compactar",
   },
