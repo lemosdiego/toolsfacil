@@ -1,6 +1,6 @@
 # 12 — Cortar e redimensionar com Cropper.js
 
-**Status:** 🚧 Em andamento · **Branch:** `feat/12-cortar-e-redimensionar-com-cropperjs` · **Depende de:** 09 e 11
+**Status:** 🔍 Em revisão · **Branch:** `feat/12-cortar-e-redimensionar-com-cropperjs` · **Depende de:** 09 e 11
 
 ## Objetivo
 
