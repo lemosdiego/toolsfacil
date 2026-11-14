@@ -3,6 +3,9 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 const encodeWebpWithWasm = vi.hoisted(() => vi.fn());
 vi.mock("./wasm-webp-encoder", () => ({ encodeWebpWithWasm }));
 
+const optimizePngWithWasm = vi.hoisted(() => vi.fn());
+vi.mock("./wasm-png-optimizer", () => ({ optimizePngWithWasm }));
+
 import { encodeImage, ImageProcessingError } from "./encode-image";
 
 /*
@@ -14,7 +17,11 @@ function fakeBitmap(width = 40, height = 30) {
   return { width, height, close: vi.fn() };
 }
 
-function fakeOffscreenCanvas(outputType: string) {
+function fakeOffscreenCanvas(
+  outputType: string,
+  convert: (options: { quality?: number }) => Promise<Blob> = () =>
+    Promise.resolve(new Blob(["x"], { type: outputType })),
+) {
   const context = {
     fillStyle: "",
     fillRect: vi.fn(),
@@ -34,8 +41,8 @@ function fakeOffscreenCanvas(outputType: string) {
     getContext() {
       return context;
     }
-    convertToBlob() {
-      return Promise.resolve(new Blob(["x"], { type: outputType }));
+    convertToBlob(options: { quality?: number }) {
+      return convert(options);
     }
   }
 
@@ -143,5 +150,69 @@ describe("encodeImage", () => {
     await expect(
       encodeImage(new Blob(["a"]), { type: "image/webp", encoder: "wasm" }),
     ).rejects.toEqual(new ImageProcessingError("encode-failed"));
+  });
+
+  it("otimiza o PNG sem perdas com o oxipng quando pedido", async () => {
+    vi.stubGlobal("createImageBitmap", vi.fn().mockResolvedValue(fakeBitmap()));
+    const { context } = fakeOffscreenCanvas("image/png");
+    optimizePngWithWasm.mockResolvedValue(
+      new Blob(["p"], { type: "image/png" }),
+    );
+
+    const result = await encodeImage(new Blob(["a"]), {
+      type: "image/png",
+      optimizePng: true,
+    });
+
+    expect(context.getImageData).toHaveBeenCalledWith(0, 0, 40, 30);
+    expect(optimizePngWithWasm).toHaveBeenCalledOnce();
+    expect(result.blob.type).toBe("image/png");
+  });
+
+  it("falha com encode-failed quando o oxipng não carrega", async () => {
+    vi.stubGlobal("createImageBitmap", vi.fn().mockResolvedValue(fakeBitmap()));
+    fakeOffscreenCanvas("image/png");
+    optimizePngWithWasm.mockRejectedValue(new Error("sem wasm"));
+
+    await expect(
+      encodeImage(new Blob(["a"]), { type: "image/png", optimizePng: true }),
+    ).rejects.toEqual(new ImageProcessingError("encode-failed"));
+  });
+
+  it("no tamanho máximo, busca a maior qualidade que cabe", async () => {
+    vi.stubGlobal("createImageBitmap", vi.fn().mockResolvedValue(fakeBitmap()));
+    // O tamanho cresce com a qualidade: 100 B por ponto.
+    const convertToBlob = vi.fn(({ quality = 0 }: { quality?: number }) =>
+      Promise.resolve(
+        new Blob([new Uint8Array(Math.round(quality * 100) * 100)], {
+          type: "image/jpeg",
+        }),
+      ),
+    );
+    fakeOffscreenCanvas("image/jpeg", convertToBlob);
+
+    const result = await encodeImage(new Blob(["a"]), {
+      type: "image/jpeg",
+      quality: 0.75,
+      maxBytes: 5000,
+    });
+
+    expect(result.fitsMaxBytes).toBe(true);
+    expect(result.blob.size).toBeLessThanOrEqual(5000);
+    expect(result.quality).toBeGreaterThanOrEqual(0.48);
+    expect(convertToBlob.mock.calls.length).toBeLessThanOrEqual(7);
+  });
+
+  it("no tamanho máximo, avisa quando nem a qualidade mínima cabe", async () => {
+    vi.stubGlobal("createImageBitmap", vi.fn().mockResolvedValue(fakeBitmap()));
+    fakeOffscreenCanvas("image/jpeg");
+
+    // O canvas simulado sempre devolve 1 byte: limite de 0 bytes não cabe.
+    const result = await encodeImage(new Blob(["a"]), {
+      type: "image/jpeg",
+      maxBytes: 0,
+    });
+
+    expect(result).toMatchObject({ fitsMaxBytes: false, quality: 0.3 });
   });
 });

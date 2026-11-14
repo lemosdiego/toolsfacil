@@ -69,8 +69,12 @@ describe("ImageRouter", () => {
     expect(
       screen.getAllByRole("link", { name: "Converter para WebP" }),
     ).toHaveLength(1);
-    // Compactar ainda não está pronta: aparece sem link.
-    expect(screen.getByText("Compactar").closest("a")).toBeNull();
+    expect(screen.getByRole("link", { name: "Compactar" })).toHaveAttribute(
+      "href",
+      "/compactar-imagem",
+    );
+    // Cortar ainda não está pronta: aparece sem link.
+    expect(screen.getByText("Cortar e redimensionar").closest("a")).toBeNull();
   });
 
   it("guarda o arquivo para a ferramenta ao clicar na ação", async () => {
