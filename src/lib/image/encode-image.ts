@@ -16,6 +16,11 @@ export type EncodeOptions = {
    * que não gera WebP pelo canvas (ver `canEncode`). Só vale para WebP.
    */
   encoder?: "canvas" | "wasm";
+  /**
+   * Otimiza o PNG sem perdas com o oxipng (WASM, carregado sob demanda).
+   * Só vale para PNG.
+   */
+  optimizePng?: boolean;
 };
 
 export type EncodedImage = {
@@ -69,6 +74,15 @@ async function encodeWithWasm(
   }
 }
 
+async function optimizePng(imageData: ImageData): Promise<Blob> {
+  try {
+    const { optimizePngWithWasm } = await import("./wasm-png-optimizer");
+    return await optimizePngWithWasm(imageData);
+  } catch {
+    throw new ImageProcessingError("encode-failed");
+  }
+}
+
 /**
  * Decodifica a imagem (com a orientação do EXIF), desenha no canvas e gera o
  * formato pedido. Regravar pelo canvas remove os metadados (inclusive GPS).
@@ -100,13 +114,15 @@ export async function encodeImage(
     }
     context.drawImage(bitmap, 0, 0);
 
-    const blob =
-      options.encoder === "wasm" && options.type === "image/webp"
-        ? await encodeWithWasm(
-            context.getImageData(0, 0, width, height),
-            options,
-          )
-        : await canvasToBlob(canvas, options);
+    const getPixels = () => context.getImageData(0, 0, width, height);
+    let blob: Blob | null;
+    if (options.optimizePng && options.type === "image/png") {
+      blob = await optimizePng(getPixels());
+    } else if (options.encoder === "wasm" && options.type === "image/webp") {
+      blob = await encodeWithWasm(getPixels(), options);
+    } else {
+      blob = await canvasToBlob(canvas, options);
+    }
     // Sem suporte ao formato, o navegador devolve PNG em silêncio (ex.: WebP no Safari).
     if (!blob || blob.type !== options.type) {
       throw new ImageProcessingError("encode-failed");

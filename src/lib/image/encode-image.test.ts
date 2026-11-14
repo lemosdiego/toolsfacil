@@ -3,6 +3,9 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 const encodeWebpWithWasm = vi.hoisted(() => vi.fn());
 vi.mock("./wasm-webp-encoder", () => ({ encodeWebpWithWasm }));
 
+const optimizePngWithWasm = vi.hoisted(() => vi.fn());
+vi.mock("./wasm-png-optimizer", () => ({ optimizePngWithWasm }));
+
 import { encodeImage, ImageProcessingError } from "./encode-image";
 
 /*
@@ -142,6 +145,33 @@ describe("encodeImage", () => {
 
     await expect(
       encodeImage(new Blob(["a"]), { type: "image/webp", encoder: "wasm" }),
+    ).rejects.toEqual(new ImageProcessingError("encode-failed"));
+  });
+
+  it("otimiza o PNG sem perdas com o oxipng quando pedido", async () => {
+    vi.stubGlobal("createImageBitmap", vi.fn().mockResolvedValue(fakeBitmap()));
+    const { context } = fakeOffscreenCanvas("image/png");
+    optimizePngWithWasm.mockResolvedValue(
+      new Blob(["p"], { type: "image/png" }),
+    );
+
+    const result = await encodeImage(new Blob(["a"]), {
+      type: "image/png",
+      optimizePng: true,
+    });
+
+    expect(context.getImageData).toHaveBeenCalledWith(0, 0, 40, 30);
+    expect(optimizePngWithWasm).toHaveBeenCalledOnce();
+    expect(result.blob.type).toBe("image/png");
+  });
+
+  it("falha com encode-failed quando o oxipng não carrega", async () => {
+    vi.stubGlobal("createImageBitmap", vi.fn().mockResolvedValue(fakeBitmap()));
+    fakeOffscreenCanvas("image/png");
+    optimizePngWithWasm.mockRejectedValue(new Error("sem wasm"));
+
+    await expect(
+      encodeImage(new Blob(["a"]), { type: "image/png", optimizePng: true }),
     ).rejects.toEqual(new ImageProcessingError("encode-failed"));
   });
 });
