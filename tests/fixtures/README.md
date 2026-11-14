@@ -19,6 +19,7 @@ São desenhadas pelo script: **sem dados pessoais** e sem EXIF, a não ser a ori
 | `transparente.png`        | PNG 320 × 240 com fundo transparente (o canto superior esquerdo é totalmente transparente)             |
 | `foto.jpg`                | JPG comum, 480 × 320                                                                                   |
 | `foto-retrato-exif-6.jpg` | JPG gravado em 400 × 300 com EXIF de orientação 6: aparece de pé (300 × 400) e deve sair de pé         |
+| `foto-detalhada.jpg`      | JPG 720 × 540 com textura e ruído, em qualidade alta (~190 KB): a compactação reduz de verdade         |
 | `imagem.webp`             | WebP 200 × 200                                                                                         |
 | `grande-demais.png`       | PNG 5000 × 4000 (20 milhões de pixels, acima do limite), em tons de cinza para o arquivo ficar pequeno |
 | `falso.png`               | Texto com extensão `.png`: deve ser recusado pelo tipo real                                            |

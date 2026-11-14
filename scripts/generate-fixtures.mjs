@@ -131,6 +131,45 @@ const images = await page.evaluate(async () => {
       "image/jpeg",
       0.85,
     ),
+    // Textura com ruído (semente fixa) em alta qualidade: a compactação
+    // faz diferença de verdade, como numa foto de celular.
+    "foto-detalhada.jpg": await encode(
+      canvas(720, 540, (context, width, height) => {
+        let seed = 42;
+        const random = () => {
+          seed = (seed * 1664525 + 1013904223) % 4294967296;
+          return seed / 4294967296;
+        };
+        const gradient = context.createLinearGradient(0, 0, width, height);
+        gradient.addColorStop(0, "#0ea5e9");
+        gradient.addColorStop(0.5, "#fde68a");
+        gradient.addColorStop(1, "#15803d");
+        context.fillStyle = gradient;
+        context.fillRect(0, 0, width, height);
+        for (let index = 0; index < 600; index++) {
+          context.fillStyle = `hsla(${random() * 360}, 60%, ${30 + random() * 50}%, 0.5)`;
+          context.beginPath();
+          context.arc(
+            random() * width,
+            random() * height,
+            4 + random() * 30,
+            0,
+            Math.PI * 2,
+          );
+          context.fill();
+        }
+        const pixels = context.getImageData(0, 0, width, height);
+        for (let index = 0; index < pixels.data.length; index += 4) {
+          const noise = (random() - 0.5) * 36;
+          pixels.data[index] += noise;
+          pixels.data[index + 1] += noise;
+          pixels.data[index + 2] += noise;
+        }
+        context.putImageData(pixels, 0, 0);
+      }),
+      "image/jpeg",
+      0.92,
+    ),
     "imagem.webp": await encode(
       canvas(200, 200, (context) => {
         context.fillStyle = "#7c3aed";
