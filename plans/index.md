@@ -32,7 +32,7 @@ Numeradas na ordem em que os planos foram criados (o número nasce com o plano).
 | 09  | [Criar envio, validação e download de imagens](phases/09-criar-envio-validacao-e-download-de-imagens.md)     | ✅ Concluído  | `feat/09-criar-envio-validacao-e-download-de-imagens`    | #8  |
 | 10  | [Converter PNG e JPG para WebP](phases/10-converter-png-e-jpg-para-webp.md)                                  | ✅ Concluído  | `feat/10-converter-png-e-jpg-para-webp`                  | #9  |
 | 11  | [Compactar imagens no navegador](phases/11-compactar-imagens-no-navegador.md)                                | ✅ Concluído  | `feat/11-compactar-imagens-no-navegador`                 | #11 |
-| 12  | [Cortar e redimensionar com Cropper.js](phases/12-cortar-e-redimensionar-com-cropperjs.md)                   | 📝 Rascunho   | `feat/12-cortar-e-redimensionar-com-cropperjs`           | —   |
+| 12  | [Cortar e redimensionar com Cropper.js](phases/12-cortar-e-redimensionar-com-cropperjs.md)                   | 🔍 Em revisão | `feat/12-cortar-e-redimensionar-com-cropperjs`           | #12 |
 | 13  | [Converter HEIC para JPG](phases/13-converter-heic-para-jpg.md)                                              | 📝 Rascunho   | `feat/13-converter-heic-para-jpg`                        | —   |
 | 14  | [Criar páginas institucionais e de privacidade](phases/14-criar-paginas-institucionais-e-de-privacidade.md)  | 📝 Rascunho   | `feat/14-criar-paginas-institucionais-e-de-privacidade`  | —   |
 | 15  | [Auditar segurança, desempenho e acessibilidade](phases/15-auditar-seguranca-desempenho-e-acessibilidade.md) | 📝 Rascunho   | `chore/15-auditar-seguranca-desempenho-e-acessibilidade` | —   |

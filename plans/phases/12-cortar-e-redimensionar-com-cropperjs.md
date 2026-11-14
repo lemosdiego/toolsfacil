@@ -1,6 +1,6 @@
 # 12 — Cortar e redimensionar com Cropper.js
 
-**Status:** 📝 Rascunho · **Branch:** `feat/12-cortar-e-redimensionar-com-cropperjs` · **Depende de:** 09 e 11
+**Status:** 🔍 Em revisão · **Branch:** `feat/12-cortar-e-redimensionar-com-cropperjs` · **Depende de:** 09 e 11
 
 ## Objetivo
 
@@ -73,16 +73,16 @@ Depois de "Cortar imagem", a área da direita mostra o `PreviewCard` com o resul
 
 ## Tarefas
 
-- [ ] Conferir de novo o peso do `cropperjs` 2.3.1 e o funcionamento com React 19 (protótipo rápido)
-- [ ] Criar `crop-geometry.ts` e `crop-presets.ts`, com testes
-- [ ] Adicionar `crop`, `rotate` e `resize` ao `encodeImage` (com a redução em etapas)
-- [ ] Adicionar a etapa de edição ao `useImageTool` e o `editor` ao `ImageToolView`
-- [ ] Criar a ilha `ImageCropper` (editor, proporções, girar, tamanho final, avisos)
-- [ ] Criar a rota `/cortador-de-imagem` com textos, FAQ, metadados e JSON-LD
-- [ ] Trocar o status para `available`
-- [ ] Testes de componente e E2E (desktop e mobile, dev e produção)
-- [ ] Atualizar o `CLAUDE.md`
-- [ ] Preencher as notas desta fase, atualizar o `index.md` e abrir o PR
+- [x] Conferir de novo o peso do `cropperjs` 2.3.1 e o funcionamento com React 19 (protótipo rápido)
+- [x] Criar `crop-geometry.ts` e `crop-presets.ts`, com testes
+- [x] Adicionar `crop`, `rotate` e `resize` ao `encodeImage` (com a redução em etapas)
+- [x] Adicionar a etapa de edição ao `useImageTool` e o `editor` ao `ImageToolView`
+- [x] Criar a ilha `ImageCropper` (editor, proporções, girar, tamanho final, avisos)
+- [x] Criar a rota `/cortador-de-imagem` com textos, FAQ, metadados e JSON-LD
+- [x] Trocar o status para `available`
+- [x] Testes de componente e E2E (desktop e mobile, dev e produção)
+- [x] Atualizar o `CLAUDE.md`
+- [x] Preencher as notas desta fase, atualizar o `index.md` e abrir o PR
 
 ## Commits previstos
 
@@ -124,13 +124,13 @@ A instalação do `cropperjs` entra no commit 4. Os testes de unidade e de compo
 
 ## Critérios de aceite
 
-- [ ] `/cortador-de-imagem` corta, gira e redimensiona JPG, PNG e WebP no navegador, mantendo o formato e a orientação
-- [ ] Proporções das redes sociais e corte livre; tamanho final com proporção travada
-- [ ] Editor usável com mouse, toque e teclado, sem CLS
-- [ ] Cropper.js carregado só depois de escolher a imagem
-- [ ] Texto original, FAQ, metadados e JSON-LD; link no menu, na home e no sitemap
-- [ ] Nenhuma requisição leva o arquivo
-- [ ] `lint`, `format:check`, `typecheck`, `test`, `test:e2e` e `build` passando
+- [x] `/cortador-de-imagem` corta, gira e redimensiona JPG, PNG e WebP no navegador, mantendo o formato e a orientação
+- [x] Proporções das redes sociais e corte livre; tamanho final com proporção travada
+- [x] Editor usável com mouse, toque e teclado, sem CLS
+- [x] Cropper.js carregado só depois de escolher a imagem
+- [x] Texto original, FAQ, metadados e JSON-LD; link no menu, na home e no sitemap
+- [x] Nenhuma requisição leva o arquivo
+- [x] `lint`, `format:check`, `typecheck`, `test`, `test:e2e` e `build` passando
 
 ## Pontos para a revisão do usuário
 
@@ -142,4 +142,25 @@ A instalação do `cropperjs` entra no commit 4. Os testes de unidade e de compo
 
 ## Notas da implementação
 
-_Preenchido ao final: desvios do plano, pendências e aprendizados._
+**Desvios do plano**
+
+- **Prévia reduzida no editor:** o editor não abre a original. Ele mostra uma prévia de até 1600 px, já de pé e girada, gerada pelo próprio worker (opção `fit` do `encodeImage`). Com isso, a imagem fica parada no editor (sem zoom nem arrastar a imagem): só a seleção se mexe, e a conversão para pixels da foto é uma regra de três. Fotos de 20 MB não pesam no celular.
+- **Girar refaz a prévia,** em vez de girar a imagem dentro do Cropper.js (o corte é medido já no espaço girado, e o worker gira antes de cortar).
+- **Teclado próprio:** o teclado nativo do Cropper.js escuta a página inteira e bloquearia a rolagem pelas setas. A área do editor é um grupo focável que trata as setas (mover) e Shift + setas (redimensionar pela borda direita ou de baixo).
+- **Roda do mouse:** o canvas do Cropper.js cancela a rolagem da página (para dar zoom, que está desligado). O evento é interceptado antes dele, e a página rola normalmente.
+- **`aria-hidden` no desenho do editor:** a grade do Cropper.js cria elementos com `role="row"` sem tabela (violação do axe). O leitor de tela recebe o grupo "Área de corte", com as instruções.
+- **Seleção `precise` e bordas que grudam a 1,5 px de tela:** sem isso, o arredondamento do editor dava 319 × 319 em vez de 320 × 320 no celular.
+- **Botão "Cortar imagem" abaixo do editor,** e não com as outras opções: no celular, ele fica logo depois de ajustar o corte, sem rolar a página de volta.
+- **Tamanho final ao mexer no corte:** com a proporção travada e um tamanho digitado, a largura fica e a altura acompanha o novo corte. Trocar a proporção ou girar volta ao tamanho do corte.
+- **PNG pelo canvas** (sem perdas), sem o oxipng: o corte precisa ser rápido. O link para o compactador aparece no resultado.
+- **Testes da home:** com Converter, Compactar e Cortar prontos, todas as ações de PNG são links. O caso "Em breve" segue coberto pelo HEIC.
+
+**Conferido no build de produção:** `/cortador-de-imagem` é estática; o Cropper.js (~14,7 KB gzip) não está no HTML e só carrega pelo `import()` ao escolher a imagem. A página carrega só a ilha (~5 KB gzip).
+
+**Testes:** 313 de unidade e componente; E2E com 257 testes em dev (os do cortador estáveis em 2 repetições, desktop e mobile) e 187 no build de produção.
+
+**Pendências**
+
+- Lighthouse mobile não medido (fica para a fase de auditoria).
+- Toque real no celular não testado em aparelho (o Playwright mobile emula o Pixel 7). Entra no roteiro da auditoria.
+- Espelhar e corte redondo continuam fora, como previsto.

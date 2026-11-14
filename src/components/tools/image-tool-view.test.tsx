@@ -26,6 +26,8 @@ function encoded(size = 120): EncodedImage {
     blob: new Blob([new Uint8Array(size)], { type: "image/png" }),
     width: 800,
     height: 600,
+    sourceWidth: 800,
+    sourceHeight: 600,
   };
 }
 
@@ -46,6 +48,34 @@ function Harness(props: { options: ImageToolOptions }) {
       accepts={accepts}
       outputLabel="PNG"
       previewAlt="Prévia da imagem"
+    />
+  );
+}
+
+/** Ferramenta com etapa de edição: o editor mostra os botões de aplicar e voltar. */
+function EditingHarness(props: { options: ImageToolOptions }) {
+  const tool = useImageTool({ ...props.options, processOnSelect: false });
+  return (
+    <ImageToolView
+      tool={tool}
+      accepts={accepts}
+      outputLabel="PNG"
+      previewAlt="Prévia da imagem"
+      editor={<p>Editor da imagem</p>}
+      controls={
+        <>
+          {tool.state.status === "editing" && (
+            <button type="button" onClick={() => void tool.apply()}>
+              Aplicar
+            </button>
+          )}
+          {tool.state.status === "done" && (
+            <button type="button" onClick={tool.backToEditing}>
+              Voltar a editar
+            </button>
+          )}
+        </>
+      }
     />
   );
 }
@@ -243,5 +273,48 @@ describe("useImageTool com imagem vinda da home", () => {
     const { result } = renderHook(() => useImageTool(options()));
 
     expect(result.current.state.status).toBe("idle");
+  });
+
+  describe("com etapa de edição", () => {
+    it("depois de validar, mostra o editor e não processa", async () => {
+      const process = vi.fn().mockResolvedValue(encoded());
+      render(<EditingHarness options={options({ process })} />);
+
+      chooseFiles(pngFile());
+
+      expect(await screen.findByText("Editor da imagem")).toBeInTheDocument();
+      expect(process).not.toHaveBeenCalled();
+      expect(
+        screen.queryByRole("link", { name: "Baixar imagem em PNG" }),
+      ).not.toBeInTheDocument();
+    });
+
+    it("processa ao aplicar e volta a editar sem perder a imagem", async () => {
+      const process = vi.fn().mockResolvedValue(encoded());
+      render(<EditingHarness options={options({ process })} />);
+      chooseFiles(pngFile());
+
+      fireEvent.click(await screen.findByRole("button", { name: "Aplicar" }));
+
+      expect(
+        await screen.findByRole("link", { name: "Baixar imagem em PNG" }),
+      ).toBeInTheDocument();
+      expect(process).toHaveBeenCalledOnce();
+      expect(screen.queryByText("Editor da imagem")).not.toBeInTheDocument();
+
+      fireEvent.click(screen.getByRole("button", { name: "Voltar a editar" }));
+
+      expect(await screen.findByText("Editor da imagem")).toBeInTheDocument();
+      expect(revokeObjectURL).toHaveBeenCalledWith("blob:teste-1");
+    });
+
+    it("arquivo inválido mostra o erro, sem abrir o editor", async () => {
+      render(<EditingHarness options={options()} />);
+
+      chooseFiles(new File(["texto"], "falso.png", { type: "image/png" }));
+
+      expect(await screen.findByRole("alert")).toBeInTheDocument();
+      expect(screen.queryByText("Editor da imagem")).not.toBeInTheDocument();
+    });
   });
 });

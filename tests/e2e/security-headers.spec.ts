@@ -32,6 +32,7 @@ const pages = [
   "/png-para-webp",
   "/jpg-para-webp",
   "/compactar-imagem",
+  "/cortador-de-imagem",
 ];
 const devPages = ["/styleguide", "/styleguide/erro"];
 

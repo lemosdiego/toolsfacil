@@ -29,6 +29,11 @@ type ImageToolViewProps = {
   previewAlt: string;
   /** Opções da ferramenta (ex.: qualidade), abaixo do botão. */
   controls?: ReactNode;
+  /**
+   * Editor mostrado no lugar da prévia enquanto a imagem está em edição
+   * (`processOnSelect: false`, ex.: a área de corte).
+   */
+  editor?: ReactNode;
 };
 
 /**
@@ -42,6 +47,7 @@ export function ImageToolView({
   outputLabel,
   previewAlt,
   controls,
+  editor,
 }: ImageToolViewProps) {
   const { state, selectFile } = tool;
   const inputRef = useRef<HTMLInputElement>(null);
@@ -126,44 +132,48 @@ export function ImageToolView({
         )}
       </ToolActionArea>
 
-      <ToolPreviewArea hiddenOnMobile={!result && !isBusy}>
-        <div
-          data-dragging={isDragging || undefined}
-          className={cn(
-            "rounded-card transition-shadow",
-            isDragging &&
-              "ring-4 ring-ring ring-offset-4 ring-offset-background",
-          )}
-        >
-          <PreviewCard
-            image={result && { src: result.url, alt: previewAlt }}
-            download={
-              result && {
-                href: result.url,
-                fileName: result.fileName,
-                label: `Baixar imagem em ${outputLabel}`,
+      {state.status === "editing" && editor ? (
+        <ToolPreviewArea>{editor}</ToolPreviewArea>
+      ) : (
+        <ToolPreviewArea hiddenOnMobile={!result && !isBusy}>
+          <div
+            data-dragging={isDragging || undefined}
+            className={cn(
+              "rounded-card transition-shadow",
+              isDragging &&
+                "ring-4 ring-ring ring-offset-4 ring-offset-background",
+            )}
+          >
+            <PreviewCard
+              image={result && { src: result.url, alt: previewAlt }}
+              download={
+                result && {
+                  href: result.url,
+                  fileName: result.fileName,
+                  label: `Baixar imagem em ${outputLabel}`,
+                }
               }
-            }
-            sizes={
-              result && hasFile && "file" in state && state.file
-                ? { before: state.file.size, after: result.blob.size }
-                : undefined
-            }
-            busy={isBusy}
-            emptyContent={
-              <button
-                type="button"
-                onClick={openPicker}
-                className="rounded-control bg-surface px-4 py-3 text-sm text-muted shadow-card hover:text-foreground"
-              >
-                {isDragging
-                  ? "Solte a imagem para abrir"
-                  : "Arraste uma imagem para cá ou clique para escolher"}
-              </button>
-            }
-          />
-        </div>
-      </ToolPreviewArea>
+              sizes={
+                result && hasFile && "file" in state && state.file
+                  ? { before: state.file.size, after: result.blob.size }
+                  : undefined
+              }
+              busy={isBusy}
+              emptyContent={
+                <button
+                  type="button"
+                  onClick={openPicker}
+                  className="rounded-control bg-surface px-4 py-3 text-sm text-muted shadow-card hover:text-foreground"
+                >
+                  {isDragging
+                    ? "Solte a imagem para abrir"
+                    : "Arraste uma imagem para cá ou clique para escolher"}
+                </button>
+              }
+            />
+          </div>
+        </ToolPreviewArea>
+      )}
     </>
   );
 }
