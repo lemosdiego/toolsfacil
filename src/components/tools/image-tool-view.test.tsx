@@ -26,6 +26,8 @@ function encoded(size = 120): EncodedImage {
     blob: new Blob([new Uint8Array(size)], { type: "image/png" }),
     width: 800,
     height: 600,
+    sourceWidth: 800,
+    sourceHeight: 600,
   };
 }
 

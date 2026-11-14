@@ -27,6 +27,10 @@ function fakeOffscreenCanvas(
     fillRect: vi.fn(),
     drawImage: vi.fn(),
     getImageData: vi.fn(() => ({ data: new Uint8ClampedArray(4) })),
+    translate: vi.fn(),
+    rotate: vi.fn(),
+    imageSmoothingEnabled: false,
+    imageSmoothingQuality: "low",
   };
   const instances: { width: number; height: number }[] = [];
 
@@ -214,5 +218,103 @@ describe("encodeImage", () => {
     });
 
     expect(result).toMatchObject({ fitsMaxBytes: false, quality: 0.3 });
+  });
+
+  it("devolve as dimensões da origem junto com as do resultado", async () => {
+    vi.stubGlobal("createImageBitmap", vi.fn().mockResolvedValue(fakeBitmap()));
+    fakeOffscreenCanvas("image/png");
+
+    const result = await encodeImage(new Blob(["a"]), { type: "image/png" });
+
+    expect(result).toMatchObject({
+      width: 40,
+      height: 30,
+      sourceWidth: 40,
+      sourceHeight: 30,
+    });
+  });
+
+  it("recorta a partir do canto pedido, num canvas do tamanho do corte", async () => {
+    vi.stubGlobal("createImageBitmap", vi.fn().mockResolvedValue(fakeBitmap()));
+    const { context, instances } = fakeOffscreenCanvas("image/png");
+    let sizeWhenDrawn: { width: number; height: number } | undefined;
+    context.drawImage.mockImplementation(() => {
+      sizeWhenDrawn = { ...instances[0] };
+    });
+
+    const result = await encodeImage(new Blob(["a"]), {
+      type: "image/png",
+      crop: { x: 5, y: 10, width: 20, height: 15 },
+    });
+
+    expect(context.translate).toHaveBeenCalledWith(-5, -10);
+    expect(sizeWhenDrawn).toEqual({ width: 20, height: 15 });
+    expect(result).toMatchObject({ width: 20, height: 15, sourceWidth: 40 });
+  });
+
+  it("gira 90° trocando largura e altura", async () => {
+    vi.stubGlobal("createImageBitmap", vi.fn().mockResolvedValue(fakeBitmap()));
+    const { context } = fakeOffscreenCanvas("image/png");
+
+    const result = await encodeImage(new Blob(["a"]), {
+      type: "image/png",
+      rotate: 90,
+    });
+
+    expect(context.translate).toHaveBeenLastCalledWith(30, 0);
+    expect(context.rotate).toHaveBeenCalledWith(Math.PI / 2);
+    expect(result).toMatchObject({
+      width: 30,
+      height: 40,
+      sourceWidth: 30,
+      sourceHeight: 40,
+    });
+  });
+
+  it("reduz em etapas e libera os canvas intermediários", async () => {
+    vi.stubGlobal(
+      "createImageBitmap",
+      vi.fn().mockResolvedValue(fakeBitmap(400, 300)),
+    );
+    const { context, instances } = fakeOffscreenCanvas("image/png");
+
+    const result = await encodeImage(new Blob(["a"]), {
+      type: "image/png",
+      resize: { width: 40, height: 30 },
+    });
+
+    // 400 → 200 → 100 → 50 → 40
+    expect(instances.map((canvas) => canvas.width)).toEqual([0, 0, 0, 0, 0]);
+    expect(context.imageSmoothingQuality).toBe("high");
+    expect(result).toMatchObject({ width: 40, height: 30 });
+  });
+
+  it("reduz para caber no lado máximo pedido (prévia)", async () => {
+    vi.stubGlobal(
+      "createImageBitmap",
+      vi.fn().mockResolvedValue(fakeBitmap(4000, 3000)),
+    );
+    fakeOffscreenCanvas("image/png");
+
+    const result = await encodeImage(new Blob(["a"]), {
+      type: "image/png",
+      fit: 1600,
+    });
+
+    expect(result).toMatchObject({ width: 1600, height: 1200 });
+  });
+
+  it("falha com encode-failed quando o corte sai da imagem", async () => {
+    const bitmap = fakeBitmap();
+    vi.stubGlobal("createImageBitmap", vi.fn().mockResolvedValue(bitmap));
+    fakeOffscreenCanvas("image/png");
+
+    await expect(
+      encodeImage(new Blob(["a"]), {
+        type: "image/png",
+        crop: { x: 30, y: 0, width: 20, height: 10 },
+      }),
+    ).rejects.toEqual(new ImageProcessingError("encode-failed"));
+    expect(bitmap.close).toHaveBeenCalledOnce();
   });
 });
